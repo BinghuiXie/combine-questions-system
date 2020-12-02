@@ -1,7 +1,6 @@
 import { Component, Emit, Prop } from 'vue-property-decorator';
 import { mixins } from 'vue-class-component';
 import Lang from '@/lang/lang';
-
 import { 
     INPUT_EMPLOYEE_ID,
     INPUT_PASSWPRD,
@@ -13,12 +12,14 @@ import {
     INPUT_STUDENT_ID,
     MAX_EMPLOYEE_ID_LENGTH,
     MAX_PASSWORD_LENGTH,
-    MIN_PASSWORD_LENGTH
+    MIN_PASSWORD_LENGTH,
+    LOGIN_USERINFO_KEY
  } from '@/common/constants'
 
 import './style.scss';
 import { IUserInfo } from '@/interfaces';
 import { SigninRules } from '../../rules';
+import storage from '@/utlis/localStorage';
 
 @Component
 export default class LoginWrapper extends mixins(Lang) {
@@ -36,8 +37,14 @@ export default class LoginWrapper extends mixins(Lang) {
 
     private startIndex: 0 | 1 | 2 = 1;
 
+    public isRememberPass: boolean = false;
+
     public $refs!: {
-        scrollBox: HTMLDivElement
+        scrollBox: HTMLDivElement;
+        loginForm: Vue & { 
+            validate: (param?: any) => any 
+        };
+        checkbox: HTMLInputElement;
     }
 
     public get model() {
@@ -85,11 +92,57 @@ export default class LoginWrapper extends mixins(Lang) {
         this.updateUserInfo(this.model)
     }
 
+    /** 检查输入是否合规(与每次输入判断不同，该方法用在整体对输入的判断上)
+     * 
+     */
+    isInputValid(): boolean {
+        // TODO: 优化返回判断输入是否符合规则的逻辑
+        let res = false;
+        this.$refs.loginForm.validate((valid: boolean) => {
+            res = valid;
+        });
+        return res;
+    }
+
+    switchRememberPass(val: boolean) {
+        this.isRememberPass = val;
+        if(val && this.isInputValid()) {
+            // 将信息存入 localStorage
+            let userInfo = {
+                id: this.model.studentId || this.model.employeeId,
+                password: this.model.password
+            }
+            storage.set(LOGIN_USERINFO_KEY, userInfo);
+        }
+    }
+
+    /**
+     *  自动填充用户名密码
+     */
+    autoFillUserInfo() {
+        const data = storage.get(LOGIN_USERINFO_KEY);
+        const key = this.isTeacherLogin ? 'employeeId' : 'studentId';
+        if(data) {
+            this.model[key] = data.id;
+            this.model.password = data.password;
+            // 填充值到框里面
+            this.updateUserInfo(this.model);
+            // TODO: element-ui checkbox 选中样式
+        }
+    }
+
+    mounted() {
+        if(storage.get(LOGIN_USERINFO_KEY)) {
+            this.autoFillUserInfo();
+        }
+    }
+
     render() {
         return (
             <el-form 
                 class='login-el-form'
                 rules={SigninRules}
+                ref='loginForm'
                 {...{ props: { model: this.model } }}
             >
                 <el-form-item class='login-el-form-item'>
@@ -135,7 +188,10 @@ export default class LoginWrapper extends mixins(Lang) {
                     ></el-input>
                 </el-form-item>
                 <el-form-item class='login-el-form-item remember-pwd'>
-                    <el-checkbox>{ this.t(REMEMBER_PASSWORD) }</el-checkbox>
+                    <el-checkbox
+                        ref='checkbox'
+                        onchange={this.switchRememberPass}
+                    >{ this.t(REMEMBER_PASSWORD) }</el-checkbox>
                 </el-form-item>
                 <el-form-item class='login-el-form-item'>
                     <el-button type='primary'>

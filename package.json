@@ -9,6 +9,7 @@
   "dependencies": {
     "core-js": "^3.6.5",
     "element-ui": "^2.14.1",
+    "js-base64": "^3.6.0",
     "postcss-loader": "^4.1.0",
     "postcss-pxtorem": "^5.1.1",
     "vue": "^2.6.11",

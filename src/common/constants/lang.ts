@@ -1,0 +1,16 @@
+export const INPUT_EMPLOYEE_ID: string = 'input_employee_id';
+export const INPUT_STUDENT_ID: string = 'input_student_id';
+export const INPUT_PASSWPRD: string = 'input_password';
+export const TEACHER_LOGIN: string = 'teacher_login';
+export const STUDENT_LOGIN: string = 'student_login';
+export const REMEMBER_PASSWORD: string = 'remember_password';
+export const FORGOT_PASSWORD: string = 'forgot_password';
+export const REGISTER_COUNT: string = 'register_count';
+export const WELCOME_NOTE: string = 'welcome_note';
+export const SELECT_REGISTER_IDENTITY: string = 'select_register_identity';
+export const CONFIRM_PASSWORD: string = 'confirm_password';
+export const INPUT_PHONE_NUMER: string = 'input_phone_number';
+export const INPUT_AUTH_CODE: string = 'input_auth_code';
+export const SEND_AUTH_CODE: string = 'send_auth_code';
+export const REGISTER_NOW: string = 'register_now';
+export const BACK_TO_LOGIN: string = 'back_to_login';

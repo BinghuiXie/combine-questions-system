@@ -1,0 +1,45 @@
+@import '@/vars.scss';
+
+.login-wrapper {
+    overflow: hidden;
+    background-color: rgba($color: #ffffff, $alpha: 1.0);
+    position: relative;
+    padding: 32px 96px;
+    height: 100vh;
+    box-sizing: border-box;
+    position: relative;
+    .login__background{
+        width: 348px;
+        height: 280px;
+        position: absolute;
+        top: 45%;
+        transform: translateY(-50%);
+        left: 11.1111vw;
+        background: url('./assets/login_bg.svg') no-repeat;
+        background-size: cover;
+    }
+    .login-el-form__wrapper{
+        position: fixed;
+        top: 40%;
+        transform: translateY(-50%);
+        right: 8.333vw;
+        width: 320px;
+        margin-right: 48px;
+        .platform__logo{
+            text-align: center;
+            margin: 24px 0;
+            i {
+                color: rgba($color: $theme_color, $alpha: 1);
+                font-size: 48px;
+                font-weight: 800;
+            }
+        }
+        .login__title{
+            text-align: center;
+            color: $default_font_color;
+            margin-bottom: 6px;
+            user-select: none;
+            font-size: 16px;
+        }
+    }
+}

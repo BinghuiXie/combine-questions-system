@@ -10,11 +10,15 @@ import {
     REMEMBER_PASSWORD,
     FORGOT_PASSWORD,
     REGISTER_COUNT,
-    INPUT_STUDENT_ID
+    INPUT_STUDENT_ID,
+    MAX_EMPLOYEE_ID_LENGTH,
+    MAX_PASSWORD_LENGTH,
+    MIN_PASSWORD_LENGTH
  } from '@/common/constants'
 
 import './style.scss';
 import { IUserInfo } from '@/interfaces';
+import { SigninRules } from '../../rules';
 
 @Component
 export default class LoginWrapper extends mixins(Lang) {
@@ -42,6 +46,14 @@ export default class LoginWrapper extends mixins(Lang) {
 
     public get userId() {
         return this.isTeacherLogin ? this.model.employeeId : this.model.studentId;
+    }
+
+    public set userId(newValue) {
+        if(this.isTeacherLogin) {
+            this.model.employeeId = newValue;
+        } else {
+            this.model.studentId = newValue;
+        }
     }
 
     @Emit('handleRegister')
@@ -75,7 +87,11 @@ export default class LoginWrapper extends mixins(Lang) {
 
     render() {
         return (
-            <el-form class='login-el-form'>
+            <el-form 
+                class='login-el-form'
+                rules={SigninRules}
+                {...{ props: { model: this.model } }}
+            >
                 <el-form-item class='login-el-form-item'>
                     <div class='el-form-item_switch-identity'>
                         <div class='switch-identity-box'>
@@ -91,8 +107,13 @@ export default class LoginWrapper extends mixins(Lang) {
                         />
                     </div>
                 </el-form-item>
-                <el-form-item class='login-el-form-item'>
+                <el-form-item 
+                    class='login-el-form-item'
+                    prop={ this.isTeacherLogin ? 'employeeId': 'studentId' }
+                >
                     <el-input
+                        maxlength={ MAX_EMPLOYEE_ID_LENGTH }
+                        show-word-limit
                         v-model={this.userId}
                         onInput={ this.handleInput }
                         placeholder={ 
@@ -102,9 +123,12 @@ export default class LoginWrapper extends mixins(Lang) {
                         }
                     ></el-input>
                 </el-form-item>
-                <el-form-item class='login-el-form-item'>
+                <el-form-item class='login-el-form-item' prop='password'>
                     <el-input
                         type='password'
+                        maxlength={MAX_PASSWORD_LENGTH}
+                        minlength={MIN_PASSWORD_LENGTH}
+                        show-password
                         v-model={this.model.password}
                         onInput={ this.handleInput }
                         placeholder={ this.t(INPUT_PASSWPRD) }

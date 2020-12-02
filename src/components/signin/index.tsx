@@ -24,7 +24,7 @@ export default class Signin extends mixins(Lang) {
 
     private isRegister: boolean = false;
 
-    public registerData: IRegisterData = {
+    public registerData: IRegisterData<string> = {
         employeeId: '',
         studentId: '',
         password: '',
@@ -48,7 +48,7 @@ export default class Signin extends mixins(Lang) {
         this.isRegister = false;
     }
 
-    public handleUpdateRegisterData(value: IRegisterData) {
+    public handleUpdateRegisterData(value: IRegisterData<string>) {
         this.registerData = value;
     }
 

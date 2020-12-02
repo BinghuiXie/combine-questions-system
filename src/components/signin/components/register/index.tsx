@@ -13,7 +13,10 @@ import {
     BACK_TO_LOGIN,
     TEACHER,
     STUDENT,
-    MAX_EMPLOYEE_ID_LENGTH
+    MAX_EMPLOYEE_ID_LENGTH,
+    MAX_PASSWORD_LENGTH,
+    MIN_PASSWORD_LENGTH,
+    STUDENT_ID_LENGTH
 } from '@/common/constants';
 import { 
     IRegisterIdentity, 
@@ -36,9 +39,9 @@ export default class RegisterWrapper extends mixins(Lang) {
         identity: TEACHER,
         confirmPass: ''
     } } })
-    registerData!: IRegisterData;
+    registerData!: IRegisterData<string>;
 
-    public get model(): IRegisterData {
+    public get model(): IRegisterData<string> {
         return {...this.registerData}
     }
 
@@ -58,11 +61,17 @@ export default class RegisterWrapper extends mixins(Lang) {
 
     public isSendCode: boolean = false;
 
+    public $refs!: {
+        registerForm: Vue & { 
+            validate: (param?: any) => boolean 
+        }
+    }
+
     @Emit('backToLogin')
     public backToLogin() {}
 
     @Emit('updateRegisterData')
-    public updateRegisterData(newValue: IRegisterData) {}
+    public updateRegisterData(newValue: IRegisterData<string>) {}
 
     handleInput() {
         this.updateRegisterData(this.model);
@@ -86,12 +95,27 @@ export default class RegisterWrapper extends mixins(Lang) {
         }
     }
 
+    handleRegister(name: string) {
+        this.$refs.registerForm.validate((valid: boolean) => {
+            if(valid) {
+                // TODO: register logic
+                console.log('submit')
+            } else {
+                return false;
+            }
+        })
+    }
+
     render() {
+
+        const refName = 'registerForm'
+
         return (
             <div class='register-wrapper'>
                 <el-form 
                     {...{ props: { model: this.model } }}
                     rules={SigninRules}
+                    ref={refName}
                 >
                     <el-form-item>
                         <el-select
@@ -103,9 +127,9 @@ export default class RegisterWrapper extends mixins(Lang) {
                             <el-option label='学生' value={STUDENT}></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item prop='employeeId'>
+                    <el-form-item prop={ this.registerIdentity === STUDENT ? 'studentId': 'employeeId' }>
                         <el-input
-                            maxlength={MAX_EMPLOYEE_ID_LENGTH}
+                            maxlength={ this.registerIdentity === STUDENT ? STUDENT_ID_LENGTH : MAX_EMPLOYEE_ID_LENGTH}
                             show-word-limit
                             v-model={this.userId}
                             onInput={this.handleInput}
@@ -116,30 +140,36 @@ export default class RegisterWrapper extends mixins(Lang) {
                             }
                         ></el-input>
                     </el-form-item>
-                    <el-form-item>
+                    <el-form-item prop='password'>
                         <el-input 
+                            maxlength={MAX_PASSWORD_LENGTH}
+                            minlength={MIN_PASSWORD_LENGTH}
+                            show-password
                             onInput={this.handleInput}
                             v-model={this.model.password}
                             placeholder={ this.t( INPUT_PASSWPRD ) }
                             type='password'
                         ></el-input>
                     </el-form-item>
-                    <el-form-item>
+                    <el-form-item prop='confirmPass'>
                         <el-input
+                            maxlength={MAX_PASSWORD_LENGTH}
+                            minlength={MIN_PASSWORD_LENGTH}
                             onInput={this.handleInput}
                             v-model={this.model.confirmPass}
+                            show-password
                             type='password'
                             placeholder={ this.t( CONFIRM_PASSWORD ) }
                         ></el-input>
                     </el-form-item>
-                    <el-form-item>
+                    <el-form-item prop='phone'>
                         <el-input
                             onInput={this.handleInput}
                             v-model={this.model.phone}
                             placeholder={ this.t( INPUT_PHONE_NUMER ) }
                         ></el-input>
                     </el-form-item>
-                    <el-form-item class='el-form-item__code'>
+                    <el-form-item class='el-form-item__code' prop='authCode'>
                         <el-input
                             onInput={this.handleInput}
                             v-model={this.model.authCode}
@@ -156,7 +186,10 @@ export default class RegisterWrapper extends mixins(Lang) {
                         </el-button>
                     </el-form-item>
                     <el-form-item class='el-form-item__button'>
-                        <el-button type='primary'>{ this.t( REGISTER_NOW ) }</el-button>
+                        <el-button 
+                            type='primary'
+                            onclick={ () => { this.handleRegister(refName) }}
+                        >{ this.t( REGISTER_NOW ) }</el-button>
                     </el-form-item>
                     <div class='back-login' onclick={ this.backToLogin }>
                         <i class='iconfont icon-fenxiang'></i>

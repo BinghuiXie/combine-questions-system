@@ -1,18 +1,18 @@
 /**
  * 注册身份
  */
-export type IRegisterIdentity = '' | 'teacher' | 'student';
+export type IRegisterIdentity = '' | 'teacher' | 'student' | Array<any>;
 
 export interface IRegisterProps {
     onBackToLogin: () => void
 }
 
-export interface IRegisterData {
-    employeeId: string;
-    studentId: string;
-    password: string;
-    confirmPass: string;
+export interface IRegisterData<T> {
+    employeeId: T;
+    studentId: T;
+    password: T;
+    confirmPass: T;
     identity: IRegisterIdentity;
-    phone: string;
-    authCode: string;
+    phone: T;
+    authCode: T;
 }

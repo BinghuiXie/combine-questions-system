@@ -10,7 +10,9 @@ import {
 import './style.scss';
 import { 
     IRegisterData, 
-    IUserInfo 
+    IUserInfo,
+    ITeacherInfo,
+    IStudentInfo
 } from '@/interfaces';
 
 @Component({
@@ -34,10 +36,14 @@ export default class Signin extends mixins(Lang) {
         confirmPass: ''
     };
 
-    public userInfo: IUserInfo = {
+    public studentInfo: IStudentInfo = {
         studentId: '',
+        sPassword: ''
+    }
+
+    public teacherInfo: ITeacherInfo = {
         employeeId: '',
-        password: ''
+        tPassword: ''
     }
 
     public handleRegister() {
@@ -52,20 +58,24 @@ export default class Signin extends mixins(Lang) {
         this.registerData = value;
     }
 
-    public handleUpdateUserInfo(value: IUserInfo) {
-        this.userInfo = value;
+    public handleUpdateUserInfo(value: any) {
+        if(value.hasOwnProperty('studentId')) {
+            this.studentInfo = value;
+        } else {
+            this.teacherInfo = value;
+        }
     }
 
     render() {
         return (
-            <div class='login-wrapper'>
+            <div class='signin-wrapper'>
                 <Canvas/>
-                <div class="login__background"></div>
-                <div class='login-el-form__wrapper'>
+                <div class="signin__background"></div>
+                <div class='signin-el-form__wrapper'>
                     <div class='platform__logo'>
                         <i class='iconfont icon-icon_xinyong_xianxing_jijin-'></i>
                     </div>
-                    <div class="login__title">
+                    <div class="signin__title">
                         { this.t( WELCOME_NOTE ) }
                     </div>
                     {
@@ -77,7 +87,8 @@ export default class Signin extends mixins(Lang) {
                         />
                         : 
                         <LoginWrapper
-                            userInfo={this.userInfo}
+                            teacherInfo={this.teacherInfo}
+                            studentInfo={this.studentInfo}
                             onUpdateUserInfo={this.handleUpdateUserInfo}
                             onHandleRegister={this.handleRegister}
                         />

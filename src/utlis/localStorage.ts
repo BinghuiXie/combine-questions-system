@@ -23,7 +23,7 @@ import { Base64 } from 'js-base64';
          // 数字，数组，boolean，object 需要 parse 一下返回，String 直接返回
         const resStr = localStorage.getItem(key);
         if(!resStr) {
-            throw new Error('key not exist in localStorage');
+            return false;
         }
         const resObj: IStorageItem = JSON.parse(Base64.decode(resStr));
         if(resObj && resObj.startTime) {

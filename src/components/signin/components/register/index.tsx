@@ -16,7 +16,7 @@ import {
     MAX_EMPLOYEE_ID_LENGTH,
     MAX_PASSWORD_LENGTH,
     MIN_PASSWORD_LENGTH,
-    STUDENT_ID_LENGTH
+    MAX_STUDENT_ID_LENGTH
 } from '@/common/constants';
 import { 
     IRegisterIdentity, 
@@ -129,7 +129,7 @@ export default class RegisterWrapper extends mixins(Lang) {
                     </el-form-item>
                     <el-form-item prop={ this.registerIdentity === STUDENT ? 'studentId': 'employeeId' }>
                         <el-input
-                            maxlength={ this.registerIdentity === STUDENT ? STUDENT_ID_LENGTH : MAX_EMPLOYEE_ID_LENGTH}
+                            maxlength={ this.registerIdentity === STUDENT ? MAX_STUDENT_ID_LENGTH : MAX_EMPLOYEE_ID_LENGTH}
                             show-word-limit
                             v-model={this.userId}
                             onInput={this.handleInput}

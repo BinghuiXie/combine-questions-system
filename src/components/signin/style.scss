@@ -1,6 +1,6 @@
 @import '@/vars.scss';
 
-.login-wrapper {
+.signin-wrapper {
     overflow: hidden;
     background-color: rgba($color: #ffffff, $alpha: 1.0);
     position: relative;
@@ -8,7 +8,7 @@
     height: 100vh;
     box-sizing: border-box;
     position: relative;
-    .login__background{
+    .signin__background{
         width: 348px;
         height: 280px;
         position: absolute;
@@ -18,7 +18,7 @@
         background: url('./assets/login_bg.svg') no-repeat;
         background-size: cover;
     }
-    .login-el-form__wrapper{
+    .signin-el-form__wrapper{
         position: fixed;
         top: 40%;
         transform: translateY(-50%);
@@ -34,7 +34,7 @@
                 font-weight: 800;
             }
         }
-        .login__title{
+        .signin__title{
             text-align: center;
             color: $default_font_color;
             margin-bottom: 6px;

@@ -6,16 +6,18 @@ import {
     checkAuthCode,
     checkStudentId
  } from './signin';
-import { IRegisterData } from '@/interfaces';
 
-const SigninRules: Partial<IRegisterData<Array<{}>>> = {
+const SigninRules: any = {
     employeeId: [
         { validator: checkEmployeeId, trigger: 'change' }
     ],
     studentId: [
         { validator: checkStudentId, trigger: 'change' }
     ],
-    password: [
+    tPassword: [
+        { validator: checkPassword, trigger: 'change' }
+    ],
+    sPassword: [
         { validator: checkPassword, trigger: 'change' }
     ],
     confirmPass: [

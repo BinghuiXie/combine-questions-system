@@ -7,10 +7,12 @@ import {
     REMEMBER_PASSWORD,
     MAX_PASSWORD_LENGTH,
     MIN_PASSWORD_LENGTH,
-    MAX_EMPLOYEE_ID_LENGTH
+    MAX_EMPLOYEE_ID_LENGTH,
+    LOGIN_TEACHERINFO_KEY
  } from '@/common/constants';
  import { SigninRules } from '@/components/signin/rules';
 import { ITeacherInfo } from '@/interfaces';
+import storage from '@/utlis/localStorage';
 
 @Component
 export default class TeacherInput extends mixins(Lang) {
@@ -21,15 +23,63 @@ export default class TeacherInput extends mixins(Lang) {
     } )})
     teacherInfo!: ITeacherInfo;
 
-    @Emit('switchRememberPass')
-    switchRememberPass(){}
-
     @Emit('input')
     handleInput(newModel: ITeacherInfo){
     }
 
-    public get model() {
+    public $refs!: {
+        loginForm: Vue & {
+            validate: (param?: any) => any 
+        };
+    }
+
+    public get model(): ITeacherInfo {
         return { ...this.teacherInfo }
+    }
+
+    public set model(newValue: ITeacherInfo) {
+        const keys = Object.keys(newValue);
+        keys.forEach((key: string) => {
+            this.model[key] = newValue[key];
+        })
+    }
+
+    /** 检查输入是否合规(与每次输入判断不同，该方法用在整体对输入的判断上)
+     * 
+     */
+    isInputValid(): boolean {
+        // TODO: 优化返回判断输入是否符合规则的逻辑
+        let res = false;
+        this.$refs.loginForm.validate((valid: boolean) => {
+            res = valid;
+        });
+        return res;
+    }
+
+    switchRememberPass(val: boolean) {
+        if(val && this.isInputValid()) {
+            // 将信息存入 localStorage
+            storage.set(LOGIN_TEACHERINFO_KEY, this.model);
+        }
+    }
+
+    fillTeacherInfo(info: ITeacherInfo) {
+        this.handleInput(info);
+    }
+
+    /**
+     *  自动填充用户名密码
+     */
+    autoFillUserInfo() {
+        const data = storage.get(LOGIN_TEACHERINFO_KEY);
+        this.model = data;
+        this.fillTeacherInfo(this.model);
+    }
+
+    mounted() {
+        if(storage.get(LOGIN_TEACHERINFO_KEY)) {
+            this.autoFillUserInfo();
+        }
     }
 
     render() {

@@ -8,8 +8,6 @@ import {
     STUDENT_LOGIN,
     FORGOT_PASSWORD,
     REGISTER_COUNT,
-    MAX_EMPLOYEE_ID_LENGTH,
-    LOGIN_USERINFO_KEY,
     MAX_STUDENT_ID_LENGTH
  } from '@/common/constants'
 
@@ -49,9 +47,6 @@ export default class LoginWrapper extends mixins(Lang) {
 
     public $refs!: {
         scrollBox: HTMLDivElement;
-        loginForm: Vue & { 
-            validate: (param?: any) => any 
-        };
     }
 
     public get model(): { [key: string]: string } {
@@ -59,11 +54,9 @@ export default class LoginWrapper extends mixins(Lang) {
     }
 
     public set model(newValue: { [key: string]: string }) {
-        console.log('newValue: ', newValue);
         const keys = Object.keys(newValue);
         keys.forEach((key: string) => {
             this.model[key] = newValue[key];
-            console.log(this.model);
         })
     }
 
@@ -102,56 +95,6 @@ export default class LoginWrapper extends mixins(Lang) {
         this.updateUserInfo(this.model)
     }
 
-    /** 检查输入是否合规(与每次输入判断不同，该方法用在整体对输入的判断上)
-     * 
-     */
-    isInputValid(): boolean {
-        // TODO: 优化返回判断输入是否符合规则的逻辑
-        let res = false;
-        this.$refs.loginForm.validate((valid: boolean) => {
-            res = valid;
-        });
-        return res;
-    }
-
-    switchRememberPass(val: boolean) {
-        this.isRememberPass = val;
-        if(val && this.isInputValid()) {
-            // 将信息存入 localStorage
-            let userInfo = {
-                id: this.model.studentId || this.model.employeeId,
-                password: this.model.password
-            }
-            storage.set(LOGIN_USERINFO_KEY, userInfo);
-        }
-    }
-
-    /**
-     *  自动填充用户名密码
-     */
-    autoFillUserInfo() {
-        // TODO: 自动填充分开教师和学生
-        const data = storage.get(LOGIN_USERINFO_KEY);
-        // 判断 localStorage 里面的信息是老师还是学生的
-        this.isTeacherLogin = !(data.id.length === MAX_STUDENT_ID_LENGTH);
-        this.startIndex = this.isTeacherLogin ? 0 : 1;
-        const identity = this.isTeacherLogin ? 'employeeId': 'studentId';
-        this.handleScrollBoxTranslate(this.startIndex, this.translateDis);
-        if(data) {
-            this.model[identity] = data.id;
-            this.model.password = data.password;
-            // 填充值到框里面
-            this.updateUserInfo(this.model);
-            // TODO: element-ui checkbox 选中样式
-        }
-    }
-
-    mounted() {
-        if(storage.get(LOGIN_USERINFO_KEY)) {
-            this.autoFillUserInfo();
-        }
-    }
-
     render() {
         return (
             <div class='login-wrapper'>
@@ -172,12 +115,10 @@ export default class LoginWrapper extends mixins(Lang) {
                     this.isTeacherLogin 
                     ? <TeacherInput
                         teacherInfo={this.teacherInfo}
-                        onSwitchRememberPass={this.switchRememberPass}
                         onInput={this.handleInput}
                     /> 
                     : <StudentInput
                         studentInfo={this.studentInfo}
-                        onSwitchRememberPass={this.switchRememberPass}
                         onInput={this.handleInput}
                     />
                 }

@@ -5,12 +5,16 @@ export interface IUserInfo {
     password: string;
 }
 
-export interface IStudentInfo {
+export interface IBaseInfo {
+    [key: string]: string;
+}
+
+export interface IStudentInfo extends IBaseInfo {
     studentId: string;
     sPassword: string;
 }
 
-export interface ITeacherInfo {
+export interface ITeacherInfo extends IBaseInfo {
     employeeId: string;
     tPassword: string;
 }

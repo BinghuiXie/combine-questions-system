@@ -7,10 +7,12 @@ import {
     INPUT_STUDENT_ID,
     MAX_PASSWORD_LENGTH,
     MIN_PASSWORD_LENGTH,
-    MAX_STUDENT_ID_LENGTH
+    MAX_STUDENT_ID_LENGTH,
+    LOGIN_STUDENTINFO_KEY
  } from '@/common/constants';
- import { SigninRules } from '@/components/signin/rules';
+import { SigninRules } from '@/components/signin/rules';
 import { IStudentInfo } from '@/interfaces';
+import storage from '@/utlis/localStorage';
 
 @Component
 export default class StudentInput extends mixins(Lang) {
@@ -19,14 +21,62 @@ export default class StudentInput extends mixins(Lang) {
     @Prop()
     studentInfo!: IStudentInfo;
 
-    @Emit('switchRememberPass')
-    switchRememberPass(){}
-
     @Emit('input')
     handleInput(newModel: IStudentInfo){}
 
-    public get model() {
+    public $refs!: {
+        loginForm: Vue & {
+            validate: (param?: any) => any 
+        };
+    }
+
+    public get model(): IStudentInfo {
         return { ...this.studentInfo }
+    }
+
+    public set model(newValue: IStudentInfo) {
+        const keys = Object.keys(newValue);
+        keys.forEach((key: string) => {
+            this.model[key] = newValue[key];
+        })
+    }
+
+    /** 检查输入是否合规(与每次输入判断不同，该方法用在整体对输入的判断上)
+     * 
+     */
+    isInputValid(): boolean {
+        // TODO: 优化返回判断输入是否符合规则的逻辑
+        let res = false;
+        this.$refs.loginForm.validate((valid: boolean) => {
+            res = valid;
+        });
+        return res;
+    }
+
+    switchRememberPass(val: boolean) {
+        if(val && this.isInputValid()) {
+            // 将信息存入 localStorage
+            storage.set(LOGIN_STUDENTINFO_KEY, this.model);
+        }
+    }
+
+    fillStudentInfo(info: IStudentInfo) {
+        this.handleInput(info);
+    }
+
+    /**
+     *  自动填充用户名密码
+     */
+    autoFillUserInfo() {
+        const data = storage.get(LOGIN_STUDENTINFO_KEY);
+        this.model = data;
+        this.fillStudentInfo(this.model);
+    }
+
+    mounted() {
+        if(storage.get(LOGIN_STUDENTINFO_KEY)) {
+            this.autoFillUserInfo();
+        }
     }
 
     render() {
@@ -48,7 +98,7 @@ export default class StudentInput extends mixins(Lang) {
                         maxlength={ MAX_STUDENT_ID_LENGTH }
                         show-word-limit
                         v-model={this.model.studentId}
-                        onInput={  () => { this.handleInput(this.model) }  }
+                        onInput={ () => { this.handleInput(this.model) }  }
                         placeholder={ this.t(INPUT_STUDENT_ID) }
                     ></el-input>
                 </el-form-item>
@@ -62,7 +112,7 @@ export default class StudentInput extends mixins(Lang) {
                         minlength={MIN_PASSWORD_LENGTH}
                         show-password
                         v-model={this.model.sPassword}
-                        onInput={  () => { this.handleInput(this.model) }  }
+                        onInput={ () => { this.handleInput(this.model) }  }
                         placeholder={ this.t(INPUT_PASSWPRD) }
                     ></el-input>
                 </el-form-item>

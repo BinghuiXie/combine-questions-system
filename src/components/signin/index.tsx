@@ -1,4 +1,5 @@
-import { Component, Vue } from 'vue-property-decorator';
+import { Component } from 'vue-property-decorator';
+import { State, Action } from 'vuex-class';
 import { mixins } from 'vue-class-component';
 import Canvas from './components/canvas';
 import LoginWrapper from './components/login';
@@ -36,16 +37,6 @@ export default class Signin extends mixins(Lang) {
         confirmPass: ''
     };
 
-    public studentInfo: IStudentInfo = {
-        studentId: '',
-        sPassword: ''
-    }
-
-    public teacherInfo: ITeacherInfo = {
-        employeeId: '',
-        tPassword: ''
-    }
-
     public handleRegister() {
         this.isRegister = true;
     }
@@ -56,14 +47,6 @@ export default class Signin extends mixins(Lang) {
 
     public handleUpdateRegisterData(value: IRegisterData<string>) {
         this.registerData = value;
-    }
-
-    public handleUpdateUserInfo(value: any) {
-        if(value.hasOwnProperty('studentId')) {
-            this.studentInfo = value;
-        } else {
-            this.teacherInfo = value;
-        }
     }
 
     render() {
@@ -87,9 +70,6 @@ export default class Signin extends mixins(Lang) {
                         />
                         : 
                         <LoginWrapper
-                            teacherInfo={this.teacherInfo}
-                            studentInfo={this.studentInfo}
-                            onUpdateUserInfo={this.handleUpdateUserInfo}
                             onHandleRegister={this.handleRegister}
                         />
                     }

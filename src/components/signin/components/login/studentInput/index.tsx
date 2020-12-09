@@ -1,4 +1,5 @@
 import { Component, Prop, Emit } from 'vue-property-decorator';
+import { State, Action } from 'vuex-class';
 import { mixins } from 'vue-class-component';
 import Lang from '@/lang/lang';
 import { 
@@ -18,11 +19,14 @@ import storage from '@/utlis/localStorage';
 export default class StudentInput extends mixins(Lang) {
 
 
-    @Prop()
+    @State(state => state.signin.studentInfo)
     studentInfo!: IStudentInfo;
 
-    @Emit('input')
-    handleInput(newModel: IStudentInfo){}
+    @Action('handleInput')
+    private handleInput!: (payload: { newModel: IStudentInfo }) => void
+
+    @Action('autoFillUserInfo')
+    private autoUpdateUserInfo!: (payload: { userInfo: IStudentInfo }) => void
 
     public $refs!: {
         loginForm: Vue & {
@@ -32,13 +36,6 @@ export default class StudentInput extends mixins(Lang) {
 
     public get model(): IStudentInfo {
         return { ...this.studentInfo }
-    }
-
-    public set model(newValue: IStudentInfo) {
-        const keys = Object.keys(newValue);
-        keys.forEach((key: string) => {
-            this.model[key] = newValue[key];
-        })
     }
 
     /** 检查输入是否合规(与每次输入判断不同，该方法用在整体对输入的判断上)
@@ -61,7 +58,7 @@ export default class StudentInput extends mixins(Lang) {
     }
 
     fillStudentInfo(info: IStudentInfo) {
-        this.handleInput(info);
+        this.handleInput({ newModel: info });
     }
 
     /**
@@ -69,8 +66,8 @@ export default class StudentInput extends mixins(Lang) {
      */
     autoFillUserInfo() {
         const data = storage.get(LOGIN_STUDENTINFO_KEY);
-        this.model = data;
-        this.fillStudentInfo(this.model);
+        this.autoUpdateUserInfo({ userInfo: data });
+        this.fillStudentInfo(this.studentInfo);
     }
 
     mounted() {
@@ -98,7 +95,7 @@ export default class StudentInput extends mixins(Lang) {
                         maxlength={ MAX_STUDENT_ID_LENGTH }
                         show-word-limit
                         v-model={this.model.studentId}
-                        onInput={ () => { this.handleInput(this.model) }  }
+                        onInput={ () => { this.handleInput({ newModel: this.model }) }  }
                         placeholder={ this.t(INPUT_STUDENT_ID) }
                     ></el-input>
                 </el-form-item>
@@ -112,7 +109,7 @@ export default class StudentInput extends mixins(Lang) {
                         minlength={MIN_PASSWORD_LENGTH}
                         show-password
                         v-model={this.model.sPassword}
-                        onInput={ () => { this.handleInput(this.model) }  }
+                        onInput={ () => { this.handleInput({ newModel: this.model }) }  }
                         placeholder={ this.t(INPUT_PASSWPRD) }
                     ></el-input>
                 </el-form-item>

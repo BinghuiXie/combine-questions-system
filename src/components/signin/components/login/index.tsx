@@ -22,18 +22,6 @@ import storage from '@/utlis/localStorage';
     }
 })
 export default class LoginWrapper extends mixins(Lang) {
-    
-    @Prop({ default: () => ( {
-        employeeId: '',
-        tPassword: ''
-    } )})
-    teacherInfo!: ITeacherInfo;
-
-    @Prop({ default: () => ( {
-        studentId: '',
-        sPassword: ''
-    } )})
-    studentInfo!: IStudentInfo;
 
     private readonly translateDis: number = 18;
 
@@ -49,22 +37,8 @@ export default class LoginWrapper extends mixins(Lang) {
         scrollBox: HTMLDivElement;
     }
 
-    public get model(): { [key: string]: string } {
-        return this.isTeacherLogin ? { ...this.teacherInfo } : { ...this.studentInfo };
-    }
-
-    public set model(newValue: { [key: string]: string }) {
-        const keys = Object.keys(newValue);
-        keys.forEach((key: string) => {
-            this.model[key] = newValue[key];
-        })
-    }
-
     @Emit('handleRegister')
     public handleRegister() {}
-
-    @Emit('updateUserInfo')
-    public updateUserInfo(data: IStudentInfo | ITeacherInfo | { [key: string]: string }) {}
 
      /** 切换登录角色
      */
@@ -90,11 +64,6 @@ export default class LoginWrapper extends mixins(Lang) {
         this.$refs.scrollBox.style.transform = `translate(0, -${index * distance}px)`;
     }
 
-    handleInput(value: any) {
-        this.model = value;
-        this.updateUserInfo(this.model)
-    }
-
     render() {
         return (
             <div class='login-wrapper'>
@@ -115,11 +84,9 @@ export default class LoginWrapper extends mixins(Lang) {
                     this.isTeacherLogin 
                     ? <TeacherInput
                         teacherInfo={this.teacherInfo}
-                        onInput={this.handleInput}
                     /> 
                     : <StudentInput
                         studentInfo={this.studentInfo}
-                        onInput={this.handleInput}
                     />
                 }
                 <div class='login__bottom-info'>

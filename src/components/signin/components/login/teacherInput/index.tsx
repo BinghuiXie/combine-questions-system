@@ -1,4 +1,5 @@
 import { Component, Prop, Emit } from 'vue-property-decorator';
+import { State, Action } from 'vuex-class';
 import { mixins } from 'vue-class-component';
 import Lang from '@/lang/lang';
 import { 
@@ -11,37 +12,29 @@ import {
     LOGIN_TEACHERINFO_KEY
  } from '@/common/constants';
  import { SigninRules } from '@/components/signin/rules';
-import { ITeacherInfo } from '@/interfaces';
+import { ITeacherInfo, IBaseInfo } from '@/interfaces';
 import storage from '@/utlis/localStorage';
 
 @Component
 export default class TeacherInput extends mixins(Lang) {
 
-    @Prop({ default: () => ( {
-        employeeId: '',
-        tPassword: ''
-    } )})
+    @State(state => state.signin.teacherInfo)
     teacherInfo!: ITeacherInfo;
 
-    @Emit('input')
-    handleInput(newModel: ITeacherInfo){
-    }
+    @Action('handleInput')
+    private handleInput!: (payload: { newModel: ITeacherInfo }) => void
+
+    @Action('autoFillUserInfo')
+    private autoUpdateUserInfo!: (payload: { userInfo: ITeacherInfo }) => void
 
     public $refs!: {
         loginForm: Vue & {
-            validate: (param?: any) => any 
+            validate: (param?: any) => any
         };
     }
 
     public get model(): ITeacherInfo {
         return { ...this.teacherInfo }
-    }
-
-    public set model(newValue: ITeacherInfo) {
-        const keys = Object.keys(newValue);
-        keys.forEach((key: string) => {
-            this.model[key] = newValue[key];
-        })
     }
 
     /** 检查输入是否合规(与每次输入判断不同，该方法用在整体对输入的判断上)
@@ -64,7 +57,7 @@ export default class TeacherInput extends mixins(Lang) {
     }
 
     fillTeacherInfo(info: ITeacherInfo) {
-        this.handleInput(info);
+        this.handleInput({ newModel: info});
     }
 
     /**
@@ -72,8 +65,8 @@ export default class TeacherInput extends mixins(Lang) {
      */
     autoFillUserInfo() {
         const data = storage.get(LOGIN_TEACHERINFO_KEY);
-        this.model = data;
-        this.fillTeacherInfo(this.model);
+        this.autoUpdateUserInfo({ userInfo: data });
+        this.fillTeacherInfo(this.teacherInfo);
     }
 
     mounted() {
@@ -101,7 +94,7 @@ export default class TeacherInput extends mixins(Lang) {
                         maxlength={ MAX_EMPLOYEE_ID_LENGTH }
                         show-word-limit
                         v-model={this.model.employeeId}
-                        onInput={ () => { this.handleInput(this.model) } }
+                        onInput={ () => { this.handleInput({ newModel: this.model }) } }
                         placeholder={ this.t(INPUT_EMPLOYEE_ID) }
                     ></el-input>
                 </el-form-item>
@@ -115,7 +108,7 @@ export default class TeacherInput extends mixins(Lang) {
                         minlength={MIN_PASSWORD_LENGTH}
                         show-password
                         v-model={this.model.tPassword}
-                        onInput={ () => { this.handleInput(this.model) } }
+                        onInput={ () => { this.handleInput({ newModel: this.model }) } }
                         placeholder={ this.t(INPUT_PASSWPRD) }
                     ></el-input>
                 </el-form-item>

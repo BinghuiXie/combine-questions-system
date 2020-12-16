@@ -1,13 +1,13 @@
-import { 
-    IUserInfo as IUserState,
-    IBaseInfo,
+import { ISigninState } from './signin.interface';
+import {
     ITeacherInfo, 
-    IStudentInfo 
+    IStudentInfo,
+    IRegisterData 
 } from '@/interfaces';
 import { MutationTree } from 'vuex';
 import * as types from './mutationTypes';
 
-export const mutations: MutationTree<IUserState> = {
+export const mutations: MutationTree<ISigninState> = {
     [types.INPUT_USER_INFO](state, payload: { newModel: ITeacherInfo | IStudentInfo }) {
         const { newModel } = payload;
         if(newModel && newModel.hasOwnProperty('employeeId')) {
@@ -23,5 +23,8 @@ export const mutations: MutationTree<IUserState> = {
         } else {
             state.studentInfo = userInfo as IStudentInfo;
         }
+    },
+    [types.UPDATE_REGISTER_DATA](state, payload: { registerData: IRegisterData<string> }) {
+        state.registerData = payload.registerData;
     }
 }

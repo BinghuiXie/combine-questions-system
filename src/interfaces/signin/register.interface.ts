@@ -3,10 +3,6 @@
  */
 export type IRegisterIdentity = '' | 'teacher' | 'student' | Array<any>;
 
-export interface IRegisterProps {
-    onBackToLogin: () => void
-}
-
 export interface IRegisterData<T> {
     employeeId: T;
     studentId: T;

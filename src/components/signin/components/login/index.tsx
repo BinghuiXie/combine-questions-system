@@ -82,12 +82,8 @@ export default class LoginWrapper extends mixins(Lang) {
                 </div>
                 {
                     this.isTeacherLogin 
-                    ? <TeacherInput
-                        teacherInfo={this.teacherInfo}
-                    /> 
-                    : <StudentInput
-                        studentInfo={this.studentInfo}
-                    />
+                    ? <TeacherInput/> 
+                    : <StudentInput/>
                 }
                 <div class='login__bottom-info'>
                     <div class='register-forget'>

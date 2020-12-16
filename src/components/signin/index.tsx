@@ -1,5 +1,5 @@
+import { CreateElement } from 'vue';
 import { Component } from 'vue-property-decorator';
-import { State, Action } from 'vuex-class';
 import { mixins } from 'vue-class-component';
 import Canvas from './components/canvas';
 import LoginWrapper from './components/login';
@@ -10,10 +10,7 @@ import {
  } from '@/common/constants'
 import './style.scss';
 import { 
-    IRegisterData, 
-    IUserInfo,
-    ITeacherInfo,
-    IStudentInfo
+    IRegisterData
 } from '@/interfaces';
 
 @Component({
@@ -26,6 +23,10 @@ import {
 export default class Signin extends mixins(Lang) {
 
     private isRegister: boolean = false;
+
+    public loginWrapper = 'LoginWrapper';
+
+    public registerWrapper = 'RegisterWrapper';
 
     public registerData: IRegisterData<string> = {
         employeeId: '',
@@ -49,7 +50,26 @@ export default class Signin extends mixins(Lang) {
         this.registerData = value;
     }
 
-    render() {
+    public renderRegisterComponent(h: CreateElement) {
+        return h(this.$options.components![this.registerWrapper], {
+            props: {
+                registerData: this.registerData
+            },
+            on: {
+                backToLogin: this.switchLoginStatus
+            }
+        })
+    }
+
+    public renderLoginComponent(h: CreateElement) {
+        return h(this.$options.components![this.loginWrapper], {
+            on: {
+                handleRegister: this.handleRegister
+            }
+        })
+    }
+
+    render(h: CreateElement) {
         return (
             <div class='signin-wrapper'>
                 <Canvas/>
@@ -63,15 +83,8 @@ export default class Signin extends mixins(Lang) {
                     </div>
                     {
                         this.isRegister 
-                        ? <RegisterWrapper
-                            registerData={this.registerData}
-                            onBackToLogin={this.switchLoginStatus}
-                            onUpdateRegisterData={this.handleUpdateRegisterData}
-                        />
-                        : 
-                        <LoginWrapper
-                            onHandleRegister={this.handleRegister}
-                        />
+                        ? this.renderRegisterComponent(h)
+                        : this.renderLoginComponent(h)
                     }
                 </div>
             </div>

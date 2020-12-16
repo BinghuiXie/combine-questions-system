@@ -1,6 +1,5 @@
-import { IUserInfo as IUserState } from '@/interfaces';
-
+import { ISigninState } from './signin/signin.interface';
 
 export interface IRootState {
-    signin: IUserState;
+    signin: ISigninState;
 }

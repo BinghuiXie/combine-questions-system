@@ -1,0 +1,72 @@
+@import '@/vars.scss';
+
+.card-container{
+    width: 180px;
+    height: 260px;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba($color: #000000, $alpha: 0.4);
+    box-sizing: border-box;
+    overflow: hidden;
+    transition: all .5s;
+    margin-right: 15px;
+    margin-bottom: 25px;
+    user-select: none;
+    &:hover{
+        box-shadow: 0 4px 16px rgba($color: #000000, $alpha: 0.5);
+        transform: translateY(-4px) scale(1.02);
+        cursor: pointer;
+        .card-container__inner{
+            .card-container__inner-bgimg{
+                img{
+                    transform: scale(1.2);
+                }
+            }
+        }
+    }
+    .card-container__inner{
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        .card-container__inner-bgimg{
+            height: 170px;
+            overflow: hidden;
+            img{
+                width: 100%;
+                height: 100%;
+                transition: all .5s;
+            }
+        }
+        .card-container__inner-content{
+            flex: 1;
+            box-sizing: border-box;
+            padding: 8px 6px;
+            position: relative;
+            .card-container__inner-content__text{
+                color: $default_font_color;
+                .title{
+                    font-size: 14px;
+                    color: #000000;
+                    font-weight: 600;
+                    margin-bottom: 5px;
+                }
+                .intro{
+                    font-size: 10px;
+                    line-height: 1.4;
+                }
+            }
+            .card-container__inner-content__label{
+                position: absolute;
+                right: 6px;
+                bottom: 6px;
+                font-size: 8px;
+                color: $theme_color;
+                box-sizing: border-box;
+                border: 1px solid $theme_color;
+                border-radius: 8px;
+                line-height: 1.4;
+                padding: 0 4px;
+                user-select: none;
+            }
+        }
+    }
+}

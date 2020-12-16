@@ -1,0 +1,19 @@
+@import '@/vars.scss';
+
+.el-portal-container {
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    padding: 0 72px;
+    font-size: $base_font_size;
+    .el-portal-main{
+        flex-grow: 1;
+        box-sizing: border-box;
+        padding: 96px 72px 72px 72px;
+        display: grid;
+        grid-template-rows: repeat(2, 46%);
+        grid-template-columns: repeat(5, 20%);
+    }
+}

@@ -27,6 +27,9 @@ export default class TeacherInput extends mixins(Lang) {
     @Action('autoFillUserInfo')
     private autoUpdateUserInfo!: (payload: { userInfo: ITeacherInfo }) => void
 
+    @Action('handleUserLogin')
+    private handleUserLogin!: (payload: { data: ITeacherInfo }) => void
+
     public $refs!: {
         loginForm: Vue & {
             validate: (param?: any) => any
@@ -119,7 +122,7 @@ export default class TeacherInput extends mixins(Lang) {
                     >{ this.t(REMEMBER_PASSWORD) }</el-checkbox>
                 </el-form-item>
                 <el-form-item class='login-el-form-item'>
-                    <el-button type='primary'>
+                    <el-button type='primary' onclick={ () => { this.handleUserLogin({ data: this.teacherInfo }) } }>
                         登录
                     </el-button>
                 </el-form-item>

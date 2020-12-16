@@ -1,5 +1,6 @@
 import { Component, Emit, Prop } from 'vue-property-decorator';
 import { mixins } from 'vue-class-component';
+import { State, Action } from 'vuex-class';
 import {
     SELECT_REGISTER_IDENTITY,
     INPUT_EMPLOYEE_ID,
@@ -30,15 +31,7 @@ import { SigninRules } from '../../rules';
 @Component
 export default class RegisterWrapper extends mixins(Lang) {
 
-    @Prop({ default: () => { return {
-        employeeId: '',
-        studentId: '',
-        password: '',
-        authCode: '',
-        phone: '',
-        identity: TEACHER,
-        confirmPass: ''
-    } } })
+    @State(state => state.signin.registerData)
     registerData!: IRegisterData<string>;
 
     public get model(): IRegisterData<string> {
@@ -46,18 +39,16 @@ export default class RegisterWrapper extends mixins(Lang) {
     }
 
     public get userId() {
-        return this.registerIdentity === STUDENT ? this.model.studentId : this.model.employeeId;
+        return this.model.identity === STUDENT ? this.model.studentId : this.model.employeeId;
     }
 
     public set userId(newValue) {
-        if(this.registerIdentity === STUDENT) {
+        if(this.model.identity === STUDENT) {
             this.model.studentId = newValue;
         } else {
             this.model.employeeId = newValue;
         }
     }
-
-    private registerIdentity: IRegisterIdentity = '';
 
     public isSendCode: boolean = false;
 
@@ -70,11 +61,15 @@ export default class RegisterWrapper extends mixins(Lang) {
     @Emit('backToLogin')
     public backToLogin() {}
 
-    @Emit('updateRegisterData')
-    public updateRegisterData(newValue: IRegisterData<string>) {}
+    @Action('handleInfoSubmit')
+    handleInfoSubmit(payload: { data: IRegisterData<string>}) {
+    }
+
+    @Action('updateRegisterData')
+    public updateRegisterData(payload: { registerData: IRegisterData<string> }) {}
 
     handleInput() {
-        this.updateRegisterData(this.model);
+        this.updateRegisterData({ registerData: this.model });
     }
 
     sendAuthCode(e: MouseEvent) {
@@ -95,11 +90,10 @@ export default class RegisterWrapper extends mixins(Lang) {
         }
     }
 
-    handleRegister(name: string) {
+    handleRegister() {
         this.$refs.registerForm.validate((valid: boolean) => {
             if(valid) {
-                // TODO: register logic
-                console.log('submit')
+                this.handleInfoSubmit({ data: this.model});
             } else {
                 return false;
             }
@@ -108,33 +102,32 @@ export default class RegisterWrapper extends mixins(Lang) {
 
     render() {
 
-        const refName = 'registerForm'
-
         return (
             <div class='register-wrapper'>
                 <el-form 
                     {...{ props: { model: this.model } }}
                     rules={SigninRules}
-                    ref={refName}
+                    ref='registerForm'
                 >
                     <el-form-item>
                         <el-select
                             class='register__select-identity'
                             placeholder={ this.t(SELECT_REGISTER_IDENTITY) }
-                            v-model={this.registerIdentity}
+                            v-model={this.model.identity}
+                            onChange={this.handleInput}
                         >
                             <el-option label='教师' value={TEACHER}></el-option>
                             <el-option label='学生' value={STUDENT}></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item prop={ this.registerIdentity === STUDENT ? 'studentId': 'employeeId' }>
+                    <el-form-item prop={ this.model.identity === STUDENT ? 'studentId': 'employeeId' }>
                         <el-input
-                            maxlength={ this.registerIdentity === STUDENT ? MAX_STUDENT_ID_LENGTH : MAX_EMPLOYEE_ID_LENGTH}
+                            maxlength={ this.model.identity === STUDENT ? MAX_STUDENT_ID_LENGTH : MAX_EMPLOYEE_ID_LENGTH}
                             show-word-limit
                             v-model={this.userId}
                             onInput={this.handleInput}
                             placeholder={ 
-                                this.registerIdentity === STUDENT 
+                                this.model.identity === STUDENT 
                                 ? this.t( INPUT_STUDENT_ID )
                                 : this.t( INPUT_EMPLOYEE_ID ) 
                             }
@@ -188,7 +181,7 @@ export default class RegisterWrapper extends mixins(Lang) {
                     <el-form-item class='el-form-item__button'>
                         <el-button 
                             type='primary'
-                            onclick={ () => { this.handleRegister(refName) }}
+                            onclick={ () => { this.handleRegister() }}
                         >{ this.t( REGISTER_NOW ) }</el-button>
                     </el-form-item>
                     <div class='back-login' onclick={ this.backToLogin }>

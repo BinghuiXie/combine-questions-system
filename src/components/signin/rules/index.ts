@@ -14,10 +14,16 @@ const SigninRules: any = {
     studentId: [
         { validator: checkStudentId, trigger: 'change' }
     ],
+    // 教师登录密码
     tPassword: [
         { validator: checkPassword, trigger: 'change' }
     ],
+    // 学生登录密码
     sPassword: [
+        { validator: checkPassword, trigger: 'change' }
+    ],
+    // 注册密码
+    password: [
         { validator: checkPassword, trigger: 'change' }
     ],
     confirmPass: [

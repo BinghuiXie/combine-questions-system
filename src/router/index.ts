@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import Signin from '@/components/signin';
-import Portal from '@/components/main'
+import Portal from '@/components/portal'
 
 Vue.use(VueRouter)
 

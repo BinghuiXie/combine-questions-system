@@ -1,7 +1,9 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import Signin from '@/components/signin';
-import Portal from '@/components/portal'
+import Portal from '@/components/portal';
+import Main from '@/components/main';
+import { component } from 'vue/types/umd';
 
 Vue.use(VueRouter)
 
@@ -13,13 +15,20 @@ const routes: Array<RouteConfig> = [
   {
     path: '/portal',
     component: Portal,
-  },
-  {
-    path: '/',
-    redirect: '/portal',
     meta: {
       requireAuth: true
     }
+  },
+  {
+    path: '/',
+    redirect: '/main',
+    meta: {
+      requireAuth: true
+    }
+  },
+  {
+    path: '/main',
+    component: Main
   }
 ]
 

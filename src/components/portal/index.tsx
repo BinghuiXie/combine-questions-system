@@ -18,7 +18,7 @@ import { isArray } from '@/utlis';
 export default class Portal extends mixins(Lang) {
 
     renderCards(h: CreateElement) {
-        return isArray(modules) && modules.map((module, index) => {
+        return isArray(modules) && modules.map(module => {
             return h(this.$options.components!['Card'], {
                 props: { 
                     imgUrl: module.imgUrl,
@@ -33,7 +33,6 @@ export default class Portal extends mixins(Lang) {
     render(h: CreateElement) {
         return (
             <el-container class='el-portal-container is-vertical'>
-                <Header></Header>
                 <el-main class='el-portal-main'>
                     {
                         this.renderCards(h)

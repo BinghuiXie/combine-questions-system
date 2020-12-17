@@ -1,0 +1,102 @@
+@import '@/vars.scss';
+
+.main-container{
+    height: 100vh;
+    overflow: hidden;
+    background-color: #ffffff;
+    position: relative;
+    .main-container__left-bg, .main-container__right-bg {
+        position: fixed;
+        bottom: 0;
+        z-index: 3;
+    }
+    .main-container__left-bg{
+        background: url('../assets/main_01.svg') no-repeat;
+        left: 0;
+        width: 480px;
+        height: 480px;
+    }
+    .main-container__right-bg{
+        width: 420px;
+        height: 420px;
+        background: url('../assets/main_02.svg') no-repeat;
+        right: 0;
+    }
+    .main-container__content{
+        position: absolute;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        top: 0;
+        width: 40%;
+        height: 50%;
+        background-color: #ffffff;
+        margin: auto;
+        border-radius: 12px;
+        z-index: 2;
+        box-shadow: 0 0 8px rgba($color: #000000, $alpha: 0.4);
+        .main-container__inner-circle{
+            width: 130px;
+            height: 130px;
+            background-color: #ffffff;
+            position: absolute;
+            right: 50%;
+            transform: translate(50%, -50%);
+            border-radius: 50%;
+            .logo{
+                width: 120px;
+                height: 120px;
+                background-color: $theme_color;
+                border-radius: 50%;
+                position: absolute;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                top: 0;
+                margin: auto;
+                text-align: center;
+                .iconfont{
+                    font-size: 64px;
+                    line-height: 120px;
+                    text-align: center;
+                    color: #ffffff;
+                    font-weight: 600;
+                }
+            }
+        }
+        .main-container__info {
+            padding-top: 70px;
+            text-align: center;
+            .title{
+                font-size: 18px;
+                line-height: 4;
+                font-weight: 600;
+            }
+            .description{
+                font-size: 16px;
+                color: #666666;
+            }
+            .button{
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding-top: 48px;
+                .el-button{
+                    background-color: $theme_color;
+                    width: 190px;
+                    line-height: 1.5;
+                    border: none;
+                    box-shadow: 0 2px 4px rgba($color: $theme_color, $alpha: 0.8);
+                    margin-bottom: 16px;
+                }
+                .el-button + .el-button {
+                    margin-left: 0;
+                    background-color: #ffffff;
+                    color: #000000;
+                    box-shadow: 0 0 4px rgba($color: #000000, $alpha: 0.4);
+                }
+            }
+        }
+    }
+}

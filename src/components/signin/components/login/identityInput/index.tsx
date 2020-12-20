@@ -125,7 +125,7 @@ export default class IdentityInput extends mixins(Lang, ComponentProp) {
         if(this.isSelectProtocol) {
             this.handleUserLogin({ data: this.model })
         } else {
-            this.$message.error(this.t(ERROR_MESSAGE.SELECT_USER_PROTOCOL));
+            this.$message.error(this.t(ERROR_MESSAGE.NOT_SELECT_USER_PROTOCOL));
         }
     }
 

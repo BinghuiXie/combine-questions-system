@@ -8,6 +8,7 @@ import {
 import { ActionTree } from 'vuex';
 import * as types from './mutationTypes';
 import AJAX from '@/utlis/ajax';
+import axios from 'axios'
 
 const $http = new AJAX();
 
@@ -53,7 +54,14 @@ export const actions: ActionTree<ISigninState, IRootState> = {
         });
         let res;
         try {
-            res = await $http.post('/user/register', copy);
+            res = await $http.post('/user/register', {
+                identityId: copy.employeeId || copy.studentId,
+                password: copy.password,
+                phoneNumber: copy.phone,
+                roleId: copy.identity === 'teacher' ? 0 : 1,
+                smsCode: Number(copy.authCode)
+            });
+            console.log(res);
         } catch (error) {
             throw Error(`request Error: ${error}`);
         }
@@ -67,4 +75,15 @@ export const actions: ActionTree<ISigninState, IRootState> = {
             registerData: payload.registerData
         })
     },
+
+    async handleSendCode(context, payload: { phoneNumber: string }) {
+        const { phoneNumber } = payload;
+        try {
+            const res = await $http.post('/user/sms', {
+                phoneNumber
+            });
+        } catch (error) {
+            
+        }
+    }
 }

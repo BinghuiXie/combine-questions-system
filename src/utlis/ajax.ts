@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { AxiosRequestConfig } from 'axios';
 
-const baseURL = '';
+const baseURL = 'http://192.168.43.225:8080';
 
 export default class AJAX {
 

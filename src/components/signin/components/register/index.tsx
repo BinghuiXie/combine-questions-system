@@ -17,7 +17,8 @@ import {
     MAX_EMPLOYEE_ID_LENGTH,
     MAX_PASSWORD_LENGTH,
     MIN_PASSWORD_LENGTH,
-    MAX_STUDENT_ID_LENGTH
+    MAX_STUDENT_ID_LENGTH,
+    ERROR_MESSAGE
 } from '@/common/constants';
 import { 
     IRegisterIdentity, 
@@ -65,6 +66,9 @@ export default class RegisterWrapper extends mixins(Lang) {
     handleInfoSubmit(payload: { data: IRegisterData<string>}) {
     }
 
+    @Action('handleSendCode')
+    handleSendCode(payload: { phoneNumber: string }) {}
+
     @Action('updateRegisterData')
     public updateRegisterData(payload: { registerData: IRegisterData<string> }) {}
 
@@ -75,18 +79,23 @@ export default class RegisterWrapper extends mixins(Lang) {
     sendAuthCode(e: MouseEvent) {
         const button = e.target as HTMLButtonElement;
         let time = 60;
-        this.isSendCode = true;
-        button.innerText = `重新发送(${String(time)}s)`;
-        if(button) {
-            const timer = setInterval(() => {
-                time--;
-                button.innerText = `重新发送(${String(time)}s)`;
-                if(+time <= 0) {
-                    clearInterval(timer);
-                    this.isSendCode = false;
-                    button.innerText = this.t(SEND_AUTH_CODE);
-                }
-            }, 1000);
+        if(!this.registerData.phone) {
+            this.$message.error(this.t(ERROR_MESSAGE.NOT_INPUT_PHONE_NUMER))
+        } else {
+            this.isSendCode = true;
+            button.innerText = `重新发送(${String(time)}s)`;
+            this.handleSendCode({ phoneNumber: this.registerData.phone });
+            if(button) {
+                const timer = setInterval(() => {
+                    time--;
+                    button.innerText = `重新发送(${String(time)}s)`;
+                    if(+time <= 0) {
+                        clearInterval(timer);
+                        this.isSendCode = false;
+                        button.innerText = this.t(SEND_AUTH_CODE);
+                    }
+                }, 1000);
+            }
         }
     }
 

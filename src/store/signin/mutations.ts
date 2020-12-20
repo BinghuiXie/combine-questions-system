@@ -1,6 +1,6 @@
 import { ISigninState } from './signin.interface';
 import {
-    ITeacherInfo, 
+    ITeacherInfo,
     IStudentInfo,
     IRegisterData,
     IBindUserInfo

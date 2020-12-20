@@ -1,10 +1,9 @@
+import { ISigninState } from './signin.interface';
 import { SUCCESS_CODE } from '@/common/constants/code';
 import { IRootState } from './../rootState.interface';
-import { 
-    IUserInfo as IUserState,
-    ITeacherInfo,
-    IStudentInfo,
-    IRegisterData 
+import {
+    IRegisterData,
+    IBindUserInfo
 } from '@/interfaces';
 import { ActionTree } from 'vuex';
 import * as types from './mutationTypes';
@@ -12,10 +11,9 @@ import AJAX from '@/utlis/ajax';
 
 const $http = new AJAX();
 
-type IBindUserInfo = ITeacherInfo | IStudentInfo;
-
-export const actions: ActionTree<IUserState, IRootState> = {
+export const actions: ActionTree<ISigninState, IRootState> = {
     handleInput(context, payload: { newModel: IBindUserInfo }) {
+        console.log('handleInput: ', payload.newModel)
         context.commit(types.INPUT_USER_INFO, { 
             newModel: payload.newModel 
         })

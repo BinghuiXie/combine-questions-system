@@ -1,24 +1,20 @@
-import { Component, Emit, Prop } from 'vue-property-decorator';
+import { CreateElement } from 'vue';
+import { Component, Emit } from 'vue-property-decorator';
 import { mixins } from 'vue-class-component';
-import TeacherInput from './teacherInput';
-import StudentInput from './studentInput';
+import IdentityInput from './identityInput';
 import Lang from '@/lang/lang';
 import { 
     TEACHER_LOGIN,
     STUDENT_LOGIN,
     FORGOT_PASSWORD,
-    REGISTER_COUNT,
-    MAX_STUDENT_ID_LENGTH
- } from '@/common/constants'
+    REGISTER_COUNT
+ } from '@/common/constants';
 
 import './style.scss';
-import { IStudentInfo, ITeacherInfo } from '@/interfaces';
-import storage from '@/utlis/localStorage';
 
 @Component({
     components: {
-        TeacherInput,
-        StudentInput
+        IdentityInput
     }
 })
 export default class LoginWrapper extends mixins(Lang) {
@@ -36,6 +32,8 @@ export default class LoginWrapper extends mixins(Lang) {
     public $refs!: {
         scrollBox: HTMLDivElement;
     }
+
+    public isSelectProtocol: boolean = false;
 
     @Emit('handleRegister')
     public handleRegister() {}
@@ -64,7 +62,20 @@ export default class LoginWrapper extends mixins(Lang) {
         this.$refs.scrollBox.style.transform = `translate(0, -${index * distance}px)`;
     }
 
-    render() {
+    handleSelectProtocol(value: boolean) {
+        this.isSelectProtocol = value;
+    }
+
+    renderChildComponent(h: CreateElement) {
+        return h(this.$options.components!['IdentityInput'], {
+            props: {
+                isSelectProtocol: this.isSelectProtocol,
+                identity: this.isTeacherLogin ? 0: 1
+            }
+        })
+    }
+
+    render(h: CreateElement) {
         return (
             <div class='login-wrapper'>
                 <div class='login-wrapper_switch-identity'>
@@ -80,11 +91,7 @@ export default class LoginWrapper extends mixins(Lang) {
                         onclick={ (e: any) => { this.handleSwitchIdentity(e) } }
                     />
                 </div>
-                {
-                    this.isTeacherLogin 
-                    ? <TeacherInput/> 
-                    : <StudentInput/>
-                }
+                { this.renderChildComponent(h) }
                 <div class='login__bottom-info'>
                     <div class='register-forget'>
                         <span onclick={ this.handleRegister }>{ this.t( REGISTER_COUNT ) }</span>
@@ -92,12 +99,11 @@ export default class LoginWrapper extends mixins(Lang) {
                     </div>
                     <div class='login__bottom-line'/>
                     <div class='disclaimer-text'>
-                        <el-checkbox>
-                            已阅读并同意<a href="">《XXXXXXX协议》</a>
+                        <el-checkbox onchange={this.handleSelectProtocol}>
+                            已阅读并同意<a href="">《用户隐私协议》</a>
                         </el-checkbox>
                     </div>
                 </div>
-                
             </div>
         )
     }

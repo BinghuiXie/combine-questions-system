@@ -17,7 +17,8 @@ const zh_CN: {
     "input_auth_code": "请输入验证码",
     "send_auth_code": "发送验证码",
     "register_now": "立即注册",
-    "back_to_login": "返回登录"
+    "back_to_login": "返回登录",
+    "select_user_protocol": "未勾选用户协议"
 }
 
 export default zh_CN;

@@ -12,7 +12,4 @@ export interface ITeacherInfo extends IBaseInfo {
     tPassword: string;
 }
 
-export interface IUserInfo {
-    teacherInfo: ITeacherInfo;
-    studentInfo: IStudentInfo;
-}
+export type IBindUserInfo = ITeacherInfo | IStudentInfo;

@@ -1,4 +1,4 @@
-import { Component, Prop, Emit } from 'vue-property-decorator';
+import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 import { State, Action } from 'vuex-class';
 import { mixins } from 'vue-class-component';
 import Lang from '@/lang/lang';
@@ -6,36 +6,107 @@ import {
     INPUT_PASSWPRD,
     REMEMBER_PASSWORD,
     INPUT_STUDENT_ID,
+    INPUT_EMPLOYEE_ID,
     MAX_PASSWORD_LENGTH,
     MIN_PASSWORD_LENGTH,
     MAX_STUDENT_ID_LENGTH,
-    LOGIN_STUDENTINFO_KEY
+    MAX_EMPLOYEE_ID_LENGTH,
+    LOGIN_STUDENTINFO_KEY,
+    LOGIN_TEACHERINFO_KEY,
+    ERROR_MESSAGE,
+    STUDENT_ID,
+    TEACHER_ID,
+    STUDENT_PASSWORD,
+    TEACHER_PASSWORD
  } from '@/common/constants';
 import { SigninRules } from '@/components/signin/rules';
-import { IStudentInfo } from '@/interfaces';
+import { IStudentInfo, ITeacherInfo, IBindUserInfo } from '@/interfaces';
 import storage from '@/utlis/localStorage';
 
+const ComponentProp = Vue.extend({
+    props: {
+        isSelectProtocol: Boolean
+    }
+})
+
 @Component
-export default class StudentInput extends mixins(Lang) {
+export default class IdentityInput extends mixins(Lang, ComponentProp) {
 
 
     @State(state => state.signin.studentInfo)
     studentInfo!: IStudentInfo;
 
+    @State(state => state.signin.teacherInfo)
+    teacherInfo!: ITeacherInfo;
+
     @Action('handleInput')
-    private handleInput!: (payload: { newModel: IStudentInfo }) => void
+    private handleInput!: (payload: { newModel: IBindUserInfo }) => void
 
     @Action('autoFillUserInfo')
-    private autoUpdateUserInfo!: (payload: { userInfo: IStudentInfo }) => void
+    private autoUpdateUserInfo!: (payload: { userInfo: IBindUserInfo }) => void
 
+    @Action('handleUserLogin')
+    private handleUserLogin!: (payload: { data: IBindUserInfo }) => void
+    
     public $refs!: {
         loginForm: Vue & {
             validate: (param?: any) => any 
         };
     }
 
-    public get model(): IStudentInfo {
-        return { ...this.studentInfo }
+    @Prop()
+    public isSelectProtocol: boolean = false;
+
+    @Prop()
+    public identity: 0 | 1 = 0; // 0 => 教师; 1 => 学生 
+
+    @Watch('identity')
+    onIdentityChange() {
+        this.autoFillUserInfo();
+    }
+
+    public get model(): IBindUserInfo {
+        return this.isTeacher ? { ...this.teacherInfo } : { ...this.studentInfo }
+    }
+
+    public get isTeacher(): boolean {
+        return this.identity === 0;
+    }
+
+    public get storageKey(): string {
+        return this.isTeacher ? LOGIN_TEACHERINFO_KEY : LOGIN_STUDENTINFO_KEY;
+    }
+
+    public get idLength(): number {
+        return this.isTeacher ? MAX_EMPLOYEE_ID_LENGTH : MAX_STUDENT_ID_LENGTH;
+    }
+
+    public get idPlaceholder(): string {
+        return this.isTeacher ? INPUT_EMPLOYEE_ID : INPUT_STUDENT_ID;
+    }
+
+    public get idName(): string {
+        return this.isTeacher ? TEACHER_ID : STUDENT_ID;
+    }
+
+    public get pwdName(): string {
+        return this.isTeacher ? TEACHER_PASSWORD : STUDENT_PASSWORD;
+    }
+
+    public get idInput() {
+        return this.model[this.idName];
+    }
+
+    public set idInput(value) {
+        this.model[this.idName] = value;
+    }
+
+    public get password(): string {
+        return this.model[this.pwdName];
+    }
+
+    public set password(value) {
+        this.model[this.pwdName] = value;
     }
 
     /** 检查输入是否合规(与每次输入判断不同，该方法用在整体对输入的判断上)
@@ -50,14 +121,22 @@ export default class StudentInput extends mixins(Lang) {
         return res;
     }
 
-    switchRememberPass(val: boolean) {
-        if(val && this.isInputValid()) {
-            // 将信息存入 localStorage
-            storage.set(LOGIN_STUDENTINFO_KEY, this.model);
+    public clickLoginButton() {
+        if(this.isSelectProtocol) {
+            this.handleUserLogin({ data: this.model })
+        } else {
+            this.$message.error(this.t(ERROR_MESSAGE.SELECT_USER_PROTOCOL));
         }
     }
 
-    fillStudentInfo(info: IStudentInfo) {
+    switchRememberPass(val: boolean) {
+        if(val && this.isInputValid()) {
+            // 将信息存入 localStorage
+            storage.set(this.storageKey, this.model);
+        }
+    }
+
+    fillStudentInfo(info: IBindUserInfo) {
         this.handleInput({ newModel: info });
     }
 
@@ -65,13 +144,13 @@ export default class StudentInput extends mixins(Lang) {
      *  自动填充用户名密码
      */
     autoFillUserInfo() {
-        const data = storage.get(LOGIN_STUDENTINFO_KEY);
+        const data = storage.get(this.storageKey);
         this.autoUpdateUserInfo({ userInfo: data });
-        this.fillStudentInfo(this.studentInfo);
+        this.fillStudentInfo(this.model);
     }
 
     mounted() {
-        if(storage.get(LOGIN_STUDENTINFO_KEY)) {
+        if(storage.get(this.storageKey)) {
             this.autoFillUserInfo();
         }
     }
@@ -89,26 +168,26 @@ export default class StudentInput extends mixins(Lang) {
                 </el-form-item>
                 <el-form-item
                     class='login-el-form-item'
-                    prop='studentId'
+                    prop={this.idName}
                 >
                     <el-input
-                        maxlength={ MAX_STUDENT_ID_LENGTH }
+                        maxlength={ this.idLength }
                         show-word-limit
-                        v-model={this.model.studentId}
+                        v-model={this.idInput}
                         onInput={ () => { this.handleInput({ newModel: this.model }) }  }
-                        placeholder={ this.t(INPUT_STUDENT_ID) }
+                        placeholder={ this.t(this.idPlaceholder) }
                     ></el-input>
                 </el-form-item>
                 <el-form-item 
                     class='login-el-form-item password__content' 
-                    prop='sPassword'
+                    prop={this.pwdName}
                 >
                     <el-input
                         type='password'
                         maxlength={MAX_PASSWORD_LENGTH}
                         minlength={MIN_PASSWORD_LENGTH}
                         show-password
-                        v-model={this.model.sPassword}
+                        v-model={this.password}
                         onInput={ () => { this.handleInput({ newModel: this.model }) }  }
                         placeholder={ this.t(INPUT_PASSWPRD) }
                     ></el-input>
@@ -120,7 +199,7 @@ export default class StudentInput extends mixins(Lang) {
                     >{ this.t(REMEMBER_PASSWORD) }</el-checkbox>
                 </el-form-item>
                 <el-form-item class='login-el-form-item'>
-                    <el-button type='primary'>
+                    <el-button type='primary' onclick={ this.clickLoginButton }>
                         登录
                     </el-button>
                 </el-form-item>

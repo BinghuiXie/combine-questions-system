@@ -36,16 +36,16 @@
         z-index: 2;
         box-shadow: 0 0 8px rgba($color: #000000, $alpha: 0.4);
         .main-container__inner-circle{
-            width: 130px;
-            height: 130px;
+            width: 120px;
+            height: 120px;
             background-color: #ffffff;
             position: absolute;
             right: 50%;
             transform: translate(50%, -50%);
             border-radius: 50%;
             .logo{
-                width: 120px;
-                height: 120px;
+                width: 110px;
+                height: 110px;
                 background-color: $theme_color;
                 border-radius: 50%;
                 position: absolute;
@@ -56,8 +56,8 @@
                 margin: auto;
                 text-align: center;
                 .iconfont{
-                    font-size: 64px;
-                    line-height: 120px;
+                    font-size: 60px;
+                    line-height: 110px;
                     text-align: center;
                     color: #ffffff;
                     font-weight: 600;

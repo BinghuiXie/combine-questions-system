@@ -1,7 +1,7 @@
 import { Component } from 'vue-property-decorator';
 import { mixins } from 'vue-class-component';
 import Lang from '@/lang/lang';
-import { teacherFunctionList } from './mock/function-list';
+import { teacherFunctionList } from '../../common/mock/compose-viewer/function-list';
 
 import './style.scss';
 

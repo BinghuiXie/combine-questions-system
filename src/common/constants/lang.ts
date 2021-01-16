@@ -24,3 +24,4 @@ export const COURSE_CODE_SELECT: string = 'course_code_select';
 export const COURSE_NAME_SELECT: string = 'course_name_select';
 export const PAPER_SCORE_INPUT: string = 'paper_score_input';
 export const PAPER_DIFFICULTY_SELECT: string = 'paper_difficulty_select';
+export const EMPTY_DATA: string = 'empty_data';

@@ -29,7 +29,8 @@ const zh_CN: {
     "course_code_select": "课程代码选择",
     "course_name_select": "课程名称选择",
     "paper_score_input": "试卷总分数录入",
-    "paper_difficulty_select": "试卷难度选择"
+    "paper_difficulty_select": "试卷难度选择",
+    "empty_data": "暂无数据"
 }
 
 export default zh_CN;

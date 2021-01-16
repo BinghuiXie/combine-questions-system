@@ -1,7 +1,7 @@
 import { IFunctionItem } from '@/interfaces/compose-viewer/functionList.interface';
-import ComposeEditor from '../compose-editor';
-import QuestionManage from '../question-manage';
-import PaperManage from '../paper-manage';
+import ComposeEditor from '@/components/compose-viewer/compose-editor';
+import QuestionManage from '@/components/compose-viewer/question-manage';
+import PaperManage from '@/components/compose-viewer/paper-manage';
 import {
     QUESTION_MANAGE,
     INTELLIGENT_COMPOSE_SYSTEM,

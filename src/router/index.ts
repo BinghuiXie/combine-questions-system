@@ -1,4 +1,4 @@
-import { teacherFunctionList } from './../components/compose-viewer/mock/function-list';
+import { teacherFunctionList } from '../common/mock/compose-viewer/function-list';
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import Signin from '@/components/signin';

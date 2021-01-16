@@ -63,6 +63,15 @@ html {
 	font-size: 100%;
 }
 
+.el-button.el-button--primary{
+    background-color: $theme_color;
+    border-color: $theme_color;
+	&:hover, &:active{
+        background: rgba($color: $theme_color, $alpha: 0.85);
+        border-color: rgba($color: $theme_color, $alpha: 0.85);
+	}
+}
+
 @media screen and (min-width: 1500px) {
 	html {
 		font-size: 125%;

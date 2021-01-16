@@ -1,15 +1,83 @@
+@import '@/vars.scss';
+
 .transfer-card{
     border: 1px solid #ebeef5;
     background-color: #ffffff;
     border-radius: 3px;
     width: 320px;
-    margin-right: 32px;
-    margin-top: 24px;
+    margin-right: 48px;
+    height: 400px;
+    box-sizing: border-box;
+    overflow-y: hidden;
+    position: relative;
     .transfer-card__header{
+        height: 40px;
         line-height: 40px;
         background-color: #f5f7fa;
         border-bottom: 1px solid #ebeef5;
         padding: 0 12px;
         box-sizing: border-box;
+        font-size: 14px;
+    }
+    .transfer-card__content{
+        height: 345px;
+        padding-bottom: 40px;
+        box-sizing: border-box;
+        .transfer-card__content-form{
+            margin: 15px;
+            position: relative;
+        }
+        .transfer-card__content-data{
+            height: 258px;
+            overflow: scroll;
+            .data-empty{
+                text-align: center;
+                color: #909399;
+                font-size: 14px;
+                margin-top: 12px;
+                line-height: 2;
+            }
+            .data-source__item{
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                height: 40px;
+                line-height: 40px;
+                font-weight: 600;
+                color: #606266;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                padding: 0 20px;
+                border-radius: 2px;
+                .data-source__item-name{
+                    font-size: 14px;
+                }
+                .data-source__item-button{
+                    display: none;
+                }
+                &:hover{
+                    cursor: pointer;
+                    background-color: rgba($color: #000000, $alpha: 0.1);
+                    .data-source__item-button{
+                        display: block;
+                    }
+                }
+            }
+        }
+    }
+    .transfer-card__operation{
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 40px;
+        background-color: #ffffff;
+        line-height: 40px;
+        padding: 0 12px;
+        border-top: 1px solid #ebeef5;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: row-reverse;
+        align-items: center;
     }
 }

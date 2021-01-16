@@ -1,0 +1,22 @@
+@import '@/vars.scss';
+
+.editor__bottom-button{
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    .el-button{
+        background-color: $theme_color;
+        border: 1px solid $theme_color;
+        &:active{
+            background-color: rgba($color: $theme_color, $alpha: 0.9);
+        }
+    }
+    .el-button.right{
+        position: absolute;
+        right: 0;
+    }
+}

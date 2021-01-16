@@ -9,8 +9,8 @@ import { Base64 } from 'js-base64';
  import { IStorageItem } from '@/interfaces';
 
  class LocalStorage {
-     public set(key: string, value: any, expires: number = DEFAULT_EXPIRE_TIME) {
-         const obj: IStorageItem = {
+     public set(key: string, value: any, expires: number = DEFAULT_EXPIRE_TIME) { 
+        const obj: IStorageItem = {
              key,
              value,
              startTime: new Date().getTime(),
@@ -45,4 +45,4 @@ import { Base64 } from 'js-base64';
      }
  }
 
- export default new LocalStorage();
+ export default LocalStorage;

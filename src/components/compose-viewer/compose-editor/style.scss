@@ -1,0 +1,35 @@
+.compose-editor{
+    padding: 24px;
+    height: 100%;
+    box-sizing: border-box;
+    .compose-editor__container{
+        box-sizing: border-box;
+        background-color: #ffffff;
+        padding: 36px;
+        height: 100%;
+        display: flex;
+        .editor-steps{
+            height: 100%;
+            width: 60px;
+            box-sizing: border-box;
+            padding: 48px 0;
+            .el-step__height-container{
+                height: 100%;
+            }
+        }
+        .editor-content{
+            flex: 1;
+            position: relative;
+            & > div:nth-of-type(1) {
+                height: 100%;
+                padding: 12px 12px 50px 12px;
+                box-sizing: border-box;
+                position: relative;
+                & > div:nth-of-type(1){
+                    line-height: 2;
+                    padding: 8px 0;
+                }
+            }
+        }
+    }
+}

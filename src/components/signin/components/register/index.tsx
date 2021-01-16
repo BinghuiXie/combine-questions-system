@@ -1,4 +1,4 @@
-import { Component, Emit, Prop } from 'vue-property-decorator';
+import { Component, Emit } from 'vue-property-decorator';
 import { mixins } from 'vue-class-component';
 import { State, Action } from 'vuex-class';
 import {
@@ -18,25 +18,29 @@ import {
     MAX_PASSWORD_LENGTH,
     MIN_PASSWORD_LENGTH,
     MAX_STUDENT_ID_LENGTH,
-    ERROR_MESSAGE
+    ERROR_MESSAGE,
+    HTTPCODE
 } from '@/common/constants';
-import { 
-    IRegisterIdentity, 
-    IRegisterData
+import {
+    IRegisterData,
+    IRegisterResponseData
 } from '@/interfaces';
 import Lang from '@/lang/lang';
-
-import './style.scss';
 import { SigninRules } from '../../rules';
+import { AxiosResponse } from 'axios';
+import './style.scss';
 
 @Component
 export default class RegisterWrapper extends mixins(Lang) {
 
-    @State(state => state.signin.registerData)
-    registerData!: IRegisterData<string>;
-
-    public get model(): IRegisterData<string> {
-        return {...this.registerData}
+    public model: IRegisterData<string> = {
+        employeeId: '',
+        studentId: '',
+        password: '',
+        confirmPass: '',
+        identity: 'teacher',
+        phone: '',
+        authCode: ''
     }
 
     public get userId() {
@@ -63,28 +67,20 @@ export default class RegisterWrapper extends mixins(Lang) {
     public backToLogin() {}
 
     @Action('handleInfoSubmit')
-    handleInfoSubmit(payload: { data: IRegisterData<string>}) {
-    }
+    handleInfoSubmit!: (payload: { data: IRegisterData<string>}) => Promise<AxiosResponse<IRegisterResponseData>>
 
     @Action('handleSendCode')
-    handleSendCode(payload: { phoneNumber: string }) {}
-
-    @Action('updateRegisterData')
-    public updateRegisterData(payload: { registerData: IRegisterData<string> }) {}
-
-    handleInput() {
-        this.updateRegisterData({ registerData: this.model });
-    }
+    handleSendCode!: (payload: { phoneNumber: string }) => void
 
     sendAuthCode(e: MouseEvent) {
         const button = e.target as HTMLButtonElement;
         let time = 60;
-        if(!this.registerData.phone) {
+        if(!this.model.phone) {
             this.$message.error(this.t(ERROR_MESSAGE.NOT_INPUT_PHONE_NUMER))
         } else {
             this.isSendCode = true;
             button.innerText = `重新发送(${String(time)}s)`;
-            this.handleSendCode({ phoneNumber: this.registerData.phone });
+            this.handleSendCode({ phoneNumber: this.model.phone });
             if(button) {
                 const timer = setInterval(() => {
                     time--;
@@ -100,9 +96,13 @@ export default class RegisterWrapper extends mixins(Lang) {
     }
 
     handleRegister() {
-        this.$refs.registerForm.validate((valid: boolean) => {
+        this.$refs.registerForm.validate(async (valid: boolean) => {
             if(valid) {
-                this.handleInfoSubmit({ data: this.model});
+                const res = await this.handleInfoSubmit({ data: this.model});
+                if(res.status === HTTPCODE.SUCCESS) {
+                    // 注册成功，跳转登录页面
+                    this.backToLogin();
+                }
             } else {
                 return false;
             }
@@ -123,7 +123,6 @@ export default class RegisterWrapper extends mixins(Lang) {
                             class='register__select-identity'
                             placeholder={ this.t(SELECT_REGISTER_IDENTITY) }
                             v-model={this.model.identity}
-                            onChange={this.handleInput}
                         >
                             <el-option label='教师' value={TEACHER}></el-option>
                             <el-option label='学生' value={STUDENT}></el-option>
@@ -134,7 +133,6 @@ export default class RegisterWrapper extends mixins(Lang) {
                             maxlength={ this.model.identity === STUDENT ? MAX_STUDENT_ID_LENGTH : MAX_EMPLOYEE_ID_LENGTH}
                             show-word-limit
                             v-model={this.userId}
-                            onInput={this.handleInput}
                             placeholder={ 
                                 this.model.identity === STUDENT 
                                 ? this.t( INPUT_STUDENT_ID )
@@ -147,7 +145,6 @@ export default class RegisterWrapper extends mixins(Lang) {
                             maxlength={MAX_PASSWORD_LENGTH}
                             minlength={MIN_PASSWORD_LENGTH}
                             show-password
-                            onInput={this.handleInput}
                             v-model={this.model.password}
                             placeholder={ this.t( INPUT_PASSWPRD ) }
                             type='password'
@@ -157,7 +154,6 @@ export default class RegisterWrapper extends mixins(Lang) {
                         <el-input
                             maxlength={MAX_PASSWORD_LENGTH}
                             minlength={MIN_PASSWORD_LENGTH}
-                            onInput={this.handleInput}
                             v-model={this.model.confirmPass}
                             show-password
                             type='password'
@@ -166,14 +162,12 @@ export default class RegisterWrapper extends mixins(Lang) {
                     </el-form-item>
                     <el-form-item prop='phone'>
                         <el-input
-                            onInput={this.handleInput}
                             v-model={this.model.phone}
                             placeholder={ this.t( INPUT_PHONE_NUMER ) }
                         ></el-input>
                     </el-form-item>
                     <el-form-item class='el-form-item__code' prop='authCode'>
                         <el-input
-                            onInput={this.handleInput}
                             v-model={this.model.authCode}
                             placeholder={ this.t( INPUT_AUTH_CODE ) } 
                             class='register-item__input'

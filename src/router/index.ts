@@ -1,9 +1,10 @@
+import { teacherFunctionList } from './../components/compose-viewer/mock/function-list';
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import Signin from '@/components/signin';
-import Portal from '@/components/portal';
 import Main from '@/components/main';
-import { component } from 'vue/types/umd';
+import ComposeViewer from '@/components/compose-viewer';
+
 
 Vue.use(VueRouter)
 
@@ -13,11 +14,18 @@ const routes: Array<RouteConfig> = [
     component: Signin
   },
   {
-    path: '/portal',
-    component: Portal,
-    meta: {
-      requireAuth: true
-    }
+    path: '/compose-viewer',
+    redirect: () => {
+      const defaultComponent = teacherFunctionList.find(item => item.default);
+      return '/compose-viewer/' + defaultComponent?.path
+    }, 
+    component: ComposeViewer,
+    children: teacherFunctionList.map((item): RouteConfig => {
+      return {
+        path: item.path,
+        component: item.component
+      }
+    })
   },
   {
     path: '/',

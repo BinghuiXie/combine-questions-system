@@ -5,11 +5,10 @@
     left: 0;
     right: 0;
     top: 0;
-    padding: 0 132px !important;
+    padding: 0 !important;
     font-size: $base_font_size;
     background-color: #ffffff;
     z-index: 2;
-    box-shadow: 0 2px 8px rgba($color: #000000, $alpha: 0.3);
     .el-header__common-content{
         line-height: 60px;
         height: 60px;
@@ -21,30 +20,74 @@
         .el-header__left{
             display: flex;
             align-items: center;
+            justify-content: center;
+            width: 200px;
+            background-color: #fafafc;
+            border-right: 1px solid #dfe4ea;
             .iconfont{
                 color: $theme_color;
                 font-weight: 600;
                 font-size: 2.4 * $base_font_size;
                 margin-right: 12px;
+                font-size: 32px;
             }
             .el-header__title{
-                color: $theme_color;
-                font-weight: 600;
+                .el-header__title-chinese{
+                    font-family: 'ZCOOL QingKe HuangYou', cursive;
+                    color: #333333;
+                    font-size: 16px;
+                    letter-spacing: 1.1px;
+                    user-select: none;
+                }
             }
         }
         .el-header__right{
+            flex: 1;
+            box-shadow: 2px 2px 8px rgba($color: #eeeeee, $alpha: 1);
             .el-header__right-list{
-                li{
+                display: flex;
+                flex-direction: row-reverse;
+                padding: 0 12px;
+                li.el-header__right-item{
                     display: inline-block;
-                    padding: 0 18px;
+                    padding: 0 32px;
                     user-select: none;
                     &:hover{
                         color: $theme_color;
                         cursor: pointer;
-                        text-shadow: 0 0 1px rgba($color: #000000, $alpha: 0.24);
+                    }
+                    &:last-of-type{
+                        &:hover{
+                            cursor: pointer;
+                            .iconfont{
+                                color: #000000;
+                            }
+                        }
+                        .el-dropdown{
+                            .el-dropdown-link{
+                                .iconfont{
+                                    transition: color .5s;
+                                    font-size: 30px;
+                                }
+                            }
+                        }
                     }
                 }
             }
+        }
+    }
+}
+
+.el-dropdown-menu{
+    padding: 4px 12px;
+    .el-dropdown-menu__item{
+        width: 160px;
+        padding: 0 24px;
+        .iconfont{
+            margin-right: 12px;
+        }
+        &:last-of-type{
+            border-top: 1px solid #eeeeee;
         }
     }
 }

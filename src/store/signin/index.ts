@@ -13,17 +13,7 @@ const state: ISigninState = {
   studentInfo: {
     studentId: '',
     sPassword: ''
-  },
-  // 注册信息
-  registerData: {
-    employeeId: '',
-    studentId: '',
-    password: '',
-    confirmPass: '',
-    identity: 'teacher',
-    phone: '',
-    authCode: ''
-  }
+  } 
 }
 
 export default {

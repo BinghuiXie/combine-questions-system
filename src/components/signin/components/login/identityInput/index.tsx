@@ -21,7 +21,9 @@ import {
  } from '@/common/constants';
 import { SigninRules } from '@/components/signin/rules';
 import { IStudentInfo, ITeacherInfo, IBindUserInfo } from '@/interfaces';
-import storage from '@/utlis/localStorage';
+import Storage from '@/utlis/localStorage';
+
+const storage = new Storage();
 
 const ComponentProp = Vue.extend({
     props: {
@@ -31,7 +33,6 @@ const ComponentProp = Vue.extend({
 
 @Component
 export default class IdentityInput extends mixins(Lang, ComponentProp) {
-
 
     @State(state => state.signin.studentInfo)
     studentInfo!: IStudentInfo;
@@ -136,17 +137,12 @@ export default class IdentityInput extends mixins(Lang, ComponentProp) {
         }
     }
 
-    fillStudentInfo(info: IBindUserInfo) {
-        this.handleInput({ newModel: info });
-    }
-
     /**
      *  自动填充用户名密码
      */
     autoFillUserInfo() {
         const data = storage.get(this.storageKey);
         this.autoUpdateUserInfo({ userInfo: data });
-        this.fillStudentInfo(this.model);
     }
 
     mounted() {
@@ -156,6 +152,7 @@ export default class IdentityInput extends mixins(Lang, ComponentProp) {
     }
 
     render() {
+        console.log(storage)
         return (
             <el-form
                 class='login-el-form'

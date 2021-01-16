@@ -11,7 +11,7 @@ import './style.scss';
 export default class Main extends Vue {
 
     enterSystem() {
-        this.$router.push('/portal');
+        
     }
 
     render() {

@@ -1,15 +1,28 @@
-export interface IBaseInfo {
-    [key: string]: string;
-}
+import { IBaseInterface } from './index';
 
-export interface IStudentInfo extends IBaseInfo {
+export interface IStudentInfo extends IBaseInterface {
     studentId: string;
     sPassword: string;
 }
 
-export interface ITeacherInfo extends IBaseInfo {
+export interface ITeacherInfo extends IBaseInterface {
     employeeId: string;
     tPassword: string;
+}
+
+export interface IUserInfo {
+    teacherInfo: ITeacherInfo;
+    studentInfo: IStudentInfo;
+}
+
+export interface ILoginResponse{
+    code: number;
+    message: string;
+    data: ILoginResponseData;
+}
+
+export interface ILoginResponseData {
+    sessionId: string;
 }
 
 export type IBindUserInfo = ITeacherInfo | IStudentInfo;

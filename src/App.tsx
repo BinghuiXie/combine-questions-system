@@ -7,11 +7,12 @@ import './fonts/iconfont.css'
 export default class App extends Vue {
 
     renderComponent() {
-        const isSignin = this.$route.fullPath === '/signin'
+        const isSignin = this.$route.fullPath === '/signin';
+        const isMain = this.$route.fullPath === '/main';
         return (
             <div id='app'>
                 {
-                    isSignin
+                    isSignin || isMain
                     ? null
                     : <Header></Header>
                 }

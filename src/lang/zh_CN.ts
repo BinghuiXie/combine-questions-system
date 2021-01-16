@@ -19,7 +19,17 @@ const zh_CN: {
     "register_now": "立即注册",
     "back_to_login": "返回登录",
     "not_select_user_protocol": "未勾选用户协议",
-    "not_input_phone_number": "请先输入手机号"
+    "not_input_phone_number": "请先输入手机号",
+    "next_step": "下一步",
+    "last_step": "上一步",
+    "finish_edit": "完成编辑",
+    "intelligent_compose_system": "智能组卷",
+    "question_manage": "试题管理",
+    "paper_manage": "试卷管理",
+    "course_code_select": "课程代码选择",
+    "course_name_select": "课程名称选择",
+    "paper_score_input": "试卷总分数录入",
+    "paper_difficulty_select": "试卷难度选择"
 }
 
 export default zh_CN;

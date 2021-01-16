@@ -3,4 +3,4 @@ import {
     IRegisterData as IRegisterState
 } from '@/interfaces';
 
-export type ISigninState = IUserState & { registerData: IRegisterState<string> }
+export type ISigninState = IUserState

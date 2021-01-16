@@ -26,7 +26,4 @@ export const mutations: MutationTree<ISigninState> = {
             state.studentInfo = userInfo as IStudentInfo;
         }
     },
-    [types.UPDATE_REGISTER_DATA](state, payload: { registerData: IRegisterData<string> }) {
-        state.registerData = payload.registerData;
-    }
 }

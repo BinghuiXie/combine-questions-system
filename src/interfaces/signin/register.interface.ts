@@ -1,6 +1,9 @@
 /**
  * 注册身份
  */
+
+import { IBaseInterface } from './index';
+
 export type IRegisterIdentity = '' | 'teacher' | 'student' | Array<any>;
 
 export interface IRegisterData<T> {
@@ -11,4 +14,8 @@ export interface IRegisterData<T> {
     identity: IRegisterIdentity;
     phone: T;
     authCode: T;
+}
+
+export interface IRegisterResponseData extends IBaseInterface {
+    
 }

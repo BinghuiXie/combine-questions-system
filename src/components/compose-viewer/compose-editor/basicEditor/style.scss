@@ -1,0 +1,26 @@
+@import '@/vars.scss';
+
+.base-editor{
+    .base-editor__content{
+        margin-top: 24px;
+        .el-form{
+            .el-form-item{
+                margin-bottom: 36px;
+                .el-form-item__content{
+                    display: flex;
+                    align-items: center;
+                    .el-input{
+                        width: 400px;
+                    }
+                    .el-rate{
+                        line-height: 40px;
+                        height: 40px;
+                        .el-rate__item{
+                            line-height: 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

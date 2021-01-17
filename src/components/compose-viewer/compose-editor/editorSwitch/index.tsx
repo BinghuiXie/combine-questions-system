@@ -7,6 +7,7 @@ import {
 } from '@/common/constants/lang';
 
 import './style.scss';
+import { ButtonType } from '@/common/constants';
 
 @Component({})
 export default class EditorSwitch extends mixins(Lang) {
@@ -57,12 +58,12 @@ export default class EditorSwitch extends mixins(Lang) {
                     style={{
                         display: this.activeIndex === 0 ? 'none' : 'inline-block'
                     }}
-                    type='primary' 
+                    type={ ButtonType.PRIMARY }
                     class='left'
                     onclick={ this.handleLastStep }
                 >{ this.t(LAST_STEP) }</el-button>
                 <el-button 
-                    type='primary' 
+                    type={ ButtonType.PRIMARY } 
                     class='right'
                     onclick={ this.handeRightButtonClick }
                 >{ this.t(this.rightButtonText) }</el-button>

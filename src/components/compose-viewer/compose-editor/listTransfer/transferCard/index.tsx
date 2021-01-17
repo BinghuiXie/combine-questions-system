@@ -3,7 +3,12 @@ import { mixins } from 'vue-class-component';
 import Lang from '@/lang/lang';
 import './style.scss';
 import { ITransferDataItem } from '@/interfaces/compose-viewer';
-import { EMPTY_DATA, ButtonSize, ButtonType } from '@/common/constants';
+import { 
+    EMPTY_DATA, 
+    ButtonSize, 
+    ButtonType, 
+    InputSize 
+} from '@/common/constants';
 import { valueof } from '@/utlis/type';
 
 enum TransferType {
@@ -136,7 +141,7 @@ export default class TransferCard extends mixins(Lang) {
                     {
                         this.transferType === TransferType.TARGET ?
                         <el-button 
-                            type='danger'
+                            type={ ButtonType.DANGER }
                             size={ ButtonSize.MINI }
                         >
                             批量删除
@@ -147,16 +152,13 @@ export default class TransferCard extends mixins(Lang) {
                 <div class='transfer-card__content'>
                     <div class='transfer-card__content-form'>
                         <el-input 
-                            size='small' 
+                            size={ InputSize.SAMLL } 
                             placeholder='请输入搜索内容'
                             v-model={ this.keyword }
                         ></el-input>
                     </div>
                     <div 
                         class='transfer-card__content-data'
-                        style={{
-                            height: this.transferType === TransferType.SOURCE ? '298px' : '258px'
-                        }}
                     >
                         <el-checkbox-group
                             v-model={ this.checkedTransferItems }

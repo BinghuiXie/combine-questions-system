@@ -19,7 +19,9 @@ import {
     MIN_PASSWORD_LENGTH,
     MAX_STUDENT_ID_LENGTH,
     ERROR_MESSAGE,
-    HTTPCODE
+    HTTPCODE,
+    InputType,
+    ButtonType
 } from '@/common/constants';
 import {
     IRegisterData,
@@ -147,7 +149,7 @@ export default class RegisterWrapper extends mixins(Lang) {
                             show-password
                             v-model={this.model.password}
                             placeholder={ this.t( INPUT_PASSWPRD ) }
-                            type='password'
+                            type={ InputType.PASSWORD }
                         ></el-input>
                     </el-form-item>
                     <el-form-item prop='confirmPass'>
@@ -156,7 +158,7 @@ export default class RegisterWrapper extends mixins(Lang) {
                             minlength={MIN_PASSWORD_LENGTH}
                             v-model={this.model.confirmPass}
                             show-password
-                            type='password'
+                            type={ InputType.PASSWORD }
                             placeholder={ this.t( CONFIRM_PASSWORD ) }
                         ></el-input>
                     </el-form-item>
@@ -173,7 +175,7 @@ export default class RegisterWrapper extends mixins(Lang) {
                             class='register-item__input'
                         ></el-input>
                         <el-button 
-                            type='primary' 
+                            type={ ButtonType.PRIMARY } 
                             class='register-item__send-code'
                             onclick={this.sendAuthCode}
                             disabled={this.isSendCode}
@@ -183,7 +185,7 @@ export default class RegisterWrapper extends mixins(Lang) {
                     </el-form-item>
                     <el-form-item class='el-form-item__button'>
                         <el-button 
-                            type='primary'
+                            type={ ButtonType.PRIMARY }
                             onclick={ () => { this.handleRegister() }}
                         >{ this.t( REGISTER_NOW ) }</el-button>
                     </el-form-item>

@@ -17,7 +17,9 @@ import {
     STUDENT_ID,
     TEACHER_ID,
     STUDENT_PASSWORD,
-    TEACHER_PASSWORD
+    TEACHER_PASSWORD,
+    InputType,
+    ButtonType
  } from '@/common/constants';
 import { SigninRules } from '@/components/signin/rules';
 import { IStudentInfo, ITeacherInfo, IBindUserInfo } from '@/interfaces';
@@ -176,11 +178,11 @@ export default class IdentityInput extends mixins(Lang, ComponentProp) {
                     ></el-input>
                 </el-form-item>
                 <el-form-item 
-                    class='login-el-form-item password__content' 
+                    class='login-el-form-item password__content'
                     prop={this.pwdName}
                 >
                     <el-input
-                        type='password'
+                        type={ InputType.PASSWORD }
                         maxlength={MAX_PASSWORD_LENGTH}
                         minlength={MIN_PASSWORD_LENGTH}
                         show-password
@@ -196,7 +198,7 @@ export default class IdentityInput extends mixins(Lang, ComponentProp) {
                     >{ this.t(REMEMBER_PASSWORD) }</el-checkbox>
                 </el-form-item>
                 <el-form-item class='login-el-form-item'>
-                    <el-button type='primary' onclick={ this.clickLoginButton }>
+                    <el-button type={ ButtonType.PRIMARY } onclick={ this.clickLoginButton }>
                         登录
                     </el-button>
                 </el-form-item>

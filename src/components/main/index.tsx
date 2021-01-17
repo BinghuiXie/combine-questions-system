@@ -2,6 +2,7 @@ import { Component, Vue } from 'vue-property-decorator';
 import Header from '@/components/common/header';
 
 import './style.scss';
+import { ButtonType } from '@/common/constants';
 
 @Component({
     components: {
@@ -30,10 +31,10 @@ export default class Main extends Vue {
                         <div class='description'>基于能力体系和知识体系的试题库及智能组卷系统</div>
                         <div class='button'>
                             <el-button 
-                                type='primary'
+                                type={ ButtonType.PRIMARY }
                                 onclick={this.enterSystem}
                             >立即使用</el-button>
-                            <el-button type='primary'>关于我们</el-button>
+                            <el-button type={ ButtonType.PRIMARY }>关于我们</el-button>
                         </div>
                     </div>
                 </div>

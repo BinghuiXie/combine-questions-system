@@ -15,6 +15,7 @@ const zh_CN: {
     "confirm_password": "确认密码",
     "input_phone_number": "请输入手机号",
     "input_auth_code": "请输入验证码",
+    "input_search_keyword": "请输入搜索关键字",
     "send_auth_code": "发送验证码",
     "register_now": "立即注册",
     "back_to_login": "返回登录",
@@ -30,7 +31,11 @@ const zh_CN: {
     "course_name_select": "课程名称选择",
     "paper_score_input": "试卷总分数录入",
     "paper_difficulty_select": "试卷难度选择",
-    "empty_data": "暂无数据"
+    "empty_data": "暂无数据",
+    "batch_delete": "批量删除",
+    "batch_add": "批量添加",
+    "batch_edit": "批量编辑",
+    "save": "保存"
 }
 
 export default zh_CN;

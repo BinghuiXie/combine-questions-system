@@ -2,25 +2,26 @@ import { Component, Prop, Emit } from 'vue-property-decorator';
 import { mixins } from 'vue-class-component';
 import Lang from '@/lang/lang';
 import './style.scss';
-import { ITransferDataItem } from '@/interfaces/compose-viewer';
 import { 
-    EMPTY_DATA, 
+    ITransferDataItem,
+    ITransferCardConfig,
+    TransferType,
+    TransferOperation,
+    TransferBatchOperation,
+    QuestionTypeMap
+} from '@/interfaces/compose-viewer';
+import { 
+    SAVE,
+    EMPTY_DATA,
+    BATCH_ADD,
+    BATCH_DELETE,
+    BATCH_EDIT,
+    INPUT_SEARCH_KEYWORD,
     ButtonSize, 
     ButtonType, 
-    InputSize 
+    InputSize
 } from '@/common/constants';
 import { valueof } from '@/utlis/type';
-
-enum TransferType {
-    SOURCE = 'source',
-    TARGET = 'target'
-}
-
-enum TransferOperation {
-    ADD = '添加',
-    EDIT = '编辑',
-    DELETE = '删除'
-}
 
 @Component({})
 export default class TransferCard extends mixins(Lang) {
@@ -34,14 +35,17 @@ export default class TransferCard extends mixins(Lang) {
     @Prop({ default: [] })
     public dataSource!: ITransferDataItem[];
 
+    @Prop({ default: { title: '', type: 0 } })
+    public config!: ITransferCardConfig;
+
     @Emit('transferItemDelete')
-    public handleTransferItemDelete(index: number) {}
+    public handleTransferItemDelete(item: number | ITransferDataItem[]) {}
 
     @Emit('transferItemEdit')
     public handleTransferItemEdit(index: number) {}
 
     @Emit('transferItemAdd')
-    public handleTransferItemAdd(index: number) {}
+    public handleTransferItemAdd(item: number | ITransferDataItem[]) {}
 
     public get dataSourceModel() {
         return [ ...this.dataSource ]
@@ -57,15 +61,14 @@ export default class TransferCard extends mixins(Lang) {
 
     public isCheckAll: boolean = false;
 
-    public checkedTransferItems: ITransferDataItem[] = [];
+    public checkedTransferLabels: string[] = [];
 
     /**
      * 处理穿梭框内每一项右侧 button 点击的操作
      */
-    public handleTransferItemOperation(type: valueof<typeof TransferOperation>, index: number) {
+    public handleTransferItemOperation(type: valueof<typeof TransferOperation>, index: number = 0) {
         switch (type) {
             case TransferOperation.ADD:
-                console.log('add');
                 this.handleTransferItemAdd(index);
                 break;
             case TransferOperation.EDIT:
@@ -74,14 +77,42 @@ export default class TransferCard extends mixins(Lang) {
             case TransferOperation.DELETE:
                 this.handleTransferItemDelete(index);
                 break;
+            case TransferOperation.SAVE:
+                this.handleTargetTransferSave()
+        }
+    }
+
+    public handleTargetTransferSave() {
+
+    }
+
+    /**
+     * 处理 批量操作
+     */
+    public handleTransferBatchOperation(type: valueof<typeof TransferBatchOperation>) {
+        const checkedTransferItems: ITransferDataItem[] = this.checkedTransferLabels.map((label: string) => {
+            return {
+                name: label,
+                id: QuestionTypeMap[label as keyof typeof QuestionTypeMap]
+            }
+        })
+        switch (type) {
+            case TransferBatchOperation.BATCH_ADD:
+                this.handleTransferItemAdd(checkedTransferItems)
+                break;
+            case TransferBatchOperation.BATCH_DELETE:
+                this.handleTransferItemDelete(checkedTransferItems);
+                break;
+            case TransferBatchOperation.BATCH_EDIT:
+                break;
         }
     }
 
     /**
      * 处理全选
      */
-    public handleCheckAll() {
-
+    public handleCheckAll(val: boolean) {
+        this.checkedTransferLabels = this.dataSource.map(item => item.name);
     }
 
     public renderDataList() {
@@ -143,8 +174,9 @@ export default class TransferCard extends mixins(Lang) {
                         <el-button 
                             type={ ButtonType.DANGER }
                             size={ ButtonSize.MINI }
+                            onclick={ () => { this.handleTransferBatchOperation(TransferBatchOperation.BATCH_DELETE) } }
                         >
-                            批量删除
+                            { TransferBatchOperation.BATCH_DELETE }
                         </el-button>
                         : null
                     }
@@ -153,7 +185,7 @@ export default class TransferCard extends mixins(Lang) {
                     <div class='transfer-card__content-form'>
                         <el-input 
                             size={ InputSize.SAMLL } 
-                            placeholder='请输入搜索内容'
+                            placeholder={ this.t( INPUT_SEARCH_KEYWORD ) }
                             v-model={ this.keyword }
                         ></el-input>
                     </div>
@@ -161,15 +193,36 @@ export default class TransferCard extends mixins(Lang) {
                         class='transfer-card__content-data'
                     >
                         <el-checkbox-group
-                            v-model={ this.checkedTransferItems }
+                            v-model={ this.checkedTransferLabels }
                         >
                             { this.renderDataList() }
                         </el-checkbox-group>
                     </div>
                 </div>
                 <div class='transfer-card__operation'>
-                    <el-button type={ ButtonType.PRIMARY } size={ ButtonSize.MINI }>
-                        { this.transferType === TransferType.SOURCE ? '批量添加' : '保存' }
+                    {
+                        this.config.batchEdit ? 
+                        <el-button 
+                            type={ ButtonType.PRIMARY } 
+                            size={ ButtonSize.MINI }
+                            onclick={ () => { this.handleTransferBatchOperation } }
+                        >{ TransferBatchOperation.BATCH_EDIT }</el-button>
+                        : null
+                    }
+                    <el-button 
+                        type={ ButtonType.PRIMARY } 
+                        size={ ButtonSize.MINI }
+                        onclick={
+                            this.transferType === TransferType.SOURCE
+                            ? () => { this.handleTransferBatchOperation(TransferBatchOperation.BATCH_ADD) }
+                            : () => { this.handleTransferItemOperation(TransferOperation.SAVE) }
+                        }
+                    >
+                        {
+                            this.transferType === TransferType.SOURCE 
+                            ? TransferBatchOperation.BATCH_ADD 
+                            : TransferOperation.SAVE 
+                        }
                     </el-button>
                 </div>
             </div>

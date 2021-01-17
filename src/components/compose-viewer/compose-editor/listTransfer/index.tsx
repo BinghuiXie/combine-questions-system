@@ -20,12 +20,14 @@ export default class ListTransfer extends mixins(Lang) {
 
     public transferTargetData: ITransferDataItem[] = [];
 
-    public renderTransferCard(h: CreateElement, config: any) {
+    public renderTransferCard(h: CreateElement, params: any) {
+        const { type, title, ...config } = params;
         return h(this.$options.components!['TransferCard'], {
             props: {
-                transferType: config.type,
-                title: config.title,
-                dataSource: config.type === 'source' ? this.transferSourceData : this.transferTargetData
+                transferType: type,
+                title,
+                dataSource: type === 'source' ? this.transferSourceData : this.transferTargetData,
+                config
             },
             on: {
                 transferItemDelete: this.deleteTransferItem,
@@ -39,27 +41,44 @@ export default class ListTransfer extends mixins(Lang) {
         console.log(questionType);
     }
 
-    public deleteTransferItem(index: number) {
-        this.transferTargetData.splice(index, 1);
+    /**
+     * 删除（单个删除或者批量删除）
+     * @param deleteOptions 单个删除为需要删除的项的下标，批量删除为要删除的目标数组
+     */
+    public deleteTransferItem(deleteOptions: number | ITransferDataItem[]) {
+        if(typeof deleteOptions === 'number') {
+            this.transferTargetData.splice(deleteOptions, 1);
+        } else {
+            this.transferTargetData.forEach((targetItem, index) => {
+                if(deleteOptions.find(item => item.id === targetItem.id)) {
+                    this.transferTargetData.splice(index, 1);
+                }
+            })
+        }
     }
 
-    public addTransferItem(index: number) {
-        this.transferTargetData.push(this.transferSourceData[index]);
+    public addTransferItem(addOptions: number | ITransferDataItem[]) {
+        console.log(addOptions);
+        if(typeof addOptions === 'number') {
+            this.transferTargetData.push(this.transferSourceData[addOptions]);
+        } else {
+            this.transferTargetData.push(...addOptions);
+        }
     }
 
     public editTransferItem(index: number) {
         // TODO：TransferItem 编辑
         const transferQuestion = this.transferTargetData[index];
-        this.renderEditQuestionDialog(transferQuestion.type);
+        this.renderEditQuestionDialog(transferQuestion.id);
     }
 
     mounted() {
-        for(let type in QuestionTypeMap) {
-            const isValue = parseInt(type, 10) >= 0;
+        for(let item in QuestionTypeMap) {
+            const isValue = parseInt(item, 10) >= 0;
             if(isValue) {
                 this.transferSourceData.push({
-                    type: parseInt(type),
-                    name: QuestionTypeMap[type]
+                    id: parseInt(item),
+                    name: QuestionTypeMap[item]
                 })
             }
         }
@@ -73,7 +92,8 @@ export default class ListTransfer extends mixins(Lang) {
                         {
                             this.renderTransferCard(h, {
                                     type: 'source',
-                                    title: '试题类型列表'
+                                    title: '试题类型列表',
+                                    batchEdit: false
                                 }
                             )
                         }
@@ -82,7 +102,8 @@ export default class ListTransfer extends mixins(Lang) {
                         {
                             this.renderTransferCard( h, {
                                     type: 'target',
-                                    title: '目标试题类型'
+                                    title: '目标试题类型',
+                                    batchEdit: false
                                 }
                             )
                         }

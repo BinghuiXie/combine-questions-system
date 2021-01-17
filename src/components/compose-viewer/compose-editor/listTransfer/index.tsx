@@ -46,11 +46,13 @@ export default class ListTransfer extends mixins(Lang) {
      * @param deleteOptions 单个删除为需要删除的项的下标，批量删除为要删除的目标数组
      */
     public deleteTransferItem(deleteOptions: number | ITransferDataItem[]) {
+        console.log(deleteOptions);
         if(typeof deleteOptions === 'number') {
             this.transferTargetData.splice(deleteOptions, 1);
         } else {
-            this.transferTargetData.forEach((targetItem, index) => {
-                if(deleteOptions.find(item => item.id === targetItem.id)) {
+            deleteOptions.forEach(deleteItem => {
+                const index = this.transferTargetData.findIndex(item => item.id === deleteItem.id)
+                if(typeof index !== 'undefined') {
                     this.transferTargetData.splice(index, 1);
                 }
             })

@@ -35,7 +35,10 @@ const zh_CN: {
     "batch_delete": "批量删除",
     "batch_add": "批量添加",
     "batch_edit": "批量编辑",
-    "save": "保存"
+    "save": "保存",
+    "button_text_cancel": "取消",
+    "button_text_confirm": "确定",
+    "question_input": "试题录入"
 }
 
 export default zh_CN;

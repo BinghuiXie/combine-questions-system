@@ -1,7 +1,8 @@
+import { CreateElement } from 'vue';
 import { Component, Prop, Emit } from 'vue-property-decorator';
 import { mixins } from 'vue-class-component';
 import Lang from '@/lang/lang';
-import './style.scss';
+import OperationDialog from '@/components/common/operationDialog';
 import { 
     ITransferDataItem,
     ITransferCardConfig,
@@ -21,9 +22,15 @@ import {
     ButtonType, 
     InputSize
 } from '@/common/constants';
-import { valueof } from '@/utlis/type';
+import { valueof } from '@/utlis';
+import { IDialogConfig } from '@/interfaces/common';
+import './style.scss';
 
-@Component({})
+@Component({
+    components: {
+        OperationDialog
+    }
+})
 export default class TransferCard extends mixins(Lang) {
 
     @Prop({ default: 'source' })
@@ -40,9 +47,6 @@ export default class TransferCard extends mixins(Lang) {
 
     @Emit('transferItemDelete')
     public handleTransferItemDelete(item: number | ITransferDataItem[]) {}
-
-    @Emit('transferItemEdit')
-    public handleTransferItemEdit(index: number) {}
 
     @Emit('transferItemAdd')
     public handleTransferItemAdd(item: number | ITransferDataItem[]) {}
@@ -63,6 +67,19 @@ export default class TransferCard extends mixins(Lang) {
 
     public checkedTransferLabels: string[] = [];
 
+    public isRenderDialog: boolean = false;
+
+    public isDialogVisible: boolean = false;
+
+    public editTransferTargetItem!: ITransferDataItem;
+
+    public get dialogConfig(): IDialogConfig {
+        return {
+            title: this.editTransferTargetItem.name,
+            visible: this.isDialogVisible
+        }
+    }
+
     /**
      * 处理穿梭框内每一项右侧 button 点击的操作
      */
@@ -82,8 +99,38 @@ export default class TransferCard extends mixins(Lang) {
         }
     }
 
+    public handleTransferItemEdit(index: number) {
+        this.editTransferTargetItem = this.dataSource[index];
+        this.isRenderDialog = true;
+        this.isDialogVisible = true;
+    }
+
+
+    public renderEditDialog(h: CreateElement) {
+        return h(this.$options.components!['OperationDialog'], {
+            props: {
+                config: this.dialogConfig,
+                dataSource: [{
+                    label: '题目数量',
+                    placeholder: '输入此类题目数量'
+                }, {
+                    label: '单个题目分值',
+                    hint: '对于填空题为每一空的分值',
+                    placeholder: '输入此类题目单个分值'
+                }]
+            },
+            on: {
+                closeDialog: this.closeDialog
+            }
+        })
+    }
+
     public handleTargetTransferSave() {
 
+    }
+
+    public closeDialog() {
+        this.isDialogVisible = false;
     }
 
     /**
@@ -112,7 +159,7 @@ export default class TransferCard extends mixins(Lang) {
      * 处理全选
      */
     public handleCheckAll(val: boolean) {
-        this.checkedTransferLabels = this.dataSource.map(item => item.name);
+        this.checkedTransferLabels = val ? this.dataSource.map(item => item.name) : [];
     }
 
     public renderDataList() {
@@ -161,9 +208,10 @@ export default class TransferCard extends mixins(Lang) {
         })
     }
 
-    render() {
+    render(h: CreateElement) {
         return (
             <div class='transfer-card'>
+                { this.isRenderDialog ? this.renderEditDialog(h) : null }
                 <div class='transfer-card__header'>
                     <el-checkbox
                         v-model={ this.isCheckAll }
@@ -173,6 +221,7 @@ export default class TransferCard extends mixins(Lang) {
                         this.transferType === TransferType.TARGET ?
                         <el-button 
                             type={ ButtonType.DANGER }
+                            disabled={ this.dataSource.length <= 0 }
                             size={ ButtonSize.MINI }
                             onclick={ () => { this.handleTransferBatchOperation(TransferBatchOperation.BATCH_DELETE) } }
                         >

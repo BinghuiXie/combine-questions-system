@@ -1,0 +1,128 @@
+.question-input{
+    .question-input__container {
+        background-color: #ffffff;
+        height: 100%;
+        display: flex;
+        & > div {
+            flex: 1;
+            padding: 12px 18px;
+            position: relative;
+            .title{
+                position: absolute;
+                padding: 0 18px;
+                top: 0;
+                right: 0;
+                left: 0;
+                height: 40px;
+                background-color: #ffffff;
+                line-height: 2;
+                margin-bottom: 16px;
+                z-index: 2;
+                box-shadow: 0 1px 6px rgba($color: #000000, $alpha: .1);
+                span{
+                    line-height: 40px;
+                }
+            }
+        }
+        .question-input__editor{
+            box-sizing: border-box;
+            border-right: 1px solid #eeeeee;
+            overflow-y: hidden;
+            position: relative;
+            .editor-form{
+                padding: 40px 16px 52px 16px;
+                overflow-y: scroll;
+                height: 100%;
+                box-sizing: border-box;
+                &::-webkit-scrollbar{
+                    display: none;
+                }
+                .question-flex{
+                    .el-form-item__content{
+                        display: flex;
+                        align-items: center;
+                    }
+                    .iconfont{
+                        margin-left: 8px;
+                        &:hover{
+                            cursor: pointer;
+                        }
+                    }
+                }
+                .question-options, 
+                .question-answers, 
+                .sub-questions{
+                    .el-input{
+                        margin-bottom: 12px;
+                    }
+                }
+                .question-difficulty{
+                    display: flex;
+                    align-items: center;
+                }
+                .content-wrapper{
+                    margin-bottom: 12px;
+                    .fragment-flex{
+                        display: flex;
+                        .iconfont{
+                            margin-left: 12px;
+                            font-size: 16px;
+                            cursor: pointer;
+                        }
+                    }
+                }
+            }
+            .question-input__bottom{
+                position: absolute;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                height: 50px;
+                background-color: #ffffff;
+                line-height: 48px;
+                padding: 0 18px;
+                direction: rtl;
+                box-shadow: 0 -1px 6px rgba($color: #000000, $alpha: .1);
+            }
+        }
+        .question-input__preview {
+            max-width: 600px;
+            overflow: hidden;
+            .preview__content {
+                box-sizing: border-box;
+                padding-top: 40px;
+                .MJX-TEX{
+                    white-space: break-spaces;
+                    mjx-mo{
+                        display: inline;
+                    }
+                    mjx-utext{
+                        line-height: 1.1;
+                    }
+                }
+                .preview__questionContentChoice-content,
+                .preview__questionSubContent-content,
+                .preview__questionContentSupplement-content{
+                    display: flex;
+                    flex-wrap: wrap;
+                }
+                .preview__questionContentChoice-content {
+                    & > p {
+                        width: 50%;
+                    }
+                }
+                .preview__questionSubContent-content{
+                    & > p {
+                        width: 100%;
+                    }
+                }
+                .preview__questionContentSupplement-content{
+                    justify-content: center;
+                    & > img {
+                        max-width: 60%;
+                    }
+                }
+            }
+        }
+    }
+}

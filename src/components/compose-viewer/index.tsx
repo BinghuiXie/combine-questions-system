@@ -1,7 +1,8 @@
 import { Component } from 'vue-property-decorator';
 import { mixins } from 'vue-class-component';
 import Lang from '@/lang/lang';
-import { teacherFunctionList } from '../../common/mock/compose-viewer/function-list';
+import { teacherFunctionList } from '@/common/mock/compose-viewer/function-list';
+import { COMPOSE_VIEWER_BASE_ROUTE } from '@/common/constants';
 
 import './style.scss';
 
@@ -23,11 +24,16 @@ export default class ComposeViewer extends mixins(Lang) {
         this.activeFunctionId = id;
         const functionItem = teacherFunctionList.find(item => item.id === id);
         if(functionItem) {
-            const path = '/compose-viewer/' + functionItem.path;
+            const path = COMPOSE_VIEWER_BASE_ROUTE + functionItem.path;
             this.$router.push({
                 path
             })
         }
+    }
+
+    public mounted() {
+        const activeFunc = teacherFunctionList.find(item => COMPOSE_VIEWER_BASE_ROUTE + item.path === this.$route.fullPath)
+        this.activeFunctionId = activeFunc ? activeFunc.id : 0;
     }
 
     render() {

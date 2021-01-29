@@ -7,6 +7,7 @@ export enum InputSize {
 export enum InputType {
     BUTTON = 'button',
     CHECKBOX = 'checkbox',
+    TEXTAREA = 'textarea',
     COLOR = 'color',
     DATE = 'date',
     LOCAL = 'datetime-local',

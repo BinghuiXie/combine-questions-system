@@ -2,10 +2,12 @@ import { IFunctionItem } from '@/interfaces/compose-viewer/functionList.interfac
 import ComposeEditor from '@/components/compose-viewer/compose-editor';
 import QuestionManage from '@/components/compose-viewer/question-manage';
 import PaperManage from '@/components/compose-viewer/paper-manage';
+import QuestionInput from '@/components/compose-viewer/question-input';
 import {
     QUESTION_MANAGE,
     INTELLIGENT_COMPOSE_SYSTEM,
-    PAPER_MANAGE
+    PAPER_MANAGE,
+    QUESTION_INPUT
 } from '@/common/constants/lang'
 
 export const teacherFunctionList: IFunctionItem[] = [
@@ -30,5 +32,12 @@ export const teacherFunctionList: IFunctionItem[] = [
         icon: 'icon-shijuanguanli',
         path: 'paper-manage',
         component: PaperManage
+    },
+    {
+        id: 3,
+        func: QUESTION_INPUT,
+        icon: 'icon-huabi',
+        path: 'question-input',
+        component: QuestionInput
     }
 ]

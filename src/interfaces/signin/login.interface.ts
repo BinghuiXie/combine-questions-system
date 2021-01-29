@@ -1,4 +1,4 @@
-import { IBaseInterface } from './index';
+import { IBaseInterface } from '../common';
 
 export interface IStudentInfo extends IBaseInterface {
     studentId: string;

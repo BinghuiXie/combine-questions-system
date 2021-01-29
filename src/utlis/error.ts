@@ -28,7 +28,7 @@ export function catchException(showAlert = false) {
 }
 
 
-function formatError(e: any, showAlert = false) {
+export function formatError(e: any, showAlert = false) {
     if (e.response && e.response.status === 433) {
         window.location.href = e.response.data;
     }

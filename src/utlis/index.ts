@@ -5,3 +5,6 @@ export * from './validate';
 export * from './string';
 export * from './error';
 export * from './object';
+export * from './type';
+export * from './question';
+export * from './mathjax';

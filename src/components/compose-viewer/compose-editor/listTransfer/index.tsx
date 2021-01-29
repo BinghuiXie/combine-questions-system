@@ -8,6 +8,8 @@ import {
     QuestionTypeMap,
     ITransferDataItem
 } from '@/interfaces/compose-viewer';
+import { IDialogConfig } from '@/interfaces/common';
+import { getQuestionTypes } from '@/utlis';
 
 @Component({
     components: {
@@ -31,14 +33,9 @@ export default class ListTransfer extends mixins(Lang) {
             },
             on: {
                 transferItemDelete: this.deleteTransferItem,
-                transferItemAdd: this.addTransferItem,
-                transferItemEdit: this.editTransferItem,
+                transferItemAdd: this.addTransferItem
             }
         })
-    }
-
-    public renderEditQuestionDialog(questionType: number) {
-        console.log(questionType);
     }
 
     /**
@@ -46,7 +43,6 @@ export default class ListTransfer extends mixins(Lang) {
      * @param deleteOptions 单个删除为需要删除的项的下标，批量删除为要删除的目标数组
      */
     public deleteTransferItem(deleteOptions: number | ITransferDataItem[]) {
-        console.log(deleteOptions);
         if(typeof deleteOptions === 'number') {
             this.transferTargetData.splice(deleteOptions, 1);
         } else {
@@ -60,7 +56,6 @@ export default class ListTransfer extends mixins(Lang) {
     }
 
     public addTransferItem(addOptions: number | ITransferDataItem[]) {
-        console.log(addOptions);
         if(typeof addOptions === 'number') {
             this.transferTargetData.push(this.transferSourceData[addOptions]);
         } else {
@@ -68,22 +63,8 @@ export default class ListTransfer extends mixins(Lang) {
         }
     }
 
-    public editTransferItem(index: number) {
-        // TODO：TransferItem 编辑
-        const transferQuestion = this.transferTargetData[index];
-        this.renderEditQuestionDialog(transferQuestion.id);
-    }
-
     mounted() {
-        for(let item in QuestionTypeMap) {
-            const isValue = parseInt(item, 10) >= 0;
-            if(isValue) {
-                this.transferSourceData.push({
-                    id: parseInt(item),
-                    name: QuestionTypeMap[item]
-                })
-            }
-        }
+        this.transferSourceData = [...getQuestionTypes()];
     }
 
     render(h: CreateElement) {

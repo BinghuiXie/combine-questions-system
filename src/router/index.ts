@@ -4,6 +4,7 @@ import VueRouter, { RouteConfig } from 'vue-router'
 import Signin from '@/components/signin';
 import Main from '@/components/main';
 import ComposeViewer from '@/components/compose-viewer';
+import { COMPOSE_VIEWER_BASE_ROUTE } from '@/common/constants/route';
 
 
 Vue.use(VueRouter)
@@ -17,7 +18,7 @@ const routes: Array<RouteConfig> = [
     path: '/compose-viewer',
     redirect: () => {
       const defaultComponent = teacherFunctionList.find(item => item.default);
-      return '/compose-viewer/' + defaultComponent?.path
+      return COMPOSE_VIEWER_BASE_ROUTE + defaultComponent?.path
     }, 
     component: ComposeViewer,
     children: teacherFunctionList.map((item): RouteConfig => {

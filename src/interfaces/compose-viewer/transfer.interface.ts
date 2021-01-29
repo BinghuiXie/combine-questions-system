@@ -1,3 +1,4 @@
+import { IBaseInterface } from '../common';
 import { IComposeViewerBase } from './index';
 
 export interface ITransferDataItem {
@@ -5,7 +6,7 @@ export interface ITransferDataItem {
     name: string;
 }
 
-export interface ITransferCardConfig extends IComposeViewerBase {
+export interface ITransferCardConfig extends IBaseInterface {
     title: string;
     type: number;
     batchEdit?: boolean;

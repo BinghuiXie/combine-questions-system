@@ -30,3 +30,6 @@ export const BATCH_DELETE: string = 'batch_delete';
 export const BATCH_ADD: string = 'batch_add';
 export const BATCH_EDIT: string = 'batch_edit';
 export const SAVE: string = 'save';
+export const BUTTON_TEXT_CANCEL: string = 'button_text_cancel';
+export const BUTTON_TEXT_CONFIRM: string = 'button_text_confirm';
+export const QUESTION_INPUT: string = 'question_input';

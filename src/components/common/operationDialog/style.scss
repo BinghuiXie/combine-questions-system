@@ -1,0 +1,29 @@
+.el-dialog{
+    .el-form{
+        padding-right: 40px;
+        overflow: hidden; // margin collapse
+        .el-form-item{
+            position: relative;
+            .el-form-item__content{
+                position: relative;
+                .el-tooltip{
+                    position: absolute;
+                    right: -26px;
+                    &:hover{
+                        cursor: pointer;
+                    }
+                    &.iconfont{
+                        font-weight: 600;
+                    }
+                }
+            }
+        }
+    }
+    .dialog-footer{
+        margin-top: 12px;
+        text-align: right;
+        .el-button{
+            margin-left: 26px;
+        }
+    }
+}

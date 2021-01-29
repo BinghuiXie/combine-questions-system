@@ -1,0 +1,1 @@
+export const COMPOSE_VIEWER_BASE_ROUTE = '/compose-viewer/';

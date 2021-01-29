@@ -96,6 +96,11 @@
                 font-size: 20px;
                 color: #333333;
             }
+            & > div:last-of-type {
+                padding: 24px;
+                height: 100%;
+                box-sizing: border-box;
+            }
         }
     }
 }

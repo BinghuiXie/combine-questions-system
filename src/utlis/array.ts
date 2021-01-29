@@ -16,3 +16,22 @@ export const isArrayString = (val: string) => {
 export const isArray = (val: any) => {
     return Object.prototype.toString.call(val) === '[object Array]';
 }
+
+export const createArray = (length: number) => {
+    const res = [];
+    for(let i = 0; i < length; i++) {
+        res.push('');
+    }
+    return res;
+}
+
+export const getArrayItem = <T = any>(arr: T[], key: string) => {
+    return arr.find(item => {
+        if(typeof item === 'string' || typeof item === 'number') {
+            return key === item;
+        } else {
+            const vals = Object.values(item);
+            return vals.indexOf(key) !== -1;
+        }
+    })
+}

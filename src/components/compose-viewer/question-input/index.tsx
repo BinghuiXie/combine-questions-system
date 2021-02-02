@@ -20,12 +20,29 @@ import {
     ButtonType,
     ButtonSize,
     choicesBaseNum,
-    Alphabet
+    Alphabet,
+    QUESTION_INPUT_MODULE
 } from '@/common/constants';
 import RegMap from '@/common/regexp';
 import { keyRenderClass } from '@/common/regexp/editor';
 import { CreateElement } from 'vue';
 import { PreviewContentKey } from '@/interfaces';
+
+const {
+    SELECT_COURSE,
+    SELECT_DIFFICULTY,
+    SELECT_QUESTION_TYPE,
+    INPUT_ANSWER,
+    INPUT_CHOICE,
+    INPUT_CONETNT,
+    INPUT_CONTENT_IMG,
+    INPUT_IMG_URL,
+    INPUT_SCORE,
+    PREVIEW,
+    ADD_CHOICES,
+    FILL_QUESTION_SCORE_TIP,
+    ADD_SUB_QUESTION
+} = QUESTION_INPUT_MODULE;
 
 @Component({})
 export default class QuestionInput extends mixins(Lang) {
@@ -80,7 +97,7 @@ export default class QuestionInput extends mixins(Lang) {
 
     public renderCourseType() {
         return (
-            <el-form-item label='选择试题课程'>
+            <el-form-item label={this.t(SELECT_COURSE)}>
                 <el-select v-model={this.questionData.courseId}>
                     <el-option 
                                 label='计算机通信与网络'
@@ -93,7 +110,7 @@ export default class QuestionInput extends mixins(Lang) {
 
     public renderQuestionType() {
         return (
-            <el-form-item label='选择试题类型'>
+            <el-form-item label={this.t(SELECT_QUESTION_TYPE)}>
                 <el-select v-model={this.questionData.questionTypeId}>
                     {
                         [...getQuestionTypes()].map(questionTypeItem => (
@@ -110,7 +127,7 @@ export default class QuestionInput extends mixins(Lang) {
 
     public renderQuestionDifficulty() {
         return (
-            <el-form-item class='question-difficulty' label='选择试题难度'>
+            <el-form-item class='question-difficulty' label={this.t(SELECT_DIFFICULTY)}>
                 <el-rate v-model={this.questionData.questionDifficulty}></el-rate>
             </el-form-item>
         )
@@ -123,11 +140,11 @@ export default class QuestionInput extends mixins(Lang) {
         const { questionTypeId: type, questionSubContent: subQuestions } = this.questionData;
         return (
             <div class='content-wrapper'>
-                <el-form-item class='question-flex flex-wrap' label='输入试题内容'>
+                <el-form-item class='question-flex flex-wrap' label={this.t(INPUT_CONETNT)}>
                     <el-input
                         autosize={{ minRows: 2 }}
                         type={InputType.TEXTAREA}
-                        placeholder='请输入试题内容'
+                        placeholder={this.t(INPUT_CONETNT)}
                         v-model={this.questionData.questionContent}
                     />
                     <el-tooltip effect="dark" placement="top-end">
@@ -139,9 +156,9 @@ export default class QuestionInput extends mixins(Lang) {
                         <i class='iconfont icon-tishi'></i>
                     </el-tooltip>
                 </el-form-item>
-                <el-form-item class='question-flex' label='输入题目图片'>
+                <el-form-item class='question-flex' label={this.t(INPUT_CONTENT_IMG)}>
                     <el-input
-                        placeholder='请输入图片链接'
+                        placeholder={this.t(INPUT_IMG_URL)}
                         v-model={this.questionData.questionContentSupplement}
                     />
                 </el-form-item>
@@ -180,7 +197,7 @@ export default class QuestionInput extends mixins(Lang) {
     public renderQuestionChoices() {
         const { questionContentChoice } = this.questionData;
         return isSelectQues(this.questionData.questionTypeId) ?
-        <el-form-item class='question-options' label='输入试题选项'>
+        <el-form-item class='question-options' label={this.t(INPUT_CHOICE)}>
             {
                 this.choices.map((choice, index) => (
                     <el-input
@@ -193,7 +210,7 @@ export default class QuestionInput extends mixins(Lang) {
                 type={ButtonType.PRIMARY} 
                 size={ButtonSize.MINI}
                 onclick={ this.addChoice }
-            >添加选项</el-button>
+            >{ this.t(ADD_CHOICES) }</el-button>
         </el-form-item>
         : null
     }
@@ -202,7 +219,7 @@ export default class QuestionInput extends mixins(Lang) {
      * 渲染答案框
      */
     public renderQuestionAnswers() {
-        return <el-form-item label='输入试题答案' class='question-answers'>
+        return <el-form-item label={this.t(INPUT_ANSWER)} class='question-answers'>
             <el-tooltip effect="dark" placement="top-end">
                 <div slot='content'>
                     1. 填空题将每一空的答案填入对应的输入框中
@@ -221,22 +238,22 @@ export default class QuestionInput extends mixins(Lang) {
         if(isSubjective(type) || isFillQues(type)) {
             const loopArr = isSubjective(type) ? [...this.subQuestions] : content.match(RegMap.fillBlankRules);
             return loopArr?.map((item, index) => (
-                <el-input placeholder={'请输入答案' + (index + 1)} v-model={this.questionData.questionAnswer[index]} />
+                <el-input placeholder={this.t(INPUT_ANSWER) + (index + 1)} v-model={this.questionData.questionAnswer[index]} />
             ))
         }
-        return <el-input placeholder='请输入答案' v-model={this.questionData.questionAnswer[0]} />
+        return <el-input placeholder={this.t(INPUT_ANSWER)} v-model={this.questionData.questionAnswer[0]} />
     }
 
     public renderQuestionScore() {
-        return <el-form-item class='question-flex' label='输入试题分值'>
+        return <el-form-item class='question-flex' label={this.t(INPUT_SCORE)}>
             <el-input 
-                placeholder='请输入分值'
+                placeholder={this.t(INPUT_SCORE)}
                 v-model={this.questionData.questionScore}
             />
             <el-tooltip 
                 effect="dark" 
                 placement="top-end"
-                content='填空题输入每一空的分值'
+                content={this.t(FILL_QUESTION_SCORE_TIP)}
             >
                 <i class='iconfont icon-tishi'></i>
             </el-tooltip>
@@ -301,12 +318,12 @@ export default class QuestionInput extends mixins(Lang) {
                                 type={ButtonType.PRIMARY}
                                 size={ButtonSize.MEDIUM}
                                 onclick={() => { this.prewViewQuestionContent() }}
-                            >预览</el-button>
+                            >{ this.t(PREVIEW) }</el-button>
                         </div>
                     </div>
                     <div class='question-input__preview'>
                         <div class='title'>
-                            <span>预览</span>
+                            <span>{ this.t(PREVIEW) }</span>
                         </div>
                         <div class='preview__content' ref='typesetElement'>
                             {/* 题干 */}

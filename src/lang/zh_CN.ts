@@ -41,6 +41,19 @@ const zh_CN: {
     "question_input": "试题录入",
     "knowledge_manage": "知识点管理",
     "knowledge_input": "知识点录入",
+    "select_course": "选择试题课程",
+    "select_question_type": "选择试题类型",
+    "select_difficulty": "选择试题难度",
+    "input_content": "输入试题内容",
+    "input_score": "输入试题分值",
+    "input_content_img": "输入题目图片",
+    "input_img_url": "请输入图片链接",
+    "input_choice": "输入试题选项",
+    "input_answer": "输入试题答案",
+    "preview": "预览",
+    "add_choices": "添加选项",
+    "add_sub_question": "添加试题小问",
+    "fill_question_score_tip": "填空题输入每一空的分值"
 }
 
 export default zh_CN;

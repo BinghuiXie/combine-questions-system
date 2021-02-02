@@ -17,6 +17,8 @@ export default class ComposeViewer extends mixins(Lang) {
 
     public activeFunctionId: number = 0;
 
+    public activeSubFuncId: number = -1;
+
     public handleOperateAside() {
         this.isFold = !this.isFold;
     }
@@ -24,6 +26,7 @@ export default class ComposeViewer extends mixins(Lang) {
     public handleSwitchFunctionItem(id: number, parentId?: number) {
         if(parentId) {
             // 点击的是子 menu
+            this.activeSubFuncId = id;
             const parentItem = teacherFunctionList.find(item => item.id === parentId);
             if(parentItem && parentItem.children) {
                 const childItem = parentItem?.children.find(child => child.id === id);
@@ -94,6 +97,29 @@ export default class ComposeViewer extends mixins(Lang) {
         )
     }
 
+    public renderFunctionTitle() {
+        const functionItem = teacherFunctionList[this.activeFunctionId];
+        let subTitle = '';
+        if(functionItem.children && this.activeSubFuncId !== -1) {
+            const activeChild = functionItem.children.find(child => child.id === this.activeSubFuncId)
+            if(activeChild) {
+                subTitle = activeChild.func;
+            }
+        }
+        return [
+            <el-breadcrumb-item>
+                { this.t(functionItem.func) }
+            </el-breadcrumb-item>,
+            subTitle ?
+            <el-breadcrumb-item>
+                { 
+                    this.t(subTitle)
+                }
+            </el-breadcrumb-item>
+            : null
+        ];
+    }
+
     public mounted() {
         const activeFunc = teacherFunctionList.find(item => COMPOSE_VIEWER_BASE_ROUTE + item.path === this.$route.fullPath)
         this.activeFunctionId = activeFunc ? activeFunc.id : 0;
@@ -121,9 +147,12 @@ export default class ComposeViewer extends mixins(Lang) {
                         </el-menu>
                     </div>
                     <div class='main-area'>
-                        <div class='main-area__function-title'>
-                            { this.t(teacherFunctionList[this.activeFunctionId].func || '') }
-                        </div>
+                        <el-breadcrumb 
+                            class='main-area__function-title'
+                            separator='/'
+                        >
+                            { this.renderFunctionTitle }
+                        </el-breadcrumb>
                         <router-view></router-view>
                     </div>
                 </div>

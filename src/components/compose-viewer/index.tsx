@@ -35,6 +35,7 @@ export default class ComposeViewer extends mixins(Lang) {
                 })
             }
         } else {
+            this.activeSubFuncId = -1;
             this.activeFunctionId = id;
             const functionItem = teacherFunctionList.find(item => item.id === id);
             if(functionItem) {
@@ -86,6 +87,7 @@ export default class ComposeViewer extends mixins(Lang) {
                         children.map(child => (
                             <el-menu-item
                                 onclick={ () => { this.handleSwitchFunctionItem(child.id, parentItem.id) } }
+                                class={this.activeSubFuncId === child.id ? 'sub-function-active' : null}
                             >
                                 <i class={['iconfont', child.icon]}></i>
                                 <span>{ this.t(child.func) }</span>
@@ -112,16 +114,23 @@ export default class ComposeViewer extends mixins(Lang) {
             </el-breadcrumb-item>,
             subTitle ?
             <el-breadcrumb-item>
-                { 
-                    this.t(subTitle)
-                }
+                { this.t(subTitle) }
             </el-breadcrumb-item>
             : null
         ];
     }
 
     public mounted() {
-        const activeFunc = teacherFunctionList.find(item => COMPOSE_VIEWER_BASE_ROUTE + item.path === this.$route.fullPath)
+        const { fullPath } = this.$route;
+        let pathArr = fullPath.split('/');
+        // 根据 / 分割后去掉数组最开始的空值
+        pathArr.shift();
+        const activeFunc = teacherFunctionList.find(item => item.path === pathArr[1])
+        if(pathArr.length === 3 && activeFunc?.children) {
+            // 当前路由定位在子功能
+            const subFunc = activeFunc?.children.find(child => child.path === pathArr[2])
+            this.activeSubFuncId = subFunc ? subFunc.id : -1;
+        }
         this.activeFunctionId = activeFunc ? activeFunc.id : 0;
     }
 

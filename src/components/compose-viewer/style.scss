@@ -102,6 +102,21 @@
                         .el-menu-item{
                             font-size: 13px;
                         }
+                        .sub-function-active{
+                            background-color: #eeeeee;
+                            color: #3A4560;
+                            &::before{
+                                content: '';
+                                width: 4px;
+                                height: 20px;
+                                position: absolute;
+                                left: 0;
+                                top: 50%;
+                                transform: translateY(-50%);
+                                background-color: $theme_color;
+                                z-index: 4;
+                            }
+                        }
                     }
                 }
             }

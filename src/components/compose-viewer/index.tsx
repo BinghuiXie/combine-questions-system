@@ -5,6 +5,7 @@ import { teacherFunctionList } from '@/common/mock/compose-viewer/function-list'
 import { COMPOSE_VIEWER_BASE_ROUTE } from '@/common/constants';
 
 import './style.scss';
+import { IFunctionItem } from '@/interfaces/compose-viewer';
 
 @Component({
 
@@ -20,15 +21,77 @@ export default class ComposeViewer extends mixins(Lang) {
         this.isFold = !this.isFold;
     }
 
-    public handleSwitchFunctionItem(id: number) {
-        this.activeFunctionId = id;
-        const functionItem = teacherFunctionList.find(item => item.id === id);
-        if(functionItem) {
-            const path = COMPOSE_VIEWER_BASE_ROUTE + functionItem.path;
-            this.$router.push({
-                path
-            })
+    public handleSwitchFunctionItem(id: number, parentId?: number) {
+        if(parentId) {
+            // 点击的是子 menu
+            const parentItem = teacherFunctionList.find(item => item.id === parentId);
+            if(parentItem && parentItem.children) {
+                const childItem = parentItem?.children.find(child => child.id === id);
+                this.$router.push({
+                    path: this.$route.fullPath + '/' + childItem?.path
+                })
+            }
+        } else {
+            this.activeFunctionId = id;
+            const functionItem = teacherFunctionList.find(item => item.id === id);
+            if(functionItem) {
+                const path = COMPOSE_VIEWER_BASE_ROUTE + functionItem.path;
+                if(!parentId) {
+                    // 点击的不是子menu
+                    this.$router.push({
+                        path
+                    });
+                } 
+            }
         }
+    }
+
+    public renderMenu() {
+        return teacherFunctionList.map(functionItem => {
+            return (
+                functionItem.children ?
+                this.renderMenuChildren(functionItem, functionItem.children)
+                : <el-menu-item 
+                    onclick={() => { this.handleSwitchFunctionItem(functionItem.id) }}
+                    class={['function-item', this.activeFunctionId === functionItem.id ? 'function-item-active' : null]}
+                    key={functionItem.id}
+                >
+                    <i class={['iconfont', functionItem.icon]}></i>
+                    <span>{ this.t(functionItem.func) }</span>
+                </el-menu-item>
+            )
+        })
+    }
+
+    public renderMenuChildren(parentItem: IFunctionItem, children: IFunctionItem[]) {
+        return (
+            <el-submenu
+                class={['function-item', this.activeFunctionId === parentItem.id ? 'function-item-active' : null]} 
+                index={String(parentItem.id)}
+            >
+                <template slot="title">
+                    <div
+                        onclick={() => { this.handleSwitchFunctionItem(parentItem.id) }}
+                    >
+                        <i class={['iconfont', parentItem.icon]}></i>
+                        <span>{ this.t(parentItem.func) }</span>
+                    </div>
+                    
+                </template>
+                <el-menu-item-group>
+                    {
+                        children.map(child => (
+                            <el-menu-item
+                                onclick={ () => { this.handleSwitchFunctionItem(child.id, parentItem.id) } }
+                            >
+                                <i class={['iconfont', child.icon]}></i>
+                                <span>{ this.t(child.func) }</span>
+                            </el-menu-item>
+                        ))
+                    }
+                </el-menu-item-group>
+            </el-submenu>
+        )
     }
 
     public mounted() {
@@ -51,22 +114,11 @@ export default class ComposeViewer extends mixins(Lang) {
                                 : <i class='iconfont icon-icon_fold'></i>
                             }
                         </div>
-                        <div class='function-list'>
+                        <el-menu class='function-list'>
                             {
-                                teacherFunctionList.map(functionItem => {
-                                    return (
-                                        <div 
-                                            onclick={() => { this.handleSwitchFunctionItem(functionItem.id) }}
-                                            class={['function-item', this.activeFunctionId === functionItem.id ? 'function-item-active' : null]} 
-                                            key={functionItem.id}
-                                        >
-                                            <i class={['iconfont', functionItem.icon]}></i>
-                                            <span>{ this.t(functionItem.func) }</span>
-                                        </div>
-                                    )
-                                })
+                                this.renderMenu()
                             }
-                        </div>
+                        </el-menu>
                     </div>
                     <div class='main-area'>
                         <div class='main-area__function-title'>

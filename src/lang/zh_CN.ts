@@ -39,7 +39,8 @@ const zh_CN: {
     "button_text_cancel": "取消",
     "button_text_confirm": "确定",
     "question_input": "试题录入",
-    "knowledge_manage": "知识点管理"
+    "knowledge_manage": "知识点管理",
+    "knowledge_input": "知识点录入",
 }
 
 export default zh_CN;

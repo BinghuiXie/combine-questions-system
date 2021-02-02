@@ -34,3 +34,4 @@ export const BUTTON_TEXT_CANCEL: string = 'button_text_cancel';
 export const BUTTON_TEXT_CONFIRM: string = 'button_text_confirm';
 export const QUESTION_INPUT: string = 'question_input';
 export const KNOWLEDGE_MANAGE: string = 'knowledge_manage';
+export const KNOWLEDGE_INPUT: string = 'knowledge_input';

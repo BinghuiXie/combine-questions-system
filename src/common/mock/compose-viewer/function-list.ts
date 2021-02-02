@@ -4,12 +4,14 @@ import QuestionManage from '@/components/compose-viewer/question-manage';
 import PaperManage from '@/components/compose-viewer/paper-manage';
 import QuestionInput from '@/components/compose-viewer/question-input';
 import KnowledgeManage from '@/components/compose-viewer/knowledge-manage';
+import KnowledgeInput from '@/components/compose-viewer/knowledge-manage/knowledegInput';
 import {
     QUESTION_MANAGE,
     INTELLIGENT_COMPOSE_SYSTEM,
     PAPER_MANAGE,
     QUESTION_INPUT,
-    KNOWLEDGE_MANAGE
+    KNOWLEDGE_MANAGE,
+    KNOWLEDGE_INPUT
 } from '@/common/constants/lang'
 
 export const teacherFunctionList: IFunctionItem[] = [
@@ -51,11 +53,11 @@ export const teacherFunctionList: IFunctionItem[] = [
         children: [
             {
                 id: 0,
-                func: KNOWLEDGE_MANAGE,
-                icon: 'icon-zhishidian',
-                path: 'knowledge-manage',
-                component: KnowledgeManage,
-            }
+                func: KNOWLEDGE_INPUT,
+                icon: 'icon-huabi',
+                path: 'knowledge-input',
+                component: KnowledgeInput
+            },
         ]
     }
 ]

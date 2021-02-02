@@ -8,7 +8,9 @@ export default class KnowledgeManage extends mixins(Lang) {
     public render() {
         return (
             <div class='knowledge-manage'>
-                <div class='knowledge-manage__container'>aa</div>
+                <div class='knowledge-manage__container'>
+                    <router-view></router-view>
+                </div>
             </div>
         )
     }

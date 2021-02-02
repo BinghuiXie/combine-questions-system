@@ -22,10 +22,26 @@ const routes: Array<RouteConfig> = [
     }, 
     component: ComposeViewer,
     children: teacherFunctionList.map((item): RouteConfig => {
-      return {
-        path: item.path,
-        component: item.component
+      let res;
+      if(item.children) {
+        res = {
+          path: item.path,
+          component: item.component,
+          children: item.children.map((child): RouteConfig => {
+            return {
+              path: child.path,
+              component: child.component
+            }
+          }),
+        }
+      } else {
+        res = {
+          path: item.path,
+          component: item.component,
+        }
       }
+      console.log(res);
+      return res;
     })
   },
   {

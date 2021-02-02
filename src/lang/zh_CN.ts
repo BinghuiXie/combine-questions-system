@@ -38,7 +38,8 @@ const zh_CN: {
     "save": "保存",
     "button_text_cancel": "取消",
     "button_text_confirm": "确定",
-    "question_input": "试题录入"
+    "question_input": "试题录入",
+    "knowledge_manage": "知识点管理"
 }
 
 export default zh_CN;

@@ -7,4 +7,5 @@ export interface IFunctionItem {
     path: string;
     icon: string;
     default?: boolean;
+    children?: IFunctionItem[];
 }

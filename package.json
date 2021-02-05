@@ -9,6 +9,7 @@
   "dependencies": {
     "axios": "^0.21.0",
     "core-js": "^3.6.5",
+    "ele-multi-cascader": "^2.2.5",
     "element-ui": "^2.14.1",
     "js-base64": "^3.6.0",
     "lodash": "^4.17.20",

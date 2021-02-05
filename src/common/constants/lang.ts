@@ -35,7 +35,7 @@ export const BUTTON_TEXT_CONFIRM: string = 'button_text_confirm';
 export const QUESTION_INPUT: string = 'question_input';
 export const KNOWLEDGE_MANAGE: string = 'knowledge_manage';
 export const KNOWLEDGE_INPUT: string = 'knowledge_input';
-export const QUESTION_INPUT_MODULE = {
+export const INPUT_MODULE = {
     SELECT_COURSE: 'select_course',
     SELECT_QUESTION_TYPE: 'select_question_type',
     SELECT_DIFFICULTY: 'select_difficulty',
@@ -48,5 +48,8 @@ export const QUESTION_INPUT_MODULE = {
     PREVIEW: 'preview',
     ADD_CHOICES: 'add_choices',
     ADD_SUB_QUESTION: 'add_sub_question',
-    FILL_QUESTION_SCORE_TIP: 'fill_question_score_tip'
+    FILL_QUESTION_SCORE_TIP: 'fill_question_score_tip',
+    INPUT_KNOWLEDGE_CONTENT: 'input_knowledge_content',
+    SELECT_CHAPTER: 'select_chapter',
+    SELECT_SECTION: 'select_section'
 }

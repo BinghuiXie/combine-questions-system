@@ -2,6 +2,26 @@
     box-sizing: border-box;
     padding: 12px 24px;
     .el-tabs{
-
+        .single-input-pane{
+            padding-top: 24px;
+            .el-form {
+                .el-form-item{
+                    margin-bottom: 30px;
+                }
+                .el-form-item__content{
+                    max-width: 50%;
+                }
+                .multiple-select,
+                .el-cascader {
+                    width: 100%;
+                }
+                .el-form-item__button{
+                    .el-form-item__content{
+                        margin-top: 12px;
+                        margin-left: 24px !important;
+                    }
+                }
+            }
+        }
     }
 }

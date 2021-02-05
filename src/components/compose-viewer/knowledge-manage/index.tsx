@@ -3,7 +3,8 @@ import { mixins } from 'vue-class-component';
 import Lang from '@/lang/lang';
 import './style.scss';
 
-@Component({})
+@Component({
+})
 export default class KnowledgeManage extends mixins(Lang) {
     public render() {
         return (

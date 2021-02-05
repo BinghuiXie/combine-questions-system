@@ -53,7 +53,10 @@ const zh_CN: {
     "preview": "预览",
     "add_choices": "添加选项",
     "add_sub_question": "添加试题小问",
-    "fill_question_score_tip": "填空题输入每一空的分值"
+    "fill_question_score_tip": "填空题输入每一空的分值",
+    "input_knowledge_content": "输入知识点内容",
+    "select_chapter": "选择课程对应章",
+    "select_section": "选择课程对应节",
 }
 
 export default zh_CN;

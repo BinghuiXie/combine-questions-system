@@ -15,3 +15,18 @@ export enum CourseType {
     REQUIRE,
     OPTIONAL
 }
+
+export interface IChapterItem {
+    chapterId: number;
+    courseId: number;
+    content: string;
+    sections: ISectionItem[];
+    importance: number;
+}
+
+export interface ISectionItem {
+    sectionId: number;
+    courseId: number;
+    content: string;
+    chapterId: number;
+}

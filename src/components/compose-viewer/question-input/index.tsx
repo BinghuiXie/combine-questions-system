@@ -21,7 +21,7 @@ import {
     ButtonSize,
     choicesBaseNum,
     Alphabet,
-    QUESTION_INPUT_MODULE
+    INPUT_MODULE
 } from '@/common/constants';
 import RegMap from '@/common/regexp';
 import { keyRenderClass } from '@/common/regexp/editor';
@@ -42,7 +42,7 @@ const {
     ADD_CHOICES,
     FILL_QUESTION_SCORE_TIP,
     ADD_SUB_QUESTION
-} = QUESTION_INPUT_MODULE;
+} = INPUT_MODULE;
 
 @Component({})
 export default class QuestionInput extends mixins(Lang) {

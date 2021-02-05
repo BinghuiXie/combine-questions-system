@@ -37,6 +37,7 @@ export const KNOWLEDGE_MANAGE: string = 'knowledge_manage';
 export const KNOWLEDGE_INPUT: string = 'knowledge_input';
 export const INPUT_MODULE = {
     SELECT_COURSE: 'select_course',
+    SELECT_KNOWLEDGE_COURSE: 'select_knowledge_course',
     SELECT_QUESTION_TYPE: 'select_question_type',
     SELECT_DIFFICULTY: 'select_difficulty',
     INPUT_CONETNT: 'input_content',

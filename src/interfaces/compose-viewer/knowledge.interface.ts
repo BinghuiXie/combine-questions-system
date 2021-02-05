@@ -6,3 +6,5 @@ export interface IKnowledgeItem {
     courseId: Array<number>;
     importance: 1 | 2 | 3 | 4 | 5;
 }
+
+export type BatchKnowledgeItem = Omit<IKnowledgeItem, 'courseId'>;

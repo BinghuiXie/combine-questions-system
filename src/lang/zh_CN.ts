@@ -42,6 +42,7 @@ const zh_CN: {
     "knowledge_manage": "知识点管理",
     "knowledge_input": "知识点录入",
     "select_course": "选择试题课程",
+    "select_knowledge_course": "选择知识点课程",
     "select_question_type": "选择试题类型",
     "select_difficulty": "选择试题难度",
     "input_content": "输入试题内容",

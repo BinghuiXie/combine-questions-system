@@ -1,3 +1,4 @@
+import { ABILITY_INPUT } from './../../constants/lang';
 import { IFunctionItem } from '@/interfaces/compose-viewer/functionList.interface';
 import ComposeEditor from '@/components/compose-viewer/compose-editor';
 import QuestionManage from '@/components/compose-viewer/question-manage';
@@ -11,8 +12,11 @@ import {
     PAPER_MANAGE,
     QUESTION_INPUT,
     KNOWLEDGE_MANAGE,
-    KNOWLEDGE_INPUT
+    KNOWLEDGE_INPUT,
+    ABILITY_MANAGE
 } from '@/common/constants/lang'
+import AbilityManage from '@/components/compose-viewer/ability-manage';
+import AbilityInput from '@/components/compose-viewer/ability-manage/abilityInput';
 
 export const teacherFunctionList: IFunctionItem[] = [
     {
@@ -58,6 +62,22 @@ export const teacherFunctionList: IFunctionItem[] = [
                 path: 'knowledge-input',
                 component: KnowledgeInput
             },
+        ]
+    },
+    {
+        id: 5,
+        func: ABILITY_MANAGE,
+        icon: 'icon-nenglidian',
+        path: 'ability-manage',
+        component: AbilityManage,
+        children: [
+            {
+                id: 0,
+                func: ABILITY_INPUT,
+                icon: 'icon-huabi',
+                path: 'ability-input',
+                component: AbilityInput
+            }
         ]
     }
 ]

@@ -106,8 +106,6 @@ export default class KnowledgeInput extends mixins(Lang) {
     }
 
     public handleSubmitBatch() {
-        console.log(this.batchList);
-        console.log(this.batchCourseId);
         // TODO: 提交批量知识点
     }
 

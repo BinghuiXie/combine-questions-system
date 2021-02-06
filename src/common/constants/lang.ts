@@ -35,6 +35,8 @@ export const BUTTON_TEXT_CONFIRM: string = 'button_text_confirm';
 export const QUESTION_INPUT: string = 'question_input';
 export const KNOWLEDGE_MANAGE: string = 'knowledge_manage';
 export const KNOWLEDGE_INPUT: string = 'knowledge_input';
+export const ABILITY_MANAGE: string = 'ability_manage';
+export const ABILITY_INPUT: string = 'ability_input';
 export const SUBMIT: string = 'submit';
 export const INPUT_MODULE = {
     SELECT_COURSE: 'select_course',

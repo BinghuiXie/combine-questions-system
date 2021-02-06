@@ -58,7 +58,9 @@ const zh_CN: {
     "input_knowledge_content": "输入知识点内容",
     "select_chapter": "选择课程对应章",
     "select_section": "选择课程对应节",
-    "submit": "提交"
+    "submit": "提交",
+    "ability_manage": "能力点管理",
+    "ability_input": "能力点录入"
 }
 
 export default zh_CN;

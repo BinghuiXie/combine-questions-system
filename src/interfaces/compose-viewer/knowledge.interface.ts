@@ -7,4 +7,8 @@ export interface IKnowledgeItem {
     importance: 1 | 2 | 3 | 4 | 5;
 }
 
-export type BatchKnowledgeItem = Omit<IKnowledgeItem, 'courseId'>;
+export interface IBatchKnowledgeItem extends IKnowledgeItem {
+    isCheck: boolean;
+}
+
+export type BatchKnowledgeItem = Omit<IBatchKnowledgeItem, 'courseId'>;

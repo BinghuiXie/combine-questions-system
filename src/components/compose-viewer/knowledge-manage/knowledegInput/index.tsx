@@ -1,12 +1,12 @@
-import { Component } from 'vue-property-decorator';
+import { Component, Watch } from 'vue-property-decorator';
 import { mixins } from 'vue-class-component';
 import { INPUT_MODULE, KNOWLEDGE_INPUT } from '@/common/constants/lang';
 import { IKnowledgeItem, IChapterItem, ISectionItem, BatchKnowledgeItem } from '@/interfaces/compose-viewer';
 import Lang from '@/lang/lang';
 import './style.scss';
 import { chapterMockData } from '@/common/mock/compose-viewer/chapter-list';
-import { deepclone } from '@/utlis';
-import { ButtonType } from '@/common/constants';
+import { deepclone, valueof } from '@/utlis';
+import { ButtonType, InputSize, ButtonSize, KeyCodeMap, SUBMIT } from '@/common/constants';
 
 enum KnowledgeInputType {
     Single = 'single',
@@ -26,6 +26,14 @@ interface ICascaderOptions {
     children?: ICascaderOptions[]
 }
 
+const knowledgeTemplate: BatchKnowledgeItem = {
+    knowledgeId: 0,
+    content: '',
+    chapterList: [],
+    sectionList: [],
+    importance: 1,
+    isCheck: false
+}
 
 @Component({})
 export default class KnowledgeInput extends mixins(Lang) {
@@ -40,17 +48,20 @@ export default class KnowledgeInput extends mixins(Lang) {
         importance: 1,
     }
 
-    public batchKnowledgeData: {
-        courseId: number;
-        knowledgeList: BatchKnowledgeItem[];
-    } = {
-        courseId: 0,
-        knowledgeList: []
+    public batchCourseId: number = 0;
+
+    public cascaderProps = {
+        multiple: true,
+        expandTrigger: 'hover',
     }
 
     public cascaderData: number[][] = [];
 
     public isAddButtonActive: boolean = false;
+
+    public batchList: BatchKnowledgeItem[] = new Array({...knowledgeTemplate});
+
+    public batchCascaderOptions: ICascaderOptions[][] = [];
 
     public $refs!: {
         addIcon: HTMLElement
@@ -94,22 +105,63 @@ export default class KnowledgeInput extends mixins(Lang) {
         // TODO: 提交单个知识点
     }
 
+    public handleSubmitBatch() {
+        console.log(this.batchList);
+        console.log(this.batchCourseId);
+        // TODO: 提交批量知识点
+    }
+
     public handleAddIconClick() {
-        
+        // 推入一个深拷贝，否则会修改一个导致所有的都发生变化
+        this.batchList.push({...knowledgeTemplate});
+    }
+
+    public handleBatchCascaderFocus(index: number) {
+        const batchRowData = this.batchList[index];
+        const chapterData = chapterMockData.filter(chapter => {
+            if(batchRowData.chapterList.indexOf(chapter.chapterId) !== -1) {
+                return chapter;
+            }
+        });
+        const res = this.scaleChapterKeys(chapterData);
+        this.batchCascaderOptions.splice(index, 0, res);
+    }
+
+    public handleSelectAll() {
+        this.batchList.forEach(batchRowData => {
+            batchRowData.isCheck = !batchRowData.isCheck;
+        })
+    }
+
+    public handleDeleteSelected() {
+        this.batchList = this.batchList.filter(batchRowData => {
+            return batchRowData.isCheck === false;
+        })
+    }
+
+    public deleteLastLine() {
+        this.batchList.pop();
     }
 
     public listenEnterKeyDown() {
         window.addEventListener('keydown', (e: any) => {
             const el = e || window.event;
-            if(el.keyCode === 13) {
-                this.isAddButtonActive = true;
-                this.handleAddIconClick();
+            switch(el.keyCode) {
+                case KeyCodeMap.ENTER:
+                    this.isAddButtonActive = true;
+                    this.handleAddIconClick();
+                    break;
+                case KeyCodeMap.DELETE:
+                    this.deleteLastLine();
+                    break;
             }
         });
         window.addEventListener('keyup', (e: any) => {
             const el = e || window.event;
-            if(el.keyCode === 13) {
-                this.isAddButtonActive = false;
+            switch(el.keyCode) {
+                case KeyCodeMap.ENTER:
+                    this.isAddButtonActive = false;
+                    break;
             }
         });
         const { addIcon } = this.$refs;
@@ -119,6 +171,64 @@ export default class KnowledgeInput extends mixins(Lang) {
         addIcon.addEventListener('mouseup', () => {
             this.isAddButtonActive = false;
         });
+    }
+
+    public renderBatchInputItem() {
+        return this.batchList.map((rowData, index) => {
+            return (
+                <li class='batch-knowledge__item' key={index}>
+                    <el-checkbox v-model={rowData.isCheck}/>
+                    <div class='knowledge-item knowledge-item__id'>{index}</div>
+                    <div class='knowledge-item knowledge-item__content'>
+                        <el-input 
+                            placeholder={this.t(KNOWLEDGE_INPUT)}
+                            size={InputSize.MINI}
+                            v-model={rowData.content}
+                        />
+                    </div>
+                    <div class='knowledge-item knowledge-item__chapter'>
+                        <el-select 
+                            placeholder={this.t(SELECT_CHAPTER)}
+                            size={InputSize.MINI}
+                            v-model={rowData.chapterList}
+                            multiple
+                            collapse-tags
+                        >
+                            {
+                                chapterMockData.map(chapter => (
+                                    <el-option
+                                        label={chapter.content}
+                                        value={chapter.chapterId}
+                                        key={chapter.chapterId}
+                                    />
+                                ))
+                            }
+                        </el-select>
+                    </div>
+                    <div class='knowledge-item knowledge-item__section'>
+                        <el-cascader
+                            placeholder={this.t(SELECT_SECTION)}
+                            size={InputSize.MINI}
+                            onFocus={() => { this.handleBatchCascaderFocus(index) }}
+                            options={this.batchCascaderOptions[index]}
+                            collapse-tags
+                            v-model={rowData.sectionList}
+                            {...{
+                                props: {
+                                    props: {...this.cascaderProps}
+                                }
+                            }}
+                        ></el-cascader>
+                    </div>
+                    <div class='knowledge-item knowledge-item__importance'>
+                        <el-input 
+                            placeholder='知识点重要程度（输入1-5）'
+                            size={InputSize.MINI}
+                            v-model={rowData.importance}
+                        />
+                    </div>
+                </li>
+        )})
     }
 
     public mounted() {
@@ -179,10 +289,7 @@ export default class KnowledgeInput extends mixins(Lang) {
                                     options={this.cascaderOptions}
                                     {...{
                                         props: {
-                                            props: {
-                                                multiple: true,
-                                                expandTrigger: 'hover',
-                                            }
+                                            props: {...this.cascaderProps}
                                         }
                                     }}
                                     clearable
@@ -198,7 +305,7 @@ export default class KnowledgeInput extends mixins(Lang) {
                                 <el-button 
                                     onclick={this.handleSubmitSingle}
                                     type={ButtonType.PRIMARY}
-                                >提交</el-button>
+                                >{this.t(SUBMIT)}</el-button>
                             </el-form-item>
                         </el-form>
                     </el-tab-pane>
@@ -209,29 +316,64 @@ export default class KnowledgeInput extends mixins(Lang) {
                     >
                         <el-form label-width='120px' label-position='right'>
                             <el-form-item label={this.t(SELECT_KNOWLEDGE_COURSE)}>
-                                <el-select 
-                                    v-model={this.singleKonwledgeData.courseId}
+                                <el-select
+                                    v-model={this.batchCourseId}
                                     placeholder={this.t(SELECT_KNOWLEDGE_COURSE)}
                                 >
                                     <el-option label='计算机通信与网络' value={0}></el-option>
+                                    <el-option label='编译原理' value={1}></el-option>
                                 </el-select>
                             </el-form-item>
-                            <el-form-item 
-                                label={this.t(KNOWLEDGE_INPUT)}
+                            <el-form-item
                                 class='el-form-item__list'
                             >
+                                <label class='batch-knowledge__label'>
+                                    {this.t(KNOWLEDGE_INPUT)}
+                                </label>
+                                <div class='batch-knowledge__number'>
+                                    { '( 0 / ' + this.batchList.length + ' )' }
+                                </div>
+                                <div class='batch-knowledge__operation'>
+                                    <el-button size={ButtonSize.MINI} type={ButtonType.PRIMARY}>新增一行</el-button>
+                                    <el-button 
+                                        size={ButtonSize.MINI} 
+                                        type={ButtonType.DANGER}
+                                        onclick={this.deleteLastLine}
+                                    >删除最后一行</el-button>
+                                    <el-button
+                                        size={ButtonSize.MINI}
+                                        type={ButtonType.DANGER}
+                                        onclick={this.handleDeleteSelected}
+                                    >删除所选</el-button>
+                                </div>
                                 <ul class='batch-knowledge_list'>
-                                    <li class='batch-knowledge__header'></li>
-                                    <li class='batch-knowledge__item'></li>
-                                    <div class='batch-knowledge__add'>
-                                        <i
-                                            ref='addIcon'
-                                            class={['iconfont', 'icon-tixing', this.isAddButtonActive ? 'active' : null]} 
-                                            onclick={this.handleAddIconClick}
-                                        ></i>
-                                        <i class={['iconfont', 'icon-add', this.isAddButtonActive ? 'active' : null]}></i>
-                                    </div>
+                                    <li class='batch-knowledge__header'>
+                                        <el-checkbox onChange={this.handleSelectAll}/>
+                                        <span class='knowledge-id'>序号</span>
+                                        <span>知识点内容</span>
+                                        <span>知识点关联章</span>
+                                        <span>知识点关联节</span>
+                                        <span>知识点重要程度</span>
+                                    </li>
+                                    {
+                                        this.renderBatchInputItem()
+                                    }
                                 </ul>
+                                <div class='batch-knowledge__add'>
+                                    <i
+                                        ref='addIcon'
+                                        class={['iconfont', 'icon-tixing', this.isAddButtonActive ? 'active' : null]} 
+                                        onclick={this.handleAddIconClick}
+                                    />
+                                    <i class={['iconfont', 'icon-add', this.isAddButtonActive ? 'active' : null]} />
+                                </div>
+                            </el-form-item>
+                            <el-form-item class='el-form-item__submit'>
+                                <el-button
+                                    type={ButtonType.PRIMARY}
+                                    onclick={this.handleSubmitBatch}
+                                    size={ButtonSize.MEDIUM}
+                                >{this.t(SUBMIT)}</el-button>
                             </el-form-item>
                         </el-form>
                     </el-tab-pane>

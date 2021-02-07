@@ -3,9 +3,9 @@ import { mixins } from 'vue-class-component';
 import Lang from '@/lang/lang';
 import { teacherFunctionList } from '@/common/mock/compose-viewer/function-list';
 import { COMPOSE_VIEWER_BASE_ROUTE } from '@/common/constants';
+import { IFunctionItem } from '@/interfaces/compose-viewer';
 
 import './style.scss';
-import { IFunctionItem } from '@/interfaces/compose-viewer';
 
 @Component({
 
@@ -28,10 +28,12 @@ export default class ComposeViewer extends mixins(Lang) {
             // 点击的是子 menu
             this.activeSubFuncId = id;
             const parentItem = teacherFunctionList.find(item => item.id === parentId);
+            console.log(parentItem?.path);
             if(parentItem && parentItem.children) {
                 const childItem = parentItem?.children.find(child => child.id === id);
+                const path = COMPOSE_VIEWER_BASE_ROUTE + parentItem.path + '/' + childItem?.path;
                 this.$router.push({
-                    path: this.$route.fullPath + '/' + childItem?.path
+                    path
                 })
             }
         } else {

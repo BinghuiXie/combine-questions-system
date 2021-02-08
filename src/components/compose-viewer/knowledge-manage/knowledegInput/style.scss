@@ -4,149 +4,53 @@
     box-sizing: border-box;
     padding: 12px 24px;
     .el-tabs{
-        .el-tab-pane {
-            padding-top: 24px;
-        }
-        .single-input-pane{
-            .el-form {
-                .el-form-item{
-                    margin-bottom: 30px;
-                }
-                .el-form-item__content{
-                    max-width: 50%;
-                }
-                .multiple-select,
-                .el-cascader {
-                    width: 100%;
-                }
-                .el-form-item__button{
-                    .el-form-item__content{
-                        margin-top: 12px;
-                        margin-left: 24px !important;
+        .el-tabs__content {
+            overflow: visible;
+            .el-tab-pane {
+                padding-top: 24px;
+            }
+            .single-input-pane{
+                .el-form {
+                    .el-form-item{
+                        margin-bottom: 30px;
                     }
-                }
-                .el-form-item__rate{
                     .el-form-item__content{
-                        display: flex;
-                        align-items: center;
-                        .el-rate{
-                            .el-rate__item{
-                                vertical-align: baseline;
-                            }
+                        max-width: 50%;
+                    }
+                    .multiple-select,
+                    .el-cascader {
+                        width: 100%;
+                    }
+                    .el-form-item__button{
+                        .el-form-item__content{
+                            margin-top: 12px;
+                            margin-left: 24px !important;
                         }
-                        .el-tooltip{
-                            margin-left: 12px;
-                            cursor: pointer;
+                    }
+                    .el-form-item__rate{
+                        .el-form-item__content{
+                            display: flex;
+                            align-items: center;
+                            .el-rate{
+                                .el-rate__item{
+                                    vertical-align: baseline;
+                                }
+                            }
+                            .el-tooltip{
+                                margin-left: 12px;
+                                cursor: pointer;
+                            }
                         }
                     }
                 }
             }
-        }
-        .batch-input-pane{
-            & > .el-form {
-                .el-form-item__list{
-                    clear: both;
-                    .el-form-item__content{
-                        margin-left: 0 !important;
-                        float: left;
-                        width: 100%;
-                        .batch-knowledge__number,
-                        .batch-knowledge__label,
-                        .batch-knowledge__operation{
-                            margin-bottom: 12px;
+            .batch-input-pane{
+                & > .el-form {
+                    .table-input-container{
+                        clear: both;
+                        .el-form-item__content{
+                            margin-left: 0 !important;
                         }
-                        .batch-knowledge__number,
-                        .batch-knowledge__label{
-                            display: inline-block;
-                            color: #606266;
-                        }
-                        .batch-knowledge__label{
-                            text-align: right;
-                            padding-right: 12px;
-                            width: 108px;
-                        }
-                        .batch-knowledge__number{
-                            margin-right: 12px;
-                        }
-                        .batch-knowledge__operation{
-                            display: inline-block;
-                        }
-                    }
-                    .batch-knowledge_list{
-                        padding: 0 24px;
-                        max-height: 360px;
-                        overflow-y: scroll;
-                        .batch-knowledge__header{
-                            display: flex;
-                            padding: 0 8px;
-                            border-bottom: 1px solid #eeeeee;
-                            .knowledge-id{
-                                flex-basis: 72px;
-                            }
-                            span{
-                                text-align: center;
-                            }
-                            span:not(.knowledge-id){
-                                flex: 1;
-                            }
-                        }
-                        .batch-knowledge__item{
-                            border-bottom: 1px solid #eeeeee;
-                            display: flex;
-                            align-items: center;
-                            height: 54px;
-                            padding: 0 8px;
-                            .knowledge-item{
-                                text-align: center;
-                                &.knowledge-item__id{
-                                    flex-basis: 72px;
-                                    color: #666666;
-                                }
-                                &:not(.knowledge-item__id){
-                                    flex: 1;
-                                }
-                            }
-                        }
-                    }
-                    .batch-knowledge__add{
-                        position: relative;
-                        .iconfont{
-                            position: absolute;
-                            top: 0;
-                            line-height: 1;
-                            left: 50%;
-                            transform: translateX(-50%);
-                            cursor: pointer;
-                            transition: color .3s;
-                        }
-                        .icon-tixing{
-                            font-size: 28px;
-                            color: rgba($color: #000000, $alpha: .2);
-                            &:hover{
-                                color: rgba($color: $theme_color, $alpha: .8);
-                            }
-                            &.active{
-                                color: rgba($color: $theme_color, $alpha: .9);
-                                font-size: 26px;
-                            }
-                        }
-                        .icon-add{
-                            height: 24px;
-                            line-height: 24px;
-                            font-size: 16px;
-                            color: #ffffff;
-                            &.active{
-                                height: 22px;
-                                line-height: 22px;
-                                font-size: 14px;
-                            }
-                        }
-                    }
-                }
-                .el-form-item__submit{
-                    padding: 0 36px;
-                    .el-form-item__content{
-                        float: right;
                     }
                 }
             }

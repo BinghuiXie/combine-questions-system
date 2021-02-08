@@ -1,8 +1,7 @@
 /**
  * 注册身份
  */
-
-import { IBaseInterface } from './index';
+import { IBaseInterface } from './../common/index';
 
 export type IRegisterIdentity = '' | 'teacher' | 'student' | Array<any>;
 

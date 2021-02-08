@@ -6,9 +6,10 @@ import Lang from '@/lang/lang';
 export default class AbilityManage extends mixins(Lang) {
     public render() {
         return (
-            <div>
-                ability-manage
-                <router-view></router-view>
+            <div class='ability-manage'>
+                <div class='ability-manage__container'>
+                    <router-view></router-view>
+                </div>
             </div>
         )
     }

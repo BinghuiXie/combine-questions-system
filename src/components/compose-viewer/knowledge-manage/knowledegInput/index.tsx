@@ -1,33 +1,36 @@
-import { Component, Watch } from 'vue-property-decorator';
+import { Component } from 'vue-property-decorator';
 import { mixins } from 'vue-class-component';
-import { INPUT_MODULE, KNOWLEDGE_INPUT } from '@/common/constants/lang';
-import { IKnowledgeItem, IChapterItem, ISectionItem, BatchKnowledgeItem } from '@/interfaces/compose-viewer';
+import {
+    IKnowledgeItem,
+    IChapterItem,
+    ISectionItem,
+    BatchKnowledgeItem,
+    KnowledgeInputType,
+    ICascaderOptions
+} from '@/interfaces/compose-viewer';
 import Lang from '@/lang/lang';
 import './style.scss';
 import { chapterMockData } from '@/common/mock/compose-viewer/chapter-list';
-import { deepclone, valueof } from '@/utlis';
-import { ButtonType, InputSize, ButtonSize, KeyCodeMap, SUBMIT } from '@/common/constants';
-
-enum KnowledgeInputType {
-    Single = 'single',
-    Batch = 'batch'
-}
+import { deepclone } from '@/utlis';
+import {
+    ButtonType,
+    KeyCodeMap,
+    SUBMIT,
+    INPUT_MODULE,
+    KNOWLEDGE_INPUT
+} from '@/common/constants';
+import { ColumnTemType, ITableConfig } from '@/interfaces/common';
+import InputTable from '@/components/common/inputTable';
 
 const {
     SELECT_KNOWLEDGE_COURSE,
     SELECT_CHAPTER,
     SELECT_SECTION,
     INPUT_KNOWLEDGE_CONTENT,
+    INPUT_CONETNT,
 } = INPUT_MODULE;
 
-interface ICascaderOptions {
-    value: number;
-    label: string;
-    children?: ICascaderOptions[]
-}
-
 const knowledgeTemplate: BatchKnowledgeItem = {
-    knowledgeId: 0,
     content: '',
     chapterList: [],
     sectionList: [],
@@ -35,7 +38,11 @@ const knowledgeTemplate: BatchKnowledgeItem = {
     isCheck: false
 }
 
-@Component({})
+@Component({
+    components: {
+        InputTable
+    }
+})
 export default class KnowledgeInput extends mixins(Lang) {
     public activeName: string = KnowledgeInputType.Batch;
 
@@ -48,6 +55,52 @@ export default class KnowledgeInput extends mixins(Lang) {
         importance: 1,
     }
 
+    public tableConfig: ITableConfig[] = [
+        {
+            type: ColumnTemType.CHECKBOX,
+            prop: 'isCheck',
+            propInit: false,
+            name: ''
+        },
+        {
+            type: ColumnTemType.TEXT,
+            prop: 'id',
+            propInit: 0,
+            name: '序号'
+        },
+        {
+            type: ColumnTemType.INPUT,
+            prop: 'content',
+            propInit: '',
+            name: '知识点内容',
+            placeholder: INPUT_CONETNT
+        },
+        {
+            type: ColumnTemType.SELECT,
+            prop: 'chapterList',
+            propInit: [],
+            name: '知识点关联章',
+            placeholder: SELECT_CHAPTER,
+            selectData: chapterMockData
+        },
+        {
+            type: ColumnTemType.CASCADER,
+            prop: 'sectionList',
+            propInit: [],
+            link: 'chapterList',
+            name: '知识点关联节',
+            placeholder: SELECT_SECTION,
+            cascaderProps: this.cascaderOptions
+        },
+        {
+            type: ColumnTemType.INPUT,
+            prop: 'importance',
+            propInit: 1,
+            name: '知识点重要程度',
+            placeholder: '知识点重要程度（1-5）'
+        },
+    ]
+
     public batchCourseId: number = 0;
 
     public cascaderProps = {
@@ -57,15 +110,7 @@ export default class KnowledgeInput extends mixins(Lang) {
 
     public cascaderData: number[][] = [];
 
-    public isAddButtonActive: boolean = false;
-
-    public batchList: BatchKnowledgeItem[] = new Array({...knowledgeTemplate});
-
     public batchCascaderOptions: ICascaderOptions[][] = [];
-
-    public $refs!: {
-        addIcon: HTMLElement
-    }
 
     public get cascaderOptions(): ICascaderOptions[] {
         const { chapterList } = this.singleKonwledgeData;
@@ -105,132 +150,19 @@ export default class KnowledgeInput extends mixins(Lang) {
         // TODO: 提交单个知识点
     }
 
-    public handleSubmitBatch() {
-        // TODO: 提交批量知识点
-    }
-
-    public handleAddIconClick() {
-        // 推入一个深拷贝，否则会修改一个导致所有的都发生变化
-        this.batchList.push({...knowledgeTemplate});
-    }
-
-    public handleBatchCascaderFocus(index: number) {
-        const batchRowData = this.batchList[index];
-        const chapterData = chapterMockData.filter(chapter => {
-            if(batchRowData.chapterList.indexOf(chapter.chapterId) !== -1) {
-                return chapter;
-            }
-        });
-        const res = this.scaleChapterKeys(chapterData);
-        this.batchCascaderOptions.splice(index, 0, res);
-    }
-
-    public handleSelectAll() {
-        this.batchList.forEach(batchRowData => {
-            batchRowData.isCheck = !batchRowData.isCheck;
-        })
-    }
-
-    public handleDeleteSelected() {
-        this.batchList = this.batchList.filter(batchRowData => {
-            return batchRowData.isCheck === false;
-        })
-    }
-
-    public deleteLastLine() {
-        this.batchList.pop();
-    }
-
-    public listenEnterKeyDown() {
-        window.addEventListener('keydown', (e: any) => {
-            const el = e || window.event;
-            switch(el.keyCode) {
-                case KeyCodeMap.ENTER:
-                    this.isAddButtonActive = true;
-                    this.handleAddIconClick();
-                    break;
-                case KeyCodeMap.DELETE:
-                    this.deleteLastLine();
-                    break;
-            }
-        });
-        window.addEventListener('keyup', (e: any) => {
-            const el = e || window.event;
-            switch(el.keyCode) {
-                case KeyCodeMap.ENTER:
-                    this.isAddButtonActive = false;
-                    break;
-            }
-        });
-        const { addIcon } = this.$refs;
-        addIcon.addEventListener('mousedown', () => {
-            this.isAddButtonActive = true;
-        });
-        addIcon.addEventListener('mouseup', () => {
-            this.isAddButtonActive = false;
-        });
-    }
-
-    public renderBatchInputItem() {
-        return this.batchList.map((rowData, index) => {
-            return (
-                <li class='batch-knowledge__item' key={index}>
-                    <el-checkbox v-model={rowData.isCheck}/>
-                    <div class='knowledge-item knowledge-item__id'>{index}</div>
-                    <div class='knowledge-item knowledge-item__content'>
-                        <el-input 
-                            placeholder={this.t(KNOWLEDGE_INPUT)}
-                            size={InputSize.MINI}
-                            v-model={rowData.content}
-                        />
-                    </div>
-                    <div class='knowledge-item knowledge-item__chapter'>
-                        <el-select 
-                            placeholder={this.t(SELECT_CHAPTER)}
-                            size={InputSize.MINI}
-                            v-model={rowData.chapterList}
-                            multiple
-                            collapse-tags
-                        >
-                            {
-                                chapterMockData.map(chapter => (
-                                    <el-option
-                                        label={chapter.content}
-                                        value={chapter.chapterId}
-                                        key={chapter.chapterId}
-                                    />
-                                ))
-                            }
-                        </el-select>
-                    </div>
-                    <div class='knowledge-item knowledge-item__section'>
-                        <el-cascader
-                            placeholder={this.t(SELECT_SECTION)}
-                            size={InputSize.MINI}
-                            onFocus={() => { this.handleBatchCascaderFocus(index) }}
-                            options={this.batchCascaderOptions[index]}
-                            collapse-tags
-                            v-model={rowData.sectionList}
-                            {...{
-                                props: {
-                                    props: {...this.cascaderProps}
-                                }
-                            }}
-                        ></el-cascader>
-                    </div>
-                    <div class='knowledge-item knowledge-item__importance'>
-                        <el-input 
-                            placeholder='知识点重要程度（输入1-5）'
-                            size={InputSize.MINI}
-                            v-model={rowData.importance}
-                        />
-                    </div>
-                </li>
-        )})
-    }
-
-    public mounted() {
-        this.listenEnterKeyDown();
+    public getCascaderData(tableConfig: ITableConfig, rowData: any, index: number) {
+        const { link } = tableConfig;
+        if(link) {
+            const linkData = rowData[link];
+            const chapterData = chapterMockData.filter(chapter => {
+                if(linkData.indexOf(chapter.chapterId) !== -1) {
+                    return chapter;
+                }
+            });
+            const res = this.scaleChapterKeys(chapterData);
+            // 在 batchCascaderOptions 对应下标位置插入改变过字段的数据
+            this.batchCascaderOptions.splice(index, 0, res);
+        }
     }
 
     public render() {
@@ -322,56 +254,13 @@ export default class KnowledgeInput extends mixins(Lang) {
                                     <el-option label='编译原理' value={1}></el-option>
                                 </el-select>
                             </el-form-item>
-                            <el-form-item
-                                class='el-form-item__list'
-                            >
-                                <label class='batch-knowledge__label'>
-                                    {this.t(KNOWLEDGE_INPUT)}
-                                </label>
-                                <div class='batch-knowledge__number'>
-                                    { '( 0 / ' + this.batchList.length + ' )' }
-                                </div>
-                                <div class='batch-knowledge__operation'>
-                                    <el-button size={ButtonSize.MINI} type={ButtonType.PRIMARY}>新增一行</el-button>
-                                    <el-button 
-                                        size={ButtonSize.MINI} 
-                                        type={ButtonType.DANGER}
-                                        onclick={this.deleteLastLine}
-                                    >删除最后一行</el-button>
-                                    <el-button
-                                        size={ButtonSize.MINI}
-                                        type={ButtonType.DANGER}
-                                        onclick={this.handleDeleteSelected}
-                                    >删除所选</el-button>
-                                </div>
-                                <ul class='batch-knowledge_list'>
-                                    <li class='batch-knowledge__header'>
-                                        <el-checkbox onChange={this.handleSelectAll}/>
-                                        <span class='knowledge-id'>序号</span>
-                                        <span>知识点内容</span>
-                                        <span>知识点关联章</span>
-                                        <span>知识点关联节</span>
-                                        <span>知识点重要程度</span>
-                                    </li>
-                                    {
-                                        this.renderBatchInputItem()
-                                    }
-                                </ul>
-                                <div class='batch-knowledge__add'>
-                                    <i
-                                        ref='addIcon'
-                                        class={['iconfont', 'icon-tixing', this.isAddButtonActive ? 'active' : null]} 
-                                        onclick={this.handleAddIconClick}
-                                    />
-                                    <i class={['iconfont', 'icon-add', this.isAddButtonActive ? 'active' : null]} />
-                                </div>
-                            </el-form-item>
-                            <el-form-item class='el-form-item__submit'>
-                                <el-button
-                                    type={ButtonType.PRIMARY}
-                                    onclick={this.handleSubmitBatch}
-                                    size={ButtonSize.MEDIUM}
-                                >{this.t(SUBMIT)}</el-button>
+                            <el-form-item class='table-input-container'>
+                                <input-table 
+                                tableConfig={this.tableConfig}
+                                tableTitle={KNOWLEDGE_INPUT}
+                                cascaderOptions={this.batchCascaderOptions}
+                                onGetCascaderData={this.getCascaderData}
+                            />
                             </el-form-item>
                         </el-form>
                     </el-tab-pane>

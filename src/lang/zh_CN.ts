@@ -60,7 +60,9 @@ const zh_CN: {
     "select_section": "选择课程对应节",
     "submit": "提交",
     "ability_manage": "能力点管理",
-    "ability_input": "能力点录入"
+    "ability_input": "能力点录入",
+    "select_ability_type": "选择能力点类型",
+    "select_ability_course": "选择能力点课程"
 }
 
 export default zh_CN;

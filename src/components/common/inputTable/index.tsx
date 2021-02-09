@@ -11,7 +11,7 @@ import {
     KeyCodeMap,
     SUBMIT
 } from '@/common/constants';
-import { ITableConfig, ColumnTemType } from '@/interfaces/common';
+import { ITableConfig, ColumnTemType, ISelectItem } from '@/interfaces/common';
 import './style.scss';
 
 @Component({})
@@ -29,6 +29,9 @@ export default class InputTable extends mixins(Lang) {
         default: '添加数据'
     })
     public tableTitle!: string;
+
+    @Prop({ default: false })
+    public showOperation!: boolean;
 
     @Emit('getCascaderData')
     public getCascaderData(config: ITableConfig, rowData: any, index: number) {
@@ -76,7 +79,22 @@ export default class InputTable extends mixins(Lang) {
     }
 
     public handleSubmitBatch() {
+        const cascaderProp = this.tableConfig.find(config => config.type === ColumnTemType.CASCADER);
+        if(cascaderProp) {
+            // 对于极联选择器，只需要保留最终选择出来 array 的下标为 1 的数
+            // 例如：[[0, 3], [1, 9]] => [3, 9] 
+            const { prop } = cascaderProp;
+            this.rowDataList.forEach(rowData => {
+                rowData[prop].forEach((item: number[], index: number) => {
+                    rowData[prop][index] = item[1];
+                })
+            })
+        }
         console.log(this.rowDataList);
+    }
+
+    public addNewLine() {
+       this.handleAddIconClick();
     }
 
     public listenEnterKeyDown() {
@@ -123,9 +141,9 @@ export default class InputTable extends mixins(Lang) {
         )
     }
 
-    // /**
-    //  * 获取当前列的模板
-    //  */
+    /**
+     * 获取当前列的模板
+     */
     public getColumnTemplate(config: ITableConfig, data: any, index: number) {
         const { type, placeholder: hint, prop } = config;
         const placeholder = hint || '';
@@ -145,21 +163,22 @@ export default class InputTable extends mixins(Lang) {
                     </div>
                 )
             case ColumnTemType.SELECT:
+                const options = config.selectOptions || {};
                 return (
                     <div class='row-item row-item__select'>
                         <el-select 
                             placeholder={this.t(placeholder)}
                             size={InputSize.MINI}
                             v-model={data[prop]}
-                            multiple
+                            multiple={ options.multiple || true }
                             collapse-tags
                         >
                             {
-                                config.selectData.map((chapter: any) => (
+                                config.selectData && config.selectData.map((selectItem: ISelectItem) => (
                                     <el-option
-                                        label={chapter.content}
-                                        value={chapter.chapterId}
-                                        key={chapter.chapterId}
+                                        label={selectItem.label}
+                                        value={selectItem.value}
+                                        key={selectItem.value}
                                     />
                                 ))
                             }
@@ -181,7 +200,7 @@ export default class InputTable extends mixins(Lang) {
                                     props: {...config.cascaderProps}
                                 }
                             }}
-                        ></el-cascader>
+                        />
                     </div>
                 )
         }
@@ -216,7 +235,11 @@ export default class InputTable extends mixins(Lang) {
                         { '( 0 / ' + this.rowDataList.length + ' )' }
                     </div>
                     <div class='table-operation'>
-                        <el-button size={ButtonSize.MINI} type={ButtonType.PRIMARY}>新增一行</el-button>
+                        <el-button 
+                            size={ButtonSize.MINI}
+                            type={ButtonType.PRIMARY}
+                            onclick={this.addNewLine}
+                        >新增一行</el-button>
                         <el-button 
                             size={ButtonSize.MINI} 
                             type={ButtonType.DANGER}

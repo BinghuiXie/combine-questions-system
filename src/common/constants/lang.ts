@@ -41,7 +41,9 @@ export const SUBMIT: string = 'submit';
 export const INPUT_MODULE = {
     SELECT_COURSE: 'select_course',
     SELECT_KNOWLEDGE_COURSE: 'select_knowledge_course',
+    SELECT_ABILITY_COURSE: 'select_ability_course',
     SELECT_QUESTION_TYPE: 'select_question_type',
+    SELECT_ABILITY_TYPE: 'select_ability_type',
     SELECT_DIFFICULTY: 'select_difficulty',
     INPUT_CONETNT: 'input_content',
     INPUT_SCORE: 'input_score',

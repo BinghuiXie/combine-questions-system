@@ -6,7 +6,7 @@ import {
     ISectionItem,
     BatchKnowledgeItem,
     KnowledgeInputType,
-    ICascaderOptions
+    KnowledgeTableConfig
 } from '@/interfaces/compose-viewer';
 import Lang from '@/lang/lang';
 import './style.scss';
@@ -19,7 +19,7 @@ import {
     INPUT_MODULE,
     KNOWLEDGE_INPUT
 } from '@/common/constants';
-import { ColumnTemType, ITableConfig } from '@/interfaces/common';
+import { ColumnTemType, ITableConfig, ISelectItem } from '@/interfaces/common';
 import InputTable from '@/components/common/inputTable';
 
 const {
@@ -55,7 +55,18 @@ export default class KnowledgeInput extends mixins(Lang) {
         importance: 1,
     }
 
-    public tableConfig: ITableConfig[] = [
+    public batchCourseId: number = 0;
+
+    public cascaderProps = {
+        multiple: true,
+        expandTrigger: 'hover',
+    }
+
+    public cascaderData: number[][] = [];
+
+    public batchCascaderOptions: ISelectItem[][] = [];
+
+    public tableConfig: KnowledgeTableConfig = [
         {
             type: ColumnTemType.CHECKBOX,
             prop: 'isCheck',
@@ -81,7 +92,7 @@ export default class KnowledgeInput extends mixins(Lang) {
             propInit: [],
             name: '知识点关联章',
             placeholder: SELECT_CHAPTER,
-            selectData: chapterMockData
+            selectData: this.scaleChapterKeys(chapterMockData)
         },
         {
             type: ColumnTemType.CASCADER,
@@ -90,7 +101,7 @@ export default class KnowledgeInput extends mixins(Lang) {
             link: 'chapterList',
             name: '知识点关联节',
             placeholder: SELECT_SECTION,
-            cascaderProps: this.cascaderOptions
+            cascaderProps: this.cascaderProps
         },
         {
             type: ColumnTemType.INPUT,
@@ -98,21 +109,10 @@ export default class KnowledgeInput extends mixins(Lang) {
             propInit: 1,
             name: '知识点重要程度',
             placeholder: '知识点重要程度（1-5）'
-        },
+        }
     ]
 
-    public batchCourseId: number = 0;
-
-    public cascaderProps = {
-        multiple: true,
-        expandTrigger: 'hover',
-    }
-
-    public cascaderData: number[][] = [];
-
-    public batchCascaderOptions: ICascaderOptions[][] = [];
-
-    public get cascaderOptions(): ICascaderOptions[] {
+    public get cascaderOptions(): ISelectItem[] {
         const { chapterList } = this.singleKonwledgeData;
         const res = chapterMockData.filter(chapter => {
             if(chapterList.indexOf(chapter.chapterId) !== -1) {
@@ -122,7 +122,7 @@ export default class KnowledgeInput extends mixins(Lang) {
         return this.scaleChapterKeys(res);
     }
 
-    public scaleChapterKeys(data: IChapterItem[] | ISectionItem[]): ICascaderOptions[] {
+    public scaleChapterKeys(data: IChapterItem[] | ISectionItem[]): ISelectItem[] {
         const copy = deepclone<typeof data>(data);
         if(!copy.length) {
             return [];
@@ -255,11 +255,11 @@ export default class KnowledgeInput extends mixins(Lang) {
                                 </el-select>
                             </el-form-item>
                             <el-form-item class='table-input-container'>
-                                <input-table 
-                                tableConfig={this.tableConfig}
-                                tableTitle={KNOWLEDGE_INPUT}
-                                cascaderOptions={this.batchCascaderOptions}
-                                onGetCascaderData={this.getCascaderData}
+                                <input-table
+                                    tableConfig={this.tableConfig}
+                                    tableTitle={KNOWLEDGE_INPUT}
+                                    cascaderOptions={this.batchCascaderOptions}
+                                    onGetCascaderData={this.getCascaderData}
                             />
                             </el-form-item>
                         </el-form>

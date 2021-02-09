@@ -1,3 +1,11 @@
+import {
+    checkboxTableConfig,
+    textTableConfig,
+    inputTableConfig,
+    cascaderTableConfig,
+    selectTableConfig
+} from '@/interfaces/common';
+
 export interface IKnowledgeItem {
     knowledgeId: number;
     content: string;
@@ -12,14 +20,17 @@ export enum KnowledgeInputType {
     Batch = 'batch'
 }
 
-export interface ICascaderOptions {
-    value: number;
-    label: string;
-    children?: ICascaderOptions[]
-}
-
 export interface IBatchKnowledgeItem extends IKnowledgeItem {
     isCheck: boolean;
 }
+
+export type KnowledgeTableConfig = [
+    checkboxTableConfig,
+    textTableConfig,
+    inputTableConfig,
+    selectTableConfig,
+    cascaderTableConfig,
+    inputTableConfig
+]
 
 export type BatchKnowledgeItem = Omit<IBatchKnowledgeItem, 'courseId' | 'knowledgeId'>;

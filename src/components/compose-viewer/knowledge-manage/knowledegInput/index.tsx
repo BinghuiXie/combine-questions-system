@@ -4,12 +4,10 @@ import {
     IKnowledgeItem,
     IChapterItem,
     ISectionItem,
-    BatchKnowledgeItem,
     KnowledgeInputType,
     KnowledgeTableConfig
 } from '@/interfaces/compose-viewer';
 import Lang from '@/lang/lang';
-import './style.scss';
 import { chapterMockData } from '@/common/mock/compose-viewer/chapter-list';
 import { deepclone } from '@/utlis';
 import {
@@ -21,6 +19,8 @@ import {
 } from '@/common/constants';
 import { ColumnTemType, ITableConfig, ISelectItem } from '@/interfaces/common';
 import InputTable from '@/components/common/inputTable';
+import './style.scss';
+import { KnowledgeRules } from '@/common/rules/compose-viewer/knowledge-manage';
 
 const {
     SELECT_KNOWLEDGE_COURSE,
@@ -29,14 +29,6 @@ const {
     INPUT_KNOWLEDGE_CONTENT,
     INPUT_CONETNT,
 } = INPUT_MODULE;
-
-const knowledgeTemplate: BatchKnowledgeItem = {
-    content: '',
-    chapterList: [],
-    sectionList: [],
-    importance: 1,
-    isCheck: false
-}
 
 @Component({
     components: {
@@ -256,6 +248,7 @@ export default class KnowledgeInput extends mixins(Lang) {
                             </el-form-item>
                             <el-form-item class='table-input-container'>
                                 <input-table
+                                    rules={KnowledgeRules}
                                     tableConfig={this.tableConfig}
                                     tableTitle={KNOWLEDGE_INPUT}
                                     cascaderOptions={this.batchCascaderOptions}

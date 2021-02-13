@@ -46,7 +46,7 @@
             }
         }
         .table-row_list{
-            max-height: 360px;
+            max-height: 320px;
             overflow-y: scroll;
             border-bottom: 1px solid #eeeeee;
             .table-row__item:not(:last-of-type) {
@@ -55,7 +55,7 @@
             .table-row__item{
                 display: flex;
                 align-items: center;
-                height: 54px;
+                height: 64px;
                 .row-item{
                     text-align: center;
                     &.row-item__text{
@@ -65,6 +65,15 @@
                     }
                     &:not(.row-item__text){
                         flex: 1;
+                    }
+                    .row-item__content{
+                        position: relative;
+                    }
+                    .el-form-item__error{
+                        padding-top: 0;
+                        margin-top: -4px;
+                        left: 50%;
+                        transform: translateX(-50%);
                     }
                 }
             }

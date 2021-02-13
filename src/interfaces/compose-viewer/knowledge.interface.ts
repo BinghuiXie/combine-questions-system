@@ -20,10 +20,9 @@ export enum KnowledgeInputType {
     Batch = 'batch'
 }
 
-export interface IBatchKnowledgeItem extends IKnowledgeItem {
-    isCheck: boolean;
-}
-
+/**
+ * 采用元组的形式对不同界面的 inputTable 的 config 进行强制的类型限制
+ */
 export type KnowledgeTableConfig = [
     checkboxTableConfig,
     textTableConfig,
@@ -32,5 +31,3 @@ export type KnowledgeTableConfig = [
     cascaderTableConfig,
     inputTableConfig
 ]
-
-export type BatchKnowledgeItem = Omit<IBatchKnowledgeItem, 'courseId' | 'knowledgeId'>;

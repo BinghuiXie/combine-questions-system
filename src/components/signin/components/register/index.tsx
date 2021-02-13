@@ -28,7 +28,7 @@ import {
     IRegisterResponseData
 } from '@/interfaces';
 import Lang from '@/lang/lang';
-import { SigninRules } from '../../rules';
+import { SigninRules } from '@/common/rules/signin';
 import { AxiosResponse } from 'axios';
 import './style.scss';
 

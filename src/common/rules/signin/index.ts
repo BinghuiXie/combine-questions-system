@@ -5,7 +5,7 @@ import {
     checkPhoneNumber,
     checkAuthCode,
     checkStudentId
- } from './signin';
+ } from './rules';
 
 const SigninRules: any = {
     employeeId: [

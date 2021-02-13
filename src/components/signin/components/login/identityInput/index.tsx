@@ -21,7 +21,7 @@ import {
     InputType,
     ButtonType
  } from '@/common/constants';
-import { SigninRules } from '@/components/signin/rules';
+import { SigninRules } from '@/common/rules/signin';
 import { IStudentInfo, ITeacherInfo, IBindUserInfo } from '@/interfaces';
 import Storage from '@/utlis/localStorage';
 

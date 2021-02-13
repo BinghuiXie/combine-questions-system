@@ -20,6 +20,9 @@ export default class InputTable extends mixins(Lang) {
     public tableConfig!: ITableConfig[];
 
     @Prop()
+    public rules!: any;
+
+    @Prop()
     public data!: Object;
 
     @Prop()
@@ -78,6 +81,9 @@ export default class InputTable extends mixins(Lang) {
         })
     }
 
+    /**
+     * inputTable 提交数据
+     */
     public handleSubmitBatch() {
         const cascaderProp = this.tableConfig.find(config => config.type === ColumnTemType.CASCADER);
         if(cascaderProp) {
@@ -90,7 +96,6 @@ export default class InputTable extends mixins(Lang) {
                 })
             })
         }
-        console.log(this.rowDataList);
     }
 
     public addNewLine() {
@@ -149,24 +154,28 @@ export default class InputTable extends mixins(Lang) {
         const placeholder = hint || '';
         switch (type) {
             case ColumnTemType.TEXT:
-                return <div class='row-item row-item__text'>{data[prop]}</div>;
+                return <el-form-item prop={prop} class='row-item row-item__text'>{data[prop]}</el-form-item>;
             case ColumnTemType.CHECKBOX:
-                return <el-checkbox v-model={data[prop]}/>;
+                return (
+                    <el-form-item prop={prop}>
+                        <el-checkbox  v-model={data[prop]}/>
+                    </el-form-item>
+                )
             case ColumnTemType.INPUT:
                 return (
-                    <div class='row-item row-item__input'>
-                        <el-input 
+                    <el-form-item prop={prop} class='row-item row-item__input'>
+                        <el-input
                             placeholder={this.t(placeholder)}
                             size={InputSize.MINI}
                             v-model={data[prop]}
                         />
-                    </div>
+                    </el-form-item>
                 )
             case ColumnTemType.SELECT:
                 const options = config.selectOptions || {};
                 return (
-                    <div class='row-item row-item__select'>
-                        <el-select 
+                    <el-form-item prop={prop} class='row-item row-item__select'>
+                        <el-select
                             placeholder={this.t(placeholder)}
                             size={InputSize.MINI}
                             v-model={data[prop]}
@@ -183,11 +192,11 @@ export default class InputTable extends mixins(Lang) {
                                 ))
                             }
                         </el-select>
-                    </div>
+                    </el-form-item>
                 )
             case ColumnTemType.CASCADER:
                 return(
-                    <div class='row-item row-item__cascader'>
+                    <el-form-item prop={prop} class='row-item row-item__cascader'>
                         <el-cascader
                             placeholder={this.t(placeholder)}
                             size={InputSize.MINI}
@@ -201,21 +210,27 @@ export default class InputTable extends mixins(Lang) {
                                 }
                             }}
                         />
-                    </div>
+                    </el-form-item>
                 )
         }
     }
 
     public renderTableRow() {
         return this.rowDataList.map((rowData, index) => {
+            console.log(rowData);
             return (
-                <li class='table-row__item' key={index}>
+                <el-form
+                    class='table-row__item'
+                    key={index}
+                    rules={this.rules}
+                    {...{ props: { model: rowData } }}
+                >
                     {
                         this.tableConfig.map(columnConfig => {
                             return this.getColumnTemplate(columnConfig, rowData, index)
                         })
                     }
-                </li>
+                </el-form>
             )
         })
     }
@@ -254,9 +269,9 @@ export default class InputTable extends mixins(Lang) {
                 </div>
                 <div class='table-body'>
                     { this.renderTableHeader() }
-                    <ul class='table-row_list'>
+                    <div class='table-row_list'>
                         { this.renderTableRow() }
-                    </ul>
+                    </div>
                 </div>
                 <div class='table-row__add'>
                     <i

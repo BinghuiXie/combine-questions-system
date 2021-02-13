@@ -179,7 +179,7 @@ export default class InputTable extends mixins(Lang) {
                             placeholder={this.t(placeholder)}
                             size={InputSize.MINI}
                             v-model={data[prop]}
-                            multiple={ options.multiple || true }
+                            multiple={ options.multiple }
                             collapse-tags
                         >
                             {

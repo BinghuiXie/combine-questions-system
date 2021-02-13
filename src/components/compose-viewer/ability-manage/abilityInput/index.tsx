@@ -6,6 +6,7 @@ import { ColumnTemType, ITableConfig, ISelectItem } from '@/interfaces/common';
 import { INPUT_MODULE, ABILITY_INPUT } from '@/common/constants';
 import { AbilityTableConfig, AbilityType } from '@/interfaces/compose-viewer/ability.interface';
 import './style.scss';
+import { AbilityRules } from '@/common/rules/compose-viewer/ability-manage';
 
 const {
     INPUT_CONETNT,
@@ -47,11 +48,11 @@ export default class AbilityInput extends mixins(Lang) {
         {
             type: ColumnTemType.SELECT,
             prop: 'abilityType',
-            propInit: [],
+            propInit: 0,
             name: '能力点类型',
             placeholder: SELECT_ABILITY_TYPE,
             selectOptions: {
-                multiple: true
+                multiple: false
             },
             selectData: this.abilityTypeSelectList
         }
@@ -87,6 +88,7 @@ export default class AbilityInput extends mixins(Lang) {
                     </el-form-item>
                 </el-form>
                 <input-table
+                    rules={AbilityRules}
                     tableConfig={this.tableConfig}
                     tableTitle={ABILITY_INPUT}
                 />

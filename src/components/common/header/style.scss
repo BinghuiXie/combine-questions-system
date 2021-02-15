@@ -13,7 +13,6 @@
         line-height: 60px;
         height: 60px;
         display: flex;
-        justify-content: space-between;
         & > div {
             height: 100%;
         }
@@ -43,15 +42,19 @@
         }
         .el-header__right{
             flex: 1;
+            padding: 0 12px;
+            box-sizing: border-box;
             box-shadow: 2px 2px 8px rgba($color: #eeeeee, $alpha: 1);
             .el-header__right-list{
-                display: flex;
-                flex-direction: row-reverse;
                 padding: 0 12px;
+                float: right;
                 li.el-header__right-item{
                     display: inline-block;
-                    padding: 0 32px;
+                    padding: 0 22px;
                     user-select: none;
+                    font-size: 14px;
+                    color: #606266;
+                    vertical-align: middle;
                     &:hover{
                         color: $theme_color;
                         cursor: pointer;

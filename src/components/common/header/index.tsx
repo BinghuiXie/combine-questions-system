@@ -5,6 +5,7 @@ import { headerList } from '@/common/mock/common/header-list';
 import { HeaderItemType } from '@/interfaces/common';
 
 import './style.scss';
+import { CreateElement } from 'vue/types/umd';
 
 @Component
 export default class Header extends mixins(Lang) {
@@ -66,7 +67,7 @@ export default class Header extends mixins(Lang) {
         });
     }
 
-    render() {
+    render(h: CreateElement) {
         return (
             <el-header class='el-header__common'>
                 <div class='el-header__common-content'>

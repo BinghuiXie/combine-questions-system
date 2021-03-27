@@ -3,6 +3,7 @@
  */
 import { Component, Prop, Emit } from 'vue-property-decorator';
 import { mixins } from 'vue-class-component';
+import { Action } from 'vuex-class';
 import Lang from '@/lang/lang';
 import {
     ButtonSize,
@@ -13,9 +14,14 @@ import {
 } from '@/common/constants';
 import { ITableConfig, ColumnTemType, ISelectItem } from '@/interfaces/common';
 import './style.scss';
+import { IKnowledgeItem } from '@/interfaces/compose-viewer';
+import { IAbilityItem } from '@/interfaces/compose-viewer/ability.interface';
 
 @Component({})
 export default class InputTable extends mixins(Lang) {
+    @Prop()
+    public courseId!: number;
+
     @Prop()
     public tableConfig!: ITableConfig[];
 
@@ -40,6 +46,12 @@ export default class InputTable extends mixins(Lang) {
     public getCascaderData(config: ITableConfig, rowData: any, index: number) {
         // cascader focus 的时候获取相关数据
     }
+
+    @Action('submitKnowledgeData')
+    public submitBatchKnowledgeData!: (payload: { courseId: number, knowledgeList: Array<IKnowledgeItem> }) => Promise<boolean>
+
+    @Action('submitAbilityData')
+    public submitBathcAbilityData!: (payload: { courseId: number, abilityList: Array<IAbilityItem> }) => Promise<boolean>
 
     public $refs!: {
         addIcon: HTMLElement
@@ -87,6 +99,7 @@ export default class InputTable extends mixins(Lang) {
     public handleSubmitBatch() {
         const cascaderProp = this.tableConfig.find(config => config.type === ColumnTemType.CASCADER);
         if(cascaderProp) {
+            // 知识点
             // 对于极联选择器，只需要保留最终选择出来 array 的下标为 1 的数
             // 例如：[[0, 3], [1, 9]] => [3, 9] 
             const { prop } = cascaderProp;
@@ -94,6 +107,16 @@ export default class InputTable extends mixins(Lang) {
                 rowData[prop].forEach((item: number[], index: number) => {
                     rowData[prop][index] = item[1];
                 })
+            });
+            this.submitBatchKnowledgeData({
+                courseId: this.courseId,
+                knowledgeList: this.rowDataList
+            })
+        } else {
+            // 能力点
+            this.submitBathcAbilityData({
+                courseId: this.courseId,
+                abilityList: this.rowDataList
             })
         }
     }

@@ -5,11 +5,14 @@ import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { catchException } from './error';
 
 const storage = new Storage();
-const baseURL = 'http://192.168.43.225:8080';
+const baseURL = 'http://47.114.146.52:8080';
 
 axios.interceptors.request.use(
     config => {
-        const sessionId = storage.get(SESSION_ID_KEY)
+        const sessionId = storage.get(SESSION_ID_KEY);
+        if(config.method == 'post'){
+            config.params = {};
+        }
         if(sessionId) {
             config.headers.Authorization = sessionId;
         }

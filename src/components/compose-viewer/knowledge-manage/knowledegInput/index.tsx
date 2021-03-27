@@ -1,4 +1,5 @@
 import { Component } from 'vue-property-decorator';
+import { Action } from 'vuex-class';
 import { mixins } from 'vue-class-component';
 import {
     IKnowledgeItem,
@@ -12,7 +13,6 @@ import { chapterMockData } from '@/common/mock/compose-viewer/chapter-list';
 import { deepclone } from '@/utlis';
 import {
     ButtonType,
-    KeyCodeMap,
     SUBMIT,
     INPUT_MODULE,
     KNOWLEDGE_INPUT
@@ -36,7 +36,10 @@ const {
     }
 })
 export default class KnowledgeInput extends mixins(Lang) {
-    public activeName: string = KnowledgeInputType.Batch;
+    @Action('submitKnowledgeData')
+    public submitKnowledgeData!: (payload: { knowledgeList: Array<IKnowledgeItem> }) => Promise<boolean>;
+
+    public activeName: string = KnowledgeInputType.Single;
 
     public singleKonwledgeData: IKnowledgeItem = {
         knowledgeId: 0,
@@ -84,7 +87,10 @@ export default class KnowledgeInput extends mixins(Lang) {
             propInit: [],
             name: '知识点关联章',
             placeholder: SELECT_CHAPTER,
-            selectData: this.scaleChapterKeys(chapterMockData)
+            selectData: this.scaleChapterKeys(chapterMockData),
+            selectOptions: {
+                multiple: true
+            }
         },
         {
             type: ColumnTemType.CASCADER,
@@ -139,7 +145,9 @@ export default class KnowledgeInput extends mixins(Lang) {
 
     public handleSubmitSingle() {
         this.singleKonwledgeData.sectionList = this.cascaderData.map(item => item[1]);
-        // TODO: 提交单个知识点
+        this.submitKnowledgeData({
+            knowledgeList: [this.singleKonwledgeData]
+        })
     }
 
     public getCascaderData(tableConfig: ITableConfig, rowData: any, index: number) {
@@ -173,7 +181,8 @@ export default class KnowledgeInput extends mixins(Lang) {
                             <el-form-item 
                                 label={this.t(SELECT_KNOWLEDGE_COURSE)}
                             >
-                                <el-select 
+                                <el-select
+                                    multiple
                                     v-model={this.singleKonwledgeData.courseId}
                                     placeholder={this.t(SELECT_KNOWLEDGE_COURSE)}
                                 >
@@ -248,12 +257,13 @@ export default class KnowledgeInput extends mixins(Lang) {
                             </el-form-item>
                             <el-form-item class='table-input-container'>
                                 <input-table
+                                    courseId={this.batchCourseId}
                                     rules={KnowledgeRules}
                                     tableConfig={this.tableConfig}
                                     tableTitle={KNOWLEDGE_INPUT}
                                     cascaderOptions={this.batchCascaderOptions}
                                     onGetCascaderData={this.getCascaderData}
-                            />
+                                />
                             </el-form-item>
                         </el-form>
                     </el-tab-pane>

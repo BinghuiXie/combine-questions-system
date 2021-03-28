@@ -60,7 +60,6 @@ function loadScript(): void {
 
 export async function renderQuestionContents(payload: IMathJax2htmlPayload) {
     const { type, value } = payload;
-    console.log(value);
     // 1. 渲染题干
     const main = getArrayItem<IMathJax2htmlObject>(value, PreviewContentKey.MAIN);
     if(main) {
@@ -116,7 +115,6 @@ function renderImage(node: Element, url: string) {
         const image = new Image();
         image.src = url;
         image.onload = function() {
-            console.log(image.width, image.height);
             node.appendChild(image);
         }
         image.onerror = function() {

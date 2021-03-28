@@ -154,7 +154,6 @@ export default class IdentityInput extends mixins(Lang, ComponentProp) {
     }
 
     render() {
-        console.log(storage)
         return (
             <el-form
                 class='login-el-form'

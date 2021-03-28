@@ -11,7 +11,6 @@ import * as types from './mutationTypes';
 export const mutations: MutationTree<ISigninState> = {
     [types.INPUT_USER_INFO](state, payload: { newModel: IBindUserInfo }) {
         const { newModel } = payload;
-        console.log(newModel)
         if(newModel && newModel.hasOwnProperty('employeeId')) {
             state.teacherInfo = newModel as ITeacherInfo;
         } else {

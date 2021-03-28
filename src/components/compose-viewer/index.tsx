@@ -28,7 +28,6 @@ export default class ComposeViewer extends mixins(Lang) {
             // 点击的是子 menu
             this.activeSubFuncId = id;
             const parentItem = teacherFunctionList.find(item => item.id === parentId);
-            console.log(parentItem?.path);
             if(parentItem && parentItem.children) {
                 const childItem = parentItem?.children.find(child => child.id === id);
                 const path = COMPOSE_VIEWER_BASE_ROUTE + parentItem.path + '/' + childItem?.path;

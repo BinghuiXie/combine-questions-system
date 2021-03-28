@@ -40,7 +40,6 @@ const routes: Array<RouteConfig> = [
           component: item.component,
         }
       }
-      console.log(res);
       return res;
     })
   },

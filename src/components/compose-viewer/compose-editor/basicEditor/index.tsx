@@ -24,7 +24,6 @@ export default class BasicEditor extends mixins(Lang) {
     }
 
     render() {
-        console.log(this.t(BaseEditorOperations.COURSE_CODE_SELECT))
         return (
             <div class='base-editor'>
                 <div class='base-editor__title'>

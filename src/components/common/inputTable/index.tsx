@@ -240,7 +240,6 @@ export default class InputTable extends mixins(Lang) {
 
     public renderTableRow() {
         return this.rowDataList.map((rowData, index) => {
-            console.log(rowData);
             return (
                 <el-form
                     class='table-row__item'

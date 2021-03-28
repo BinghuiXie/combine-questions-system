@@ -46,7 +46,7 @@ export default class KnowledgeInput extends mixins(Lang) {
         content: '',
         chapterList: [],
         sectionList: [],
-        courseId: [0],
+        courseId: 0,
         importance: 1,
     }
 
@@ -143,10 +143,16 @@ export default class KnowledgeInput extends mixins(Lang) {
         }
     }
 
-    public handleSubmitSingle() {
+    public handleSubmitSingle(formName: string) {
         this.singleKonwledgeData.sectionList = this.cascaderData.map(item => item[1]);
-        this.submitKnowledgeData({
-            knowledgeList: [this.singleKonwledgeData]
+        this.$refs[formName].validate((valid: boolean) => {
+            if(valid) {
+                this.submitKnowledgeData({
+                    knowledgeList: [this.singleKonwledgeData]
+                })
+            } else {
+                return false;
+            }
         })
     }
 
@@ -175,6 +181,16 @@ export default class KnowledgeInput extends mixins(Lang) {
                         name={ KnowledgeInputType.Single }
                     >
                         <el-form
+                            {...{
+                                props: {
+                                    model: { 
+                                        ...this.singleKonwledgeData,
+                                        cascaderData: this.cascaderData
+                                    }
+                                }
+                            }}
+                            ref='singleRuleForm'
+                            rules={KnowledgeRules}
                             label-width='120px'
                             label-position='right'
                         >
@@ -182,14 +198,14 @@ export default class KnowledgeInput extends mixins(Lang) {
                                 label={this.t(SELECT_KNOWLEDGE_COURSE)}
                             >
                                 <el-select
-                                    multiple
                                     v-model={this.singleKonwledgeData.courseId}
                                     placeholder={this.t(SELECT_KNOWLEDGE_COURSE)}
                                 >
                                     <el-option label='计算机通信与网络' value={0}></el-option>
                                 </el-select>
                             </el-form-item>
-                            <el-form-item 
+                            <el-form-item
+                                prop="content"
                                 label={this.t(INPUT_KNOWLEDGE_CONTENT)}
                             >
                                 <el-input
@@ -197,7 +213,7 @@ export default class KnowledgeInput extends mixins(Lang) {
                                     placeholder={this.t(INPUT_KNOWLEDGE_CONTENT)}
                                 />
                             </el-form-item>
-                            <el-form-item label={this.t(SELECT_CHAPTER)}>
+                            <el-form-item prop="chapterList" label={this.t(SELECT_CHAPTER)}>
                                 <el-select
                                     class='multiple-select'
                                     v-model={this.singleKonwledgeData.chapterList}
@@ -214,7 +230,7 @@ export default class KnowledgeInput extends mixins(Lang) {
                                     }
                                 </el-select>
                             </el-form-item>
-                            <el-form-item label={this.t(SELECT_SECTION)}>
+                            <el-form-item prop="cascaderData" label={this.t(SELECT_SECTION)}>
                                 <el-cascader
                                     v-model={this.cascaderData}
                                     options={this.cascaderOptions}
@@ -234,7 +250,7 @@ export default class KnowledgeInput extends mixins(Lang) {
                             </el-form-item>
                             <el-form-item class='el-form-item__button'>
                                 <el-button 
-                                    onclick={this.handleSubmitSingle}
+                                    onclick={() => { this.handleSubmitSingle('singleRuleForm') }}
                                     type={ButtonType.PRIMARY}
                                 >{this.t(SUBMIT)}</el-button>
                             </el-form-item>

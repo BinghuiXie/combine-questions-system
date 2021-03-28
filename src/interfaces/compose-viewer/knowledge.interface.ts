@@ -11,7 +11,7 @@ export interface IKnowledgeItem {
     content: string;
     chapterList: Array<number>;
     sectionList: Array<number>;
-    courseId: Array<number>;
+    courseId: number | Array<number>;
     importance: 1 | 2 | 3 | 4 | 5;
 }
 

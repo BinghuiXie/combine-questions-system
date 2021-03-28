@@ -17,6 +17,14 @@ export const checkChapterList = (rule: any, value: string, cb: any) => {
 }
 
 export const checkSectionList = (rule: any, value: string, cb: any) => {
+    console.log(value)
+    if(!value.length) {
+        return cb(new Error('知识点关联节不能为空'));
+    }
+    cb();
+}
+
+export const checkCascaderData = (rule: any, value: string, cb: any) => {
     if(!value.length) {
         return cb(new Error('知识点关联节不能为空'));
     }

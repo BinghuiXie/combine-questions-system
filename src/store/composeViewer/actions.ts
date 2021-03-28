@@ -13,7 +13,6 @@ export const actions: ActionTree<IComposeState, IRootState> = {
     async submitKnowledgeData(context, payload: { courseId: number, knowledgeList: Array<IKnowledgeItem> }) {
         // 知识点录入
         const { courseId, knowledgeList } = payload;
-        console.log(knowledgeList);
         const data = knowledgeList.map(knowledgeItem => (
             {
                 courseId: courseId,
@@ -23,9 +22,7 @@ export const actions: ActionTree<IComposeState, IRootState> = {
                 knowledgeLevel: knowledgeItem.importance
             }
         ))
-        console.log(data)
         const res = await $http.post('/knowledge/insert', data)
-        console.log(res);
         return true;
     },
     async submitAbilityData(context, payload: { abilityList: Array<IAbilityItem> }) {

@@ -21,7 +21,6 @@ export default class Header extends mixins(Lang) {
         } else {
             const parentItem = headerList.find(item => item.id === parentId)!;
             const childItem = parentItem.children!.find(child => child.id === selfId)!;
-            console.log(parentItem, childItem);
             this.$router.push({
                 path: childItem.path
             })

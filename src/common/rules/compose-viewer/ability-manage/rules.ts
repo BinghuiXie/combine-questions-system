@@ -8,10 +8,3 @@ export const checkAbilityContent = (rule: any, value: string, cb: any) => {
     }
     cb();
 }
-
-export const checkAbilityType = (rule: any, value: string, cb: any) => {
-    if(!value) {
-        return cb(new Error('能力点类型不能为空'));
-    }
-    cb();
-}

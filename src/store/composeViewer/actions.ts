@@ -13,6 +13,15 @@ export const actions: ActionTree<IComposeState, IRootState> = {
     async submitKnowledgeData(context, payload: { courseId: number, knowledgeList: Array<IKnowledgeItem> }) {
         // 知识点录入
         const { courseId, knowledgeList } = payload;
+
+        // 对于节的数据，只需要取对应节的 id 即可，也就是 item[1]
+        for(let knowledgeItem of knowledgeList) {
+            let sectionList = knowledgeItem.sectionList;
+            if(Array.isArray(sectionList[0])) {
+                knowledgeItem.sectionList = (sectionList as []).map((item: number[]) => item[1]);
+            }
+        }
+
         const data = knowledgeList.map(knowledgeItem => (
             {
                 courseId: courseId,

@@ -21,6 +21,7 @@ import { ColumnTemType, ITableConfig, ISelectItem } from '@/interfaces/common';
 import InputTable from '@/components/common/inputTable';
 import './style.scss';
 import { KnowledgeRules } from '@/common/rules/compose-viewer/knowledge-manage';
+import { IRefValidate } from '@/interfaces/common/validate.interface';
 
 const {
     SELECT_KNOWLEDGE_COURSE,
@@ -48,6 +49,11 @@ export default class KnowledgeInput extends mixins(Lang) {
         sectionList: [],
         courseId: 0,
         importance: 1,
+    }
+
+    public $refs!: {
+        [key: string]: any;
+        singleRuleForm: IRefValidate
     }
 
     public batchCourseId: number = 0;
@@ -144,7 +150,6 @@ export default class KnowledgeInput extends mixins(Lang) {
     }
 
     public handleSubmitSingle(formName: string) {
-        this.singleKonwledgeData.sectionList = this.cascaderData.map(item => item[1]);
         this.$refs[formName].validate((valid: boolean) => {
             if(valid) {
                 this.submitKnowledgeData({
@@ -183,10 +188,7 @@ export default class KnowledgeInput extends mixins(Lang) {
                         <el-form
                             {...{
                                 props: {
-                                    model: { 
-                                        ...this.singleKonwledgeData,
-                                        cascaderData: this.cascaderData
-                                    }
+                                    model: this.singleKonwledgeData
                                 }
                             }}
                             ref='singleRuleForm'
@@ -230,9 +232,9 @@ export default class KnowledgeInput extends mixins(Lang) {
                                     }
                                 </el-select>
                             </el-form-item>
-                            <el-form-item prop="cascaderData" label={this.t(SELECT_SECTION)}>
+                            <el-form-item prop="sectionList" label={this.t(SELECT_SECTION)}>
                                 <el-cascader
-                                    v-model={this.cascaderData}
+                                    v-model={this.singleKonwledgeData.sectionList}
                                     options={this.cascaderOptions}
                                     {...{
                                         props: {

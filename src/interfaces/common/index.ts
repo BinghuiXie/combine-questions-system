@@ -4,3 +4,4 @@ export interface IBaseInterface {
 export * from './dialog.interface';
 export * from './inputTable.interface';
 export * from './header.interface';
+export * from './validate.interface'

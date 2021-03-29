@@ -10,7 +10,7 @@ export interface IKnowledgeItem {
     knowledgeId: number;
     content: string;
     chapterList: Array<number>;
-    sectionList: Array<number>;
+    sectionList: number[] | number[][];
     courseId: number | Array<number>;
     importance: 1 | 2 | 3 | 4 | 5;
 }

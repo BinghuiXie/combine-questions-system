@@ -16,6 +16,8 @@ import { ITableConfig, ColumnTemType, ISelectItem } from '@/interfaces/common';
 import './style.scss';
 import { IKnowledgeItem } from '@/interfaces/compose-viewer';
 import { IAbilityItem } from '@/interfaces/compose-viewer/ability.interface';
+import { IRefValidate } from '@/interfaces/common'
+import { validateInput } from '@/utlis';
 
 @Component({})
 export default class InputTable extends mixins(Lang) {
@@ -54,7 +56,9 @@ export default class InputTable extends mixins(Lang) {
     public submitBathcAbilityData!: (payload: { courseId: number, abilityList: Array<IAbilityItem> }) => Promise<boolean>
 
     public $refs!: {
-        addIcon: HTMLElement
+        [key: string]: any;
+        addIcon: HTMLElement,
+        batchRuleForm: IRefValidate
     }
 
     public get templateData() {
@@ -96,28 +100,35 @@ export default class InputTable extends mixins(Lang) {
     /**
      * inputTable 提交数据
      */
-    public handleSubmitBatch() {
+    public async handleSubmitBatch() {
         const cascaderProp = this.tableConfig.find(config => config.type === ColumnTemType.CASCADER);
-        if(cascaderProp) {
-            // 知识点
-            // 对于极联选择器，只需要保留最终选择出来 array 的下标为 1 的数
-            // 例如：[[0, 3], [1, 9]] => [3, 9] 
-            const { prop } = cascaderProp;
-            this.rowDataList.forEach(rowData => {
-                rowData[prop].forEach((item: number[], index: number) => {
-                    rowData[prop][index] = item[1];
-                })
-            });
-            this.submitBatchKnowledgeData({
-                courseId: this.courseId,
-                knowledgeList: this.rowDataList
-            })
+        const validateRes = await validateInput(this.rowDataList, this.rules, 0);
+        if(typeof validateRes === 'object') {
+            // 验证不通过返回一个对象
+            this.$message.error(validateRes.message);
         } else {
-            // 能力点
-            this.submitBathcAbilityData({
-                courseId: this.courseId,
-                abilityList: this.rowDataList
-            })
+            // 验证通过
+            if(cascaderProp) {
+                // 知识点
+                // 对于极联选择器，只需要保留最终选择出来 array 的下标为 1 的数
+                // 例如：[[0, 3], [1, 9]] => [3, 9] 
+                const { prop } = cascaderProp;
+                this.rowDataList.forEach(rowData => {
+                    rowData[prop].forEach((item: number[], index: number) => {
+                        rowData[prop][index] = item[1];
+                    })
+                });
+                this.submitBatchKnowledgeData({
+                    courseId: this.courseId,
+                    knowledgeList: this.rowDataList
+                })
+            } else {
+                // 能力点
+                this.submitBathcAbilityData({
+                    courseId: this.courseId,
+                    abilityList: this.rowDataList
+                })
+            }
         }
     }
 
@@ -244,6 +255,7 @@ export default class InputTable extends mixins(Lang) {
                 <el-form
                     class='table-row__item'
                     key={index}
+                    ref='batchRuleForm'
                     rules={this.rules}
                     {...{ props: { model: rowData } }}
                 >
@@ -306,7 +318,7 @@ export default class InputTable extends mixins(Lang) {
                 <div class='table-sbumit'>
                     <el-button
                         type={ButtonType.PRIMARY}
-                        onclick={this.handleSubmitBatch}
+                        onclick={ () => { this.handleSubmitBatch() }}
                         size={ButtonSize.MEDIUM}
                     >{this.t(SUBMIT)}</el-button>
                 </div>

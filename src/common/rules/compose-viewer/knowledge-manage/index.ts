@@ -1,8 +1,7 @@
 import {
     checkKnowledgeContent,
     checkChapterList,
-    checkSectionList,
-    checkCascaderData
+    checkSectionList
 } from './rules';
 
 export const KnowledgeRules = {
@@ -14,8 +13,5 @@ export const KnowledgeRules = {
     ],
     sectionList: [
         { require: true, validator: checkSectionList, trigger: 'change'}
-    ],
-    cascaderData: [
-        { require: true, validator: checkCascaderData, trigger: 'change'}
     ]
 }

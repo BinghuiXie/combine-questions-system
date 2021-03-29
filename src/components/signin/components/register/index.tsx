@@ -31,6 +31,7 @@ import Lang from '@/lang/lang';
 import { SigninRules } from '@/common/rules/signin';
 import { AxiosResponse } from 'axios';
 import './style.scss';
+import { validateInput } from '@/utlis';
 
 @Component
 export default class RegisterWrapper extends mixins(Lang) {
@@ -97,18 +98,17 @@ export default class RegisterWrapper extends mixins(Lang) {
         }
     }
 
-    handleRegister() {
-        this.$refs.registerForm.validate(async (valid: boolean) => {
-            if(valid) {
-                const res = await this.handleInfoSubmit({ data: this.model});
-                if(res.status === HTTPCODE.SUCCESS) {
-                    // 注册成功，跳转登录页面
-                    this.backToLogin();
-                }
-            } else {
-                return false;
+    public async handleRegister() {
+        const validateRes = await validateInput(this.model, SigninRules, 0);
+        if(typeof validateRes === 'object') {
+            this.$message.error('注册信息输入格式不正确')
+        } else {
+            const res = await this.handleInfoSubmit({ data: this.model});
+            if(res.status === HTTPCODE.SUCCESS) {
+                // 注册成功，跳转登录页面
+                this.backToLogin();
             }
-        })
+        }
     }
 
     render() {

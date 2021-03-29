@@ -24,6 +24,7 @@ import {
 import { SigninRules } from '@/common/rules/signin';
 import { IStudentInfo, ITeacherInfo, IBindUserInfo } from '@/interfaces';
 import Storage from '@/utlis/localStorage';
+import { validateInput } from '@/utlis';
 
 const storage = new Storage();
 
@@ -115,13 +116,9 @@ export default class IdentityInput extends mixins(Lang, ComponentProp) {
     /** 检查输入是否合规(与每次输入判断不同，该方法用在整体对输入的判断上)
      * 
      */
-    isInputValid(): boolean {
-        // TODO: 优化返回判断输入是否符合规则的逻辑
-        let res = false;
-        this.$refs.loginForm.validate((valid: boolean) => {
-            res = valid;
-        });
-        return res;
+    public async isInputValid(): Promise<boolean> {
+        const validateRes = await validateInput(this.model, SigninRules, 0);
+        return !(typeof validateRes === 'object');
     }
 
     public clickLoginButton() {
@@ -132,8 +129,8 @@ export default class IdentityInput extends mixins(Lang, ComponentProp) {
         }
     }
 
-    switchRememberPass(val: boolean) {
-        if(val && this.isInputValid()) {
+    public async switchRememberPass(val: boolean) {
+        if(val && await this.isInputValid()) {
             // 将信息存入 localStorage
             storage.set(this.storageKey, this.model);
         }

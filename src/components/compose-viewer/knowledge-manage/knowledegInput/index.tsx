@@ -10,7 +10,7 @@ import {
 } from '@/interfaces/compose-viewer';
 import Lang from '@/lang/lang';
 import { chapterMockData } from '@/common/mock/compose-viewer/chapter-list';
-import { deepclone } from '@/utlis';
+import { deepclone, validateInput } from '@/utlis';
 import {
     ButtonType,
     SUBMIT,
@@ -149,16 +149,15 @@ export default class KnowledgeInput extends mixins(Lang) {
         }
     }
 
-    public handleSubmitSingle(formName: string) {
-        this.$refs[formName].validate((valid: boolean) => {
-            if(valid) {
-                this.submitKnowledgeData({
-                    knowledgeList: [this.singleKonwledgeData]
-                })
-            } else {
-                return false;
-            }
-        })
+    public async handleSubmitSingle() {
+        const validateRes = await validateInput(this.singleKonwledgeData, KnowledgeRules, 0)
+        if(typeof validateRes === 'object') {
+            this.$message.error('输入数据有误')
+        } else {
+            this.submitKnowledgeData({
+                knowledgeList: [this.singleKonwledgeData]
+            })
+        }
     }
 
     public getCascaderData(tableConfig: ITableConfig, rowData: any, index: number) {
@@ -252,7 +251,7 @@ export default class KnowledgeInput extends mixins(Lang) {
                             </el-form-item>
                             <el-form-item class='el-form-item__button'>
                                 <el-button 
-                                    onclick={() => { this.handleSubmitSingle('singleRuleForm') }}
+                                    onclick={() => { this.handleSubmitSingle() }}
                                     type={ButtonType.PRIMARY}
                                 >{this.t(SUBMIT)}</el-button>
                             </el-form-item>

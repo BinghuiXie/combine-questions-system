@@ -1,5 +1,4 @@
 import { 
-    MAX_EMPLOYEE_ID_LENGTH,
     MIN_PASSWORD_LENGTH,
     MAX_PASSWORD_LENGTH
  } from '@/common/constants/siginin';
@@ -7,37 +6,10 @@ import RegMap from '@/common/regexp';
 
 /**
  * 
- * @param{object} rule 规则
+ * @param {object} rule 规则
  * @param value 实际输入值
  * @param cb 回调用函数
  */
-export const checkEmployeeId = (rule: any, value: string, cb: any) => {
-    if(!value) {
-        return cb(new Error('工号不能为空'));
-    }
-    if(value.length < MAX_EMPLOYEE_ID_LENGTH) {
-        return cb(new Error(`工号长度应为${MAX_EMPLOYEE_ID_LENGTH}位`));
-    }
-    const reg = RegMap.employeeId;
-    if(!reg.test(value)) {
-        return cb(new Error(`工号格式应为${MAX_EMPLOYEE_ID_LENGTH}位数字`));
-    } else {
-        cb();
-    }
-}
-// TODO: 正则判断输入值是否符合规则后期封装成一个公共方法
-
-export const checkStudentId = (rule: any, value: string, cb: any) => {
-    if(!value) {
-        return cb(new Error('学号不能为空'));
-    }
-    const reg = RegMap.studentId;
-    if(!reg.test(value)) {
-        return cb(new Error(`学号号应由1位大写字母与8位数字组成`));
-    } else {
-        cb();
-    }
-}
 let pass = '';
 
 export const checkPassword = (rule: any, value: string, cb: any) => {
@@ -69,6 +41,9 @@ export const checkConfirmPassword = (rule: any, value: string, cb: any) => {
 export const checkPhoneNumber = (rule: any, value: string, cb: any) => {
     if(!value) {
         return cb(new Error('手机号码不能为空'));
+    }
+    if(value.length < 11) {
+        return new cb(new Error('手机号长度应为11位'))
     }
     const reg = RegMap.phone;
     if(!reg.test(value)) {

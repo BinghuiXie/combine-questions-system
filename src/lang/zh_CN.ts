@@ -2,14 +2,13 @@
 const zh_CN: {
     [key: string]: string
 } = {
-    "input_employee_id": "请输入工号",
-    "input_student_id": "请输入学号",
+    "input_phone_id": "请输入手机号",
     "input_password": "请输入密码",
+    "administrator_login": "管理员登录",
     "teacher_login": "教师登录",
     "student_login": "学生登录",
     "remember_password": "记住密码",
-    "register_count": "立即注册",
-    "forgot_password": "忘记密码？",
+    "forgot_password": "忘记密码",
     "welcome_note": "欢迎使用智慧组卷平台",
     "select_register_identity": "请选择注册身份",
     "confirm_password": "确认密码",
@@ -17,7 +16,7 @@ const zh_CN: {
     "input_auth_code": "请输入验证码",
     "input_search_keyword": "请输入搜索关键字",
     "send_auth_code": "发送验证码",
-    "register_now": "立即注册",
+    "change_now": "立即修改",
     "back_to_login": "返回登录",
     "not_select_user_protocol": "未勾选用户协议",
     "not_input_phone_number": "请先输入手机号",

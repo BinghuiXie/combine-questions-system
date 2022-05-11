@@ -1,18 +1,18 @@
 import { IBaseInterface } from '../common';
 
-export interface IStudentInfo extends IBaseInterface {
-    studentId: string;
-    sPassword: string;
+export interface IAdministratorInfo extends IBaseInterface {
+    administratorId: string;
+    aPassword: string;
 }
 
 export interface ITeacherInfo extends IBaseInterface {
-    employeeId: string;
+    teacherId: string;
     tPassword: string;
 }
 
 export interface IUserInfo {
     teacherInfo: ITeacherInfo;
-    studentInfo: IStudentInfo;
+    administratorInfo: IAdministratorInfo;
 }
 
 export interface ILoginResponse{
@@ -25,4 +25,4 @@ export interface ILoginResponseData {
     sessionId: string;
 }
 
-export type IBindUserInfo = ITeacherInfo | IStudentInfo;
+export type IBindUserInfo = ITeacherInfo | IAdministratorInfo;

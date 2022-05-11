@@ -6,14 +6,14 @@ import { ISigninState } from './signin.interface';
 const state: ISigninState = {
   // 教师登录信息
   teacherInfo: {
-    employeeId: '',
+    teacherId: '',
     tPassword: ''
   },
-  // 学生登录信息
-  studentInfo: {
-    studentId: '',
-    sPassword: ''
-  } 
+  //管理员登录信息
+  administratorInfo: {
+    administratorId: '',
+    aPassword: ''
+  }
 }
 
 export default {

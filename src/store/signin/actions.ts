@@ -49,6 +49,7 @@ export const actions: ActionTree<ISigninState, IRootState> = {
         $storage.set(SESSION_ID_KEY, sessionId, INFINITY_TIME);
         if(res.status === HTTPCODE.SUCCESS) {
             // TODO: 处理跳转逻辑
+            console.log(res.data);
         }
     },
 

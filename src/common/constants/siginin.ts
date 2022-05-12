@@ -1,4 +1,5 @@
 export const TEACHER: string = 'teacher';
+export const MAX_EMPLOYEE_ID_LENGTH = 8
 export const MAX_PASSWORD_LENGTH = 20;
 export const MIN_PASSWORD_LENGTH = 8;
 export const PHONE_LENGTH = 11;

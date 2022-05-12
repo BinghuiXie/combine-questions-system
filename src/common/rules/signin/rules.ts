@@ -1,6 +1,8 @@
 import { 
     MIN_PASSWORD_LENGTH,
-    MAX_PASSWORD_LENGTH
+    MAX_PASSWORD_LENGTH,
+    MAX_EMPLOYEE_ID_LENGTH,
+
  } from '@/common/constants/siginin';
 import RegMap from '@/common/regexp';
 
@@ -11,6 +13,22 @@ import RegMap from '@/common/regexp';
  * @param cb 回调用函数
  */
 let pass = '';
+
+export const checkEmployeeId = (rule: any, value: string, cb: any) => {
+    if(!value) {
+        return cb(new Error('工号不能为空'));
+    }
+    if(value.length < MAX_EMPLOYEE_ID_LENGTH) {
+        return cb(new Error(`工号长度应为${MAX_EMPLOYEE_ID_LENGTH}位`));
+    }
+    const reg = RegMap.employeeId;
+    if(!reg.test(value)) {
+        return cb(new Error(`工号格式应为${MAX_EMPLOYEE_ID_LENGTH}位数字`));
+    } else {
+        cb();
+    }
+}
+
 
 export const checkPassword = (rule: any, value: string, cb: any) => {
     if(!value) {

@@ -1,5 +1,5 @@
 const regexpRules = {
-    studentId: /^[A-Z][0-9]{8}$/,
+    employeeId: /^[0-9]{8}$/,
     password: /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])/,
     phone: /^1[3-9]\d{9}$/,
     authCode: /^[0-9]{6}$/

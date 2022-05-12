@@ -3,16 +3,17 @@ import {
     checkConfirmPassword,
     checkPhoneNumber,
     checkAuthCode,
+    checkEmployeeId
  } from './rules';
 
 const SigninRules: any = {
     //管理员登录账号
     administratorId: [
-        { validator: checkPhoneNumber, trigger: 'change' }
+        { validator: checkEmployeeId, trigger: 'change' }
     ],
     //教师登录账号
     tercherId: [
-        { validator: checkPhoneNumber, trigger: 'change' }
+        { validator: checkEmployeeId, trigger: 'change' }
     ],
     // 教师登录密码
     tPassword: [

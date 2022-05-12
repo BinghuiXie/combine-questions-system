@@ -21,7 +21,9 @@ import {
     LOGIN_TEACHERINFO_KEY,
     REMEMBER_PASSWORD,
     ButtonType,
-    ERROR_MESSAGE
+    ERROR_MESSAGE,
+    MAX_EMPLOYEE_ID_LENGTH,
+    INPUT_EMPLOYEE_ID
 } from '@/common/constants';
 
 const storage = new Storage();
@@ -150,13 +152,13 @@ export default class IdentityInput extends mixins(Lang, ComponentProp) {
                 <el-form-item class="login-el-form-item"></el-form-item>
                 <el-form-item class="login-el-form-item" prop={this.idName}>
                     <el-input
-                        maxlength={PHONE_LENGTH}
+                        maxlength={MAX_EMPLOYEE_ID_LENGTH}
                         show-word-limit
                         v-model={this.idInput}
                         onInput={() => {
                             this.handleInput({ newModel: this.model });
                         }}
-                        placeholder={this.t(INPUT_PHONE_ID)}
+                        placeholder={this.t(INPUT_EMPLOYEE_ID)}
                     ></el-input>
                 </el-form-item>
                 <el-form-item

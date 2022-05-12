@@ -6,7 +6,7 @@ const zh_CN: {
     "input_password": "请输入密码",
     "administrator_login": "管理员登录",
     "teacher_login": "教师登录",
-    "student_login": "学生登录",
+    "input_emplyee_id": "请输入工号",
     "remember_password": "记住密码",
     "forgot_password": "忘记密码",
     "welcome_note": "欢迎使用智慧组卷平台",

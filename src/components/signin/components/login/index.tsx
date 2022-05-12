@@ -7,7 +7,6 @@ import "./style.scss";
 import {
     ADMINISTRATOR_LOGIN,
     TEACHER_LOGIN,
-    // STUDENT_LOGIN,
     FORGOT_PASSWORD,
 } from "@/common/constants";
 

@@ -8,6 +8,7 @@ export const FORGOT_PASSWORD: string = 'forgot_password';
 export const WELCOME_NOTE: string = 'welcome_note';
 export const SELECT_REGISTER_IDENTITY: string = 'select_register_identity';
 export const CONFIRM_PASSWORD: string = 'confirm_password';
+export const INPUT_EMPLOYEE_ID = 'input_emplyee_id';
 export const INPUT_PHONE_NUMER: string = 'input_phone_number';
 export const INPUT_AUTH_CODE: string = 'input_auth_code';
 export const INPUT_SEARCH_KEYWORD: string = 'input_search_keyword';

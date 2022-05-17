@@ -1,0 +1,147 @@
+@import '@/vars.scss';
+
+.compose-viewer__container {
+    padding-top: 60px;
+    height: 100vh;
+    box-sizing: border-box;
+    .compose-viewer__container-inner{
+        height: 100%;
+        display: flex;
+        .aside-list{
+            height: 100%;
+            width: 200px;
+            background-color: #2c354c;
+            position: relative;
+            transition: transform, width .3s;
+            padding-top: 24px;
+            box-sizing: border-box;
+            .aside-operation{
+                position: absolute;
+                width: 30px;
+                height: 45px;
+                bottom: 24px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-weight: 600;
+                &:hover{
+                    cursor: pointer;
+                }
+                .icon-spread{
+                    transform: rotateZ(180deg);
+                }
+            }
+            .aside-operation__fold{
+                border-top-left-radius: 3px;
+                border-bottom-left-radius: 3px;
+                background-color: #fafafc;
+                color: #2c354c;
+                right: 0;
+            }
+            .aside-operation__spread{
+                position: fixed;
+                border-top-right-radius: 3px;
+                border-bottom-right-radius: 3px;
+                color: #fafafc;
+                background-color: #2c354c;
+                left: 200px;
+            }
+            .function-list{
+                border: none;
+                .function-item{
+                    background-color: #2c354c;
+                    color: #90979e;
+                    line-height: 60px;
+                    font-size: 14px;
+                    text-align: center;
+                    &:hover{
+                        cursor: pointer;
+                        color: #ffffff;
+                        background-color: #3A4560;
+                    }
+                    &.function-item-active{
+                        color: #ffffff;
+                        background-color: #3A4560;
+                        position: relative;
+                        &::before{
+                            content: '';
+                            width: 4px;
+                            height: 28px;
+                            position: absolute;
+                            left: 0;
+                            top: 14px;
+                            background-color: $theme_color;
+                            z-index: 4;
+                        }
+                    }
+                    .iconfont{
+                        padding-right: 14px;
+                    }
+                }
+                .el-submenu.function-item{
+                    .el-submenu__title{
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        color: #90979e;
+                        &:hover{
+                            cursor: pointer;
+                            color: #ffffff;
+                            background-color: #3A4560;
+                        }
+                        .el-submenu__icon-arrow{
+                            font-size: 14px;
+                        }
+                    }
+                    .el-menu{
+                        .el-menu-item-group__title{
+                            padding: 0;
+                        }
+                        .el-menu-item{
+                            font-size: 13px;
+                        }
+                        .sub-function-active{
+                            background-color: #eeeeee;
+                            color: #3A4560;
+                            &::before{
+                                content: '';
+                                width: 4px;
+                                height: 20px;
+                                position: absolute;
+                                left: 0;
+                                top: 50%;
+                                transform: translateY(-50%);
+                                background-color: $theme_color;
+                                z-index: 4;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .aside-fold{
+            transform: translateX(-200px);
+            width: 0;
+        }
+        .aside-spread{
+            transform: translateX(0);
+            width: 200px;
+        }
+        .main-area{
+            height: 100%;
+            flex: 1;
+            background-color: #F7F8FC;
+            padding: 20px 24px;
+            box-sizing: border-box;
+            .main-area__function-title{
+                font-size: 18px;
+                color: #333333;
+            }
+            & > div:last-of-type {
+                padding: 24px;
+                height: 100%;
+                box-sizing: border-box;
+            }
+        }
+    }
+}

@@ -1,3 +1,4 @@
+import { PERSONAL_MANAGE } from "@/common/constants";
 
 const zh_CN: {
     [key: string]: string
@@ -61,7 +62,14 @@ const zh_CN: {
     "ability_manage": "能力点管理",
     "ability_input": "能力点录入",
     "select_ability_type": "选择能力点类型",
-    "select_ability_course": "选择能力点课程"
+    "select_ability_course": "选择能力点课程",
+    "personal_information" : "个人信息",
+    "personal_manage": '用户管理',
+    "username": '姓名',
+    "phone": '手机号',
+    "identify_id": '工号',
+    "course_name": '课程名',
+    "course_manage": '课程管理'
 }
 
 export default zh_CN;

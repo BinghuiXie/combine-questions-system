@@ -38,6 +38,15 @@ export const KNOWLEDGE_INPUT: string = 'knowledge_input';
 export const ABILITY_MANAGE: string = 'ability_manage';
 export const ABILITY_INPUT: string = 'ability_input';
 export const SUBMIT: string = 'submit';
+export const PERSONAL_INFORMATION = 'personal_information';
+export const PERSONAL_MANAGE = 'personal_manage';
+export const COURSE_MANAGE = 'course_manage'
+export const USERINFO = {
+    USERNAME: 'username',
+    IDENTIFY_ID: 'identify_id',
+    PHONE: 'phone',
+    COURSE_NAME: 'course_name',
+};
 export const INPUT_MODULE = {
     SELECT_COURSE: 'select_course',
     SELECT_KNOWLEDGE_COURSE: 'select_knowledge_course',

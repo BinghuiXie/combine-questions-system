@@ -6,6 +6,7 @@ import PaperManage from '@/components/compose-viewer/paper-manage';
 import QuestionInput from '@/components/compose-viewer/question-input';
 import KnowledgeManage from '@/components/compose-viewer/knowledge-manage';
 import KnowledgeInput from '@/components/compose-viewer/knowledge-manage/knowledegInput';
+import KnowledgeCheck from '@/components/compose-viewer/knowledge-manage/knowledegCheck';//之前一直报错说找不到，突然就好了无语
 import {
     QUESTION_MANAGE,
     INTELLIGENT_COMPOSE_SYSTEM,
@@ -13,10 +14,13 @@ import {
     QUESTION_INPUT,
     KNOWLEDGE_MANAGE,
     KNOWLEDGE_INPUT,
-    ABILITY_MANAGE
+    ABILITY_MANAGE,
+    KNOWLEDGE_CHECK,
+    ABILITY_CHECK
 } from '@/common/constants/lang'
 import AbilityManage from '@/components/compose-viewer/ability-manage';
 import AbilityInput from '@/components/compose-viewer/ability-manage/abilityInput';
+import AbilityCheck from '@/components/compose-viewer/ability-manage/abilityCheck';
 
 export const teacherFunctionList: IFunctionItem[] = [
     {
@@ -62,6 +66,13 @@ export const teacherFunctionList: IFunctionItem[] = [
                 path: 'knowledge-input',
                 component: KnowledgeInput
             },
+            {
+                id: 1,
+                func: KNOWLEDGE_CHECK,
+                icon: 'icon-huabi',
+                path: 'knowledge-check',
+                component: KnowledgeCheck
+            },
         ]
     },
     {
@@ -77,6 +88,13 @@ export const teacherFunctionList: IFunctionItem[] = [
                 icon: 'icon-huabi',
                 path: 'ability-input',
                 component: AbilityInput
+            },
+            {
+                id:1,
+                func:ABILITY_CHECK,
+                icon:'icon-huabi',
+                path:'ability-check',
+                component:AbilityCheck
             }
         ]
     }

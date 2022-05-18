@@ -19,15 +19,20 @@ export enum KnowledgeInputType {
     Single = 'single',
     Batch = 'batch'
 }
-
+export type KnowledegTableCheck=[
+    checkboxTableConfig,
+    // textTableConfig,
+    textTableConfig,
+    textTableConfig,
+    textTableConfig
+]
 /**
  * 采用元组的形式对不同界面的 inputTable 的 config 进行强制的类型限制
  */
 export type KnowledgeTableConfig = [
     checkboxTableConfig,
-    textTableConfig,
+  //  textTableConfig,
     inputTableConfig,
-    selectTableConfig,
-    cascaderTableConfig,
-    inputTableConfig
+    inputTableConfig,
+    
 ]

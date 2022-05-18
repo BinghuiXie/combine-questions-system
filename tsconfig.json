@@ -34,7 +34,7 @@
     "src/**/*.vue",
     "tests/**/*.ts",
     "tests/**/*.tsx"
-  ],
+, "src/components/compose-viewer/ability-manage/abilityCheck/index.tsx"  ],
   "exclude": [
     "node_modules"
   ]

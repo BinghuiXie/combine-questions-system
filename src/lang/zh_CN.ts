@@ -40,6 +40,8 @@ const zh_CN: {
     "question_input": "试题录入",
     "knowledge_manage": "知识点管理",
     "knowledge_input": "知识点录入",
+    "knowledge_check":"知识点查看",
+    "ability_check":"能力点查看",
     "select_course": "选择试题课程",
     "select_knowledge_course": "选择知识点课程",
     "select_question_type": "选择试题类型",
@@ -50,6 +52,8 @@ const zh_CN: {
     "input_img_url": "请输入图片链接",
     "input_choice": "输入试题选项",
     "input_answer": "输入试题答案",
+    "input_ability":"输入能力点",
+    "input_knowledge":"输入知识点",
     "preview": "预览",
     "add_choices": "添加选项",
     "add_sub_question": "添加试题小问",
@@ -61,7 +65,8 @@ const zh_CN: {
     "ability_manage": "能力点管理",
     "ability_input": "能力点录入",
     "select_ability_type": "选择能力点类型",
-    "select_ability_course": "选择能力点课程"
+    "select_ability_course": "选择能力点课程",
+    "related_knowledge":"关联知识点"
 }
 
 export default zh_CN;

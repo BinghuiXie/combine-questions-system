@@ -61,14 +61,15 @@
                 }
                 .row-item{
                     text-align: center;
-                    &.row-item__text{
-                        flex-basis: 72px;
-                        color: #666666;
-                        font-size: 14px;
-                    }
-                    &:not(.row-item__text){
-                        flex: 1;
-                    }
+                    // &.row-item__text{
+                    //     flex-basis: 72px;
+                    //     color: #666666;
+                    //     font-size: 14px;
+                    // }
+                    // &:not(.row-item__text){
+
+                    //     flex: 1;
+                    // }
                     .row-item__content{
                         position: relative;
                     }

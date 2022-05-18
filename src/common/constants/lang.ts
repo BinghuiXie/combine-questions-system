@@ -34,6 +34,8 @@ export const BUTTON_TEXT_CONFIRM: string = 'button_text_confirm';
 export const QUESTION_INPUT: string = 'question_input';
 export const KNOWLEDGE_MANAGE: string = 'knowledge_manage';
 export const KNOWLEDGE_INPUT: string = 'knowledge_input';
+export const KNOWLEDGE_CHECK:string = 'knowledge_check';
+export const ABILITY_CHECK: string = 'ability_check';
 export const ABILITY_MANAGE: string = 'ability_manage';
 export const ABILITY_INPUT: string = 'ability_input';
 export const SUBMIT: string = 'submit';
@@ -45,6 +47,8 @@ export const INPUT_MODULE = {
     SELECT_ABILITY_TYPE: 'select_ability_type',
     SELECT_DIFFICULTY: 'select_difficulty',
     INPUT_CONETNT: 'input_content',
+    INPUT_ABILITY:'input_ability',
+    INPUT_KNOWLEDGE:'input_knowledge',
     INPUT_SCORE: 'input_score',
     INPUT_CONTENT_IMG: 'input_content_img',
     INPUT_IMG_URL: 'input_img_url',
@@ -56,5 +60,6 @@ export const INPUT_MODULE = {
     FILL_QUESTION_SCORE_TIP: 'fill_question_score_tip',
     INPUT_KNOWLEDGE_CONTENT: 'input_knowledge_content',
     SELECT_CHAPTER: 'select_chapter',
-    SELECT_SECTION: 'select_section'
+    SELECT_SECTION: 'select_section',
+    RELATED_KNOWLEDGE:'related_knowledge'
 }

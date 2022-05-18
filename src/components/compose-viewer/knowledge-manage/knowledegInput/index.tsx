@@ -56,6 +56,7 @@ export default class KnowledgeInput extends mixins(Lang) {
         singleRuleForm: IRefValidate
     }
 
+    //课程id
     public batchCourseId: number = 0;
 
     public cascaderProps = {
@@ -66,6 +67,16 @@ export default class KnowledgeInput extends mixins(Lang) {
     public cascaderData: number[][] = [];
 
     public batchCascaderOptions: ISelectItem[][] = [];
+    public courseData:any=[
+        {
+            courseName:'hh',
+            id:1
+        },
+        {
+            courseName:'hhh',
+            id:2
+        }
+    ];//课程数据
 
     public tableConfig: KnowledgeTableConfig = [
         {
@@ -74,12 +85,12 @@ export default class KnowledgeInput extends mixins(Lang) {
             propInit: false,
             name: ''
         },
-        {
-            type: ColumnTemType.TEXT,
-            prop: 'id',
-            propInit: 0,
-            name: '序号'
-        },
+        // {
+        //     type: ColumnTemType.TEXT,
+        //     prop: 'id',
+        //     propInit: 0,
+        //     name: '序号'
+        // },
         {
             type: ColumnTemType.INPUT,
             prop: 'content',
@@ -87,26 +98,26 @@ export default class KnowledgeInput extends mixins(Lang) {
             name: '知识点内容',
             placeholder: INPUT_CONETNT
         },
-        {
-            type: ColumnTemType.SELECT,
-            prop: 'chapterList',
-            propInit: [],
-            name: '知识点关联章',
-            placeholder: SELECT_CHAPTER,
-            selectData: this.scaleChapterKeys(chapterMockData),
-            selectOptions: {
-                multiple: true
-            }
-        },
-        {
-            type: ColumnTemType.CASCADER,
-            prop: 'sectionList',
-            propInit: [],
-            link: 'chapterList',
-            name: '知识点关联节',
-            placeholder: SELECT_SECTION,
-            cascaderProps: this.cascaderProps
-        },
+        // {
+        //     type: ColumnTemType.SELECT,
+        //     prop: 'chapterList',
+        //     propInit: [],
+        //     name: '知识点关联章',
+        //     placeholder: SELECT_CHAPTER,
+        //     selectData: this.scaleChapterKeys(chapterMockData),
+        //     selectOptions: {
+        //         multiple: true
+        //     }
+        // },
+        // {
+        //     type: ColumnTemType.CASCADER,
+        //     prop: 'sectionList',
+        //     propInit: [],
+        //     link: 'chapterList',
+        //     name: '知识点关联节',
+        //     placeholder: SELECT_SECTION,
+        //     cascaderProps: this.cascaderProps
+        // },
         {
             type: ColumnTemType.INPUT,
             prop: 'importance',
@@ -178,113 +189,37 @@ export default class KnowledgeInput extends mixins(Lang) {
     public render() {
         return (
             <div class='knowledge-input'>
-                <el-tabs v-model={this.activeName}>
-                    <el-tab-pane
-                        label="单个录入"
-                        class='single-input-pane'
-                        name={ KnowledgeInputType.Single }
-                    >
-                        <el-form
-                            {...{
-                                props: {
-                                    model: this.singleKonwledgeData
-                                }
-                            }}
-                            ref='singleRuleForm'
-                            rules={KnowledgeRules}
-                            label-width='120px'
-                            label-position='right'
+                <el-form label-width='120px' label-position='right'>
+                    <el-form-item label={this.t(SELECT_KNOWLEDGE_COURSE)}>
+                        <el-select
+                            v-model={this.batchCourseId}
+                            placeholder={this.t(SELECT_KNOWLEDGE_COURSE)}
                         >
-                            <el-form-item 
-                                label={this.t(SELECT_KNOWLEDGE_COURSE)}
-                            >
-                                <el-select
-                                    v-model={this.singleKonwledgeData.courseId}
-                                    placeholder={this.t(SELECT_KNOWLEDGE_COURSE)}
-                                >
-                                    <el-option label='计算机通信与网络' value={0}></el-option>
-                                </el-select>
-                            </el-form-item>
-                            <el-form-item
-                                prop="content"
-                                label={this.t(INPUT_KNOWLEDGE_CONTENT)}
-                            >
-                                <el-input
-                                    v-model={this.singleKonwledgeData.content}
-                                    placeholder={this.t(INPUT_KNOWLEDGE_CONTENT)}
-                                />
-                            </el-form-item>
-                            <el-form-item prop="chapterList" label={this.t(SELECT_CHAPTER)}>
-                                <el-select
-                                    class='multiple-select'
-                                    v-model={this.singleKonwledgeData.chapterList}
-                                    multiple
-                                >
-                                    {
-                                        chapterMockData.map(chapter => (
-                                            <el-option
-                                                label={chapter.content}
-                                                value={chapter.chapterId}
-                                                key={chapter.chapterId}
-                                            />
-                                        ))
-                                    }
-                                </el-select>
-                            </el-form-item>
-                            <el-form-item prop="sectionList" label={this.t(SELECT_SECTION)}>
-                                <el-cascader
-                                    v-model={this.singleKonwledgeData.sectionList}
-                                    options={this.cascaderOptions}
-                                    {...{
-                                        props: {
-                                            props: {...this.cascaderProps}
-                                        }
-                                    }}
-                                    clearable
-                                ></el-cascader>
-                            </el-form-item>
-                            <el-form-item class='el-form-item__rate' label='知识点重要程度'>
-                                <el-rate v-model={this.singleKonwledgeData.importance}></el-rate>
-                                <el-tooltip effect="dark" content='默认重要程度为1颗星' placement="top-end">
-                                    <i class='iconfont icon-tishi'></i>
-                                </el-tooltip>
-                            </el-form-item>
-                            <el-form-item class='el-form-item__button'>
-                                <el-button 
-                                    onclick={() => { this.handleSubmitSingle() }}
-                                    type={ButtonType.PRIMARY}
-                                >{this.t(SUBMIT)}</el-button>
-                            </el-form-item>
-                        </el-form>
-                    </el-tab-pane>
-                    <el-tab-pane
-                        class='batch-input-pane'
-                        label="批量录入"
-                        name={ KnowledgeInputType.Batch }
-                    >
-                        <el-form label-width='120px' label-position='right'>
-                            <el-form-item label={this.t(SELECT_KNOWLEDGE_COURSE)}>
-                                <el-select
-                                    v-model={this.batchCourseId}
-                                    placeholder={this.t(SELECT_KNOWLEDGE_COURSE)}
-                                >
-                                    <el-option label='计算机通信与网络' value={0}></el-option>
-                                    <el-option label='编译原理' value={1}></el-option>
-                                </el-select>
-                            </el-form-item>
-                            <el-form-item class='table-input-container'>
-                                <input-table
-                                    courseId={this.batchCourseId}
-                                    rules={KnowledgeRules}
-                                    tableConfig={this.tableConfig}
-                                    tableTitle={KNOWLEDGE_INPUT}
-                                    cascaderOptions={this.batchCascaderOptions}
-                                    onGetCascaderData={this.getCascaderData}
-                                />
-                            </el-form-item>
-                        </el-form>
-                    </el-tab-pane>
-                </el-tabs>
+                            {/* <el-option label='计算机通信与网络' value={0}></el-option>
+                            <el-option label='编译原理' value={1}></el-option> */}
+                            {this.courseData.map((Option:any,index:number)=>{
+                                return (
+                                    <el-option
+                                         key={index} 
+                                        label={Option.courseName}
+                                         value={index} >
+                                    </el-option>
+                                )
+                            })}
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item class='table-input-container'>
+                        <input-table
+                            courseId={this.batchCourseId}
+                            rules={KnowledgeRules}
+                            tableConfig={this.tableConfig}
+                            tableTitle={KNOWLEDGE_INPUT}
+                            cascaderOptions={this.batchCascaderOptions}
+                            onGetCascaderData={this.getCascaderData}
+                        />
+                    </el-form-item>
+                </el-form>
+                
             </div>
         )
     }

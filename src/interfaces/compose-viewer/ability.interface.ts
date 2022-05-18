@@ -1,3 +1,4 @@
+import KnowledgeEditor from '@/components/compose-viewer/compose-editor/knowledgeEditor';
 import {
     checkboxTableConfig,
     textTableConfig,
@@ -20,11 +21,22 @@ export interface IBatchAbilityItem {
 
 export type AbilityTableConfig = [
     checkboxTableConfig,
-    textTableConfig,
-    inputTableConfig,
-    selectTableConfig
+    // textTableConfig,//序号
+    inputTableConfig,//内容
+    selectTableConfig,//选择知识的
+    inputTableConfig//重要程度
 ]
-
+export interface KnowType{
+    KnowledgeId:number,
+    content:string,
+}//之前用type一直报错
+//
+export type AbilityTableCheck=[
+    checkboxTableConfig,
+    // textTableConfig,//序号
+    textTableConfig,
+    textTableConfig
+]
 export enum AbilityType {
     '了解能力',
     '熟悉能力',

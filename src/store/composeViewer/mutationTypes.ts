@@ -1,1 +1,1 @@
-export const TEST = 'test'
+export const GET_KNOWLEDGE_INFO = 'GET_KNOWLEDGE_INFO';

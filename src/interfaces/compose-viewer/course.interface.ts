@@ -2,13 +2,9 @@ import { valueof } from '@/utlis/type';
 
 export interface ICourseItem {
     courseId: number;
-    name: string;
-    courseCode: string;
-    credits: string;
-    teacher: Array<number>;
-    courseTime: string;
-    type: valueof<typeof CourseType>;
-    coursePlace: string; // 上课地点
+    courseName: string;
+   gmtCreat:null;
+   gmtModified:null;
 }
 
 export enum CourseType {

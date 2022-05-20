@@ -6,6 +6,8 @@ import { ColumnTemType, ITableConfig, ISelectItem } from '@/interfaces/common';
 import { INPUT_MODULE, ABILITY_INPUT, ABILITY_CHECK } from '@/common/constants';
 import { AbilityTableCheck, AbilityTableConfig, AbilityType } from '@/interfaces/compose-viewer/ability.interface';
 import { AbilityRules } from '@/common/rules/compose-viewer/ability-manage';
+import { ICourseItem } from '@/interfaces/compose-viewer/course.interface';
+import { Action } from 'vuex-class/lib/bindings';
 
 const {
     INPUT_CONETNT,
@@ -20,11 +22,14 @@ const {
 })
 export default class AbilityCheck extends mixins(Lang) {
 
+    @Action('getCourseInfo')
+    private getCourseInfo!: () => any;
+
     public abilityTypeSelectList: ISelectItem[] = [];
 
     public courseId: number = 0;
 
-    
+    public courseData:ICourseItem[]=[];
     public tableConfig1: AbilityTableCheck = [
         {
             type: ColumnTemType.CHECKBOX,
@@ -87,7 +92,20 @@ export default class AbilityCheck extends mixins(Lang) {
     //         selectData: this.abilityTypeSelectList
     //     }
     // ]
-   
+       //加载课程
+       public  async created() {
+     
+        await this.getCourseInfo().then((res:any) => {
+           
+            const data:ICourseItem[] = Array.from(res[0].data)
+            // this.CourseInfo.CourseInfo = res
+                this.courseData.push(...data)
+                console.log(this.courseData);
+            // console.log("coursedata:",res[0]);
+            
+        })
+        
+    }
 
 //能力点类型
     public mounted() {
@@ -118,8 +136,17 @@ export default class AbilityCheck extends mixins(Lang) {
                             v-model={this.courseId}
                             placeholder={this.t(SELECT_ABILITY_COURSE)}
                         >
-                            <el-option label='计算机通信与网络' value={0}></el-option>
-                            <el-option label='计算机通信' value={1}></el-option>
+                                   {
+                            this.courseData.map((option:any,index:number)=>{
+                                return(
+                                    <el-option 
+                                    key={index}
+                                    label={option.courseName}
+                                    value={option.courseId}
+                                    ></el-option>
+                                )
+                            })
+                        }
                         </el-select>
                     </el-form-item>
                 </el-form>

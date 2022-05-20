@@ -4,6 +4,7 @@ import { ActionTree } from "vuex";
 import { IRootState } from "../rootState.interface";
 import { IUserState } from "./personCenter.interface";
 
+
 const $http = new AJAX();
 
 export const actions: ActionTree<IUserState, IRootState> = {

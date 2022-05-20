@@ -71,5 +71,7 @@ export const INPUT_MODULE = {
     INPUT_KNOWLEDGE_CONTENT: 'input_knowledge_content',
     SELECT_CHAPTER: 'select_chapter',
     SELECT_SECTION: 'select_section',
-    RELATED_KNOWLEDGE:'related_knowledge'
+    RELATED_KNOWLEDGE:'related_knowledge',
+    INPUT_ABILITY_CONTENT:'input_ability_content',
+    SELECT_RELATEDKNOWLEDGE:'select_relatedknowledge'
 }

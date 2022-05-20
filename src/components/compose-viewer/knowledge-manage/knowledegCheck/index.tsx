@@ -7,6 +7,8 @@ import { INPUT_MODULE, ABILITY_INPUT, ABILITY_CHECK } from '@/common/constants';
 import { KnowledegTableCheck,KnowledgeTableConfig} from '@/interfaces/compose-viewer/knowledge.interface';
 import { AbilityRules } from '@/common/rules/compose-viewer/ability-manage';
 import { KnowledgeRules } from '@/common/rules/compose-viewer/knowledge-manage';
+import { ICourseItem } from '@/interfaces/compose-viewer';
+import { Action } from 'vuex-class';
 
 const {
    
@@ -19,12 +21,18 @@ const {
     }
 })
 export default class KnowledgeCheck extends mixins(Lang) {
+    @Action('getCourseInfo')
+    private getCourseInfo!: () => any;
+
+    @Action('getKnowledgeData')
+    private getKnowledgeDatao!: () => any;
+
 
     public KnowledgeTypeSelectList: ISelectItem[] = [];
 
     public courseId: number = 0;
 
-    
+    public courseData:ICourseItem[]=[];
     public tableConfig1: KnowledegTableCheck = [
         {
             type: ColumnTemType.CHECKBOX,
@@ -77,6 +85,21 @@ export default class KnowledgeCheck extends mixins(Lang) {
         // }
     }
 
+         //加载课程
+         public  async created() {
+     
+            await this.getCourseInfo().then((res:any) => {
+               
+                const data:ICourseItem[] = Array.from(res[0].data)
+                // this.CourseInfo.CourseInfo = res
+                    this.courseData.push(...data)
+                    console.log(this.courseData);
+                // console.log("coursedata:",res[0]);
+                
+            })
+            
+        }
+
     public render() {
         return (
             
@@ -90,8 +113,17 @@ export default class KnowledgeCheck extends mixins(Lang) {
                             v-model={this.courseId}
                             placeholder={this.t(SELECT_KNOWLEDGE_COURSE)}
                         >
-                            <el-option label='计算机通信与网络' value={0}></el-option>
-                            <el-option label='计算机通信' value={1}></el-option>
+                                {
+                            this.courseData.map((option:any,index:number)=>{
+                                return(
+                                    <el-option 
+                                    key={index}
+                                    label={option.courseName}
+                                    value={option.courseId}
+                                    ></el-option>
+                                )
+                            })
+                        }
                         </el-select>
                     </el-form-item>
                 </el-form>

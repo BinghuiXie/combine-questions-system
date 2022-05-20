@@ -1,4 +1,4 @@
-import { IAbilityItem } from './../../interfaces/compose-viewer/ability.interface';
+import { IAbilityItem, IBatchAbilityItem } from './../../interfaces/compose-viewer/ability.interface';
 import { IComposeState } from './compose.interface';
 import { IKnowledgeItem } from './../../interfaces/compose-viewer/knowledge.interface';
 import AJAX from '@/utlis/ajax';
@@ -6,6 +6,7 @@ import { ActionTree } from 'vuex';
 import { HTTPCODE } from '@/common/constants';
 import { IRootState } from './../rootState.interface';
 import * as types from './mutationTypes';
+import AbilityCheck from '@/components/compose-viewer/ability-manage/abilityCheck';
 
 const $http = new AJAX();
 
@@ -14,28 +15,45 @@ export const actions: ActionTree<IComposeState, IRootState> = {
         // 知识点录入
         const { courseId, knowledgeList } = payload;
 
-        // 对于节的数据，只需要取对应节的 id 即可，也就是 item[1]
-        for(let knowledgeItem of knowledgeList) {
-            let sectionList = knowledgeItem.sectionList;
-            if(Array.isArray(sectionList[0])) {
-                knowledgeItem.sectionList = (sectionList as []).map((item: number[]) => item[1]);
-            }
-        }
-
         const data = knowledgeList.map(knowledgeItem => (
             {
                 courseId: courseId,
                 knowledgeContent: knowledgeItem.content,
-                parentIdCollection: knowledgeItem.chapterList,
-                childrenIdCollection: knowledgeItem.sectionList,
+                // parentIdCollection: knowledgeItem.chapterList,
+                // childrenIdCollection: knowledgeItem.sectionList,
                 knowledgeLevel: knowledgeItem.importance
             }
         ))
-        const res = await $http.post('/knowledge/insert', data)
+        const res = await $http.post('/knowledge/save', data)
+        console.log("data:",data);
+        // console.log("jjjjjjjjjjjjj");
+        console.log("res",res);
+        
         return true;
     },
-    async submitAbilityData(context, payload: { abilityList: Array<IAbilityItem> }) {
+    async submitAbilityData(context, payload: { abilityItem: IAbilityItem }) {
         // 能力点录入
-
+      
+        const res = await $http.post('/ability/save',payload)
+        console.log("data:",payload);
+        console.log("res",res);
+        return res.status
+     
+    },
+     /**
+     * 
+     * 获取课程信息
+     */
+      async getCourseInfo() {
+        const res = await $http.get('/course/list');
+        console.log("rescourse:",res.data);
+        
+        return  res.data
+        
+    },
+    async getKnowledgeData(){
+        const  res=await $http.get('/knowledge/listByCourseId')
+        console.log("knowledgedata：",res);
+        
     }
 }

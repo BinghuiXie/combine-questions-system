@@ -9,9 +9,24 @@ import {
 import { valueof } from '@/utlis/type';
 
 export interface IAbilityItem {
-    abilityId: number;
+   
     content: string;
-    abilityType: valueof<typeof AbilityType>;
+    importance:number;
+    relatedKnowledgeId:number[];
+    courseId:number
+
+}
+export interface RelatedKnowledgeItem {
+     id:number;
+   
+    content: string;
+    // importance:number;
+
+
+}
+export enum AbilityinputType {
+    Single = 'single',
+    Batch = 'batch'
 }
 
 export interface IBatchAbilityItem {

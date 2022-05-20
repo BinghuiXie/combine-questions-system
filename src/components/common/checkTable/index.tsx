@@ -14,10 +14,11 @@
  } from '@/common/constants';
  import { ITableConfig, ColumnTemType, ISelectItem } from '@/interfaces/common';
  import './style.scss';
- import { IKnowledgeItem } from '@/interfaces/compose-viewer';
+ import { IKnowledgeItem, KnowledegTableCheck } from '@/interfaces/compose-viewer';
  import { IAbilityItem } from '@/interfaces/compose-viewer/ability.interface';
  import { IRefValidate } from '@/interfaces/common'
  import { validateInput } from '@/utlis';
+import KnowledgeCheck from '@/components/compose-viewer/knowledge-manage/knowledegCheck';
  
  @Component({})
  export default class CheckTable extends mixins(Lang) {
@@ -80,6 +81,30 @@
      public isAddButtonActive: boolean = false;
  
      public rowDataList: any[] = new Array({...this.templateData});
+     //
+
+     private KnowledgeInfo: (KnowledegTableCheck)[] = [
+        
+    ];
+
+     @Action("getKnowledgeInfo")
+     private getKnowledgeInfo!: () => any;
+     
+    @Action('getAbilityInfo')
+    private getAbilityInfo!: () => any;
+
+     async created() {
+        // this.getUserInfo();
+        await this.getKnowledgeInfo().then((res: any) => {
+            const data:(KnowledegTableCheck)[] = Array.from(res.data)
+        // this.CourseInfo.CourseInfo = res
+            this.KnowledgeInfo.push(...data)
+            console.log(this.KnowledgeInfo);
+        })
+        
+        console.log("created");
+    }
+//
  
     //  public currnentIndex:number = 0;
     //  public rowNum:number = 4;
@@ -124,6 +149,7 @@
         });
     }
 
+   
     //初始化rowdataList
     public initRowDataList(){
         // this.tableData.map((Data, index) => {
@@ -295,7 +321,7 @@
  
      public mounted() {
         //  this.listenEnterKeyDown();
-         console.log("hhh");
+        
          this.initRowDataList()
         //  console.log("cuhhhhhhhhhhhhhhhhh:",this.currnentIndex);
      }

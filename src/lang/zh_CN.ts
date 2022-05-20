@@ -74,7 +74,9 @@ const zh_CN: {
     "identify_id": '工号',
     "course_name": '课程名',
     "course_manage": '课程管理',
-    "related_knowledge":"关联知识点"
+    "related_knowledge":"关联知识点",
+   "input_ability_content":"输入能力点内容",
+    "select_relatedknowledge":"选择关联知识点"
 }
 
 export default zh_CN;

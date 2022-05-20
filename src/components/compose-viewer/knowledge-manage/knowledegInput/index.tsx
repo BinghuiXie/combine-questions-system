@@ -6,7 +6,8 @@ import {
     IChapterItem,
     ISectionItem,
     KnowledgeInputType,
-    KnowledgeTableConfig
+    KnowledgeTableConfig,
+    ICourseItem
 } from '@/interfaces/compose-viewer';
 import Lang from '@/lang/lang';
 import { chapterMockData } from '@/common/mock/compose-viewer/chapter-list';
@@ -37,16 +38,20 @@ const {
     }
 })
 export default class KnowledgeInput extends mixins(Lang) {
+    
     @Action('submitKnowledgeData')
     public submitKnowledgeData!: (payload: { knowledgeList: Array<IKnowledgeItem> }) => Promise<boolean>;
+
+    @Action('getCourseInfo')
+    private getCourseInfo!: () => any;
 
     public activeName: string = KnowledgeInputType.Single;
 
     public singleKonwledgeData: IKnowledgeItem = {
-        knowledgeId: 0,
+        // knowledgeId: 0,
         content: '',
-        chapterList: [],
-        sectionList: [],
+        // chapterList: [],
+        // sectionList: [],
         courseId: 0,
         importance: 1,
     }
@@ -67,16 +72,21 @@ export default class KnowledgeInput extends mixins(Lang) {
     public cascaderData: number[][] = [];
 
     public batchCascaderOptions: ISelectItem[][] = [];
-    public courseData:any=[
-        {
-            courseName:'hh',
-            id:1
-        },
-        {
-            courseName:'hhh',
-            id:2
-        }
-    ];//课程数据
+    public courseData:ICourseItem[]=[
+        // {
+        //     courseId:1,
+        //     courseName:"hhh",
+        //     gmtCreat:null,
+        //     gmtModified:null,
+        // },
+        // {
+        //     courseId:1,
+        //     courseName:"hhh",
+        //     gmtCreat:null,
+        //     gmtModified:null,
+        // }
+    ]
+    // public courseDataAll:any[]=[];
 
     public tableConfig: KnowledgeTableConfig = [
         {
@@ -85,12 +95,7 @@ export default class KnowledgeInput extends mixins(Lang) {
             propInit: false,
             name: ''
         },
-        // {
-        //     type: ColumnTemType.TEXT,
-        //     prop: 'id',
-        //     propInit: 0,
-        //     name: '序号'
-        // },
+     
         {
             type: ColumnTemType.INPUT,
             prop: 'content',
@@ -127,14 +132,29 @@ export default class KnowledgeInput extends mixins(Lang) {
         }
     ]
 
-    public get cascaderOptions(): ISelectItem[] {
-        const { chapterList } = this.singleKonwledgeData;
-        const res = chapterMockData.filter(chapter => {
-            if(chapterList.indexOf(chapter.chapterId) !== -1) {
-                return chapter;
-            }
-        });
-        return this.scaleChapterKeys(res);
+    // public get cascaderOptions(): ISelectItem[] {
+    //     const { chapterList } = this.singleKonwledgeData;
+    //     const res = chapterMockData.filter(chapter => {
+    //         if(chapterList.indexOf(chapter.chapterId) !== -1) {
+    //             return chapter;
+    //         }
+    //     });
+    //     return this.scaleChapterKeys(res);
+    // }
+
+  //加载课程
+   public  async created() {
+     
+        await this.getCourseInfo().then((res:any) => {
+           
+            const data:ICourseItem[] = Array.from(res[0].data)
+            // this.CourseInfo.CourseInfo = res
+                this.courseData.push(...data)
+                console.log(this.courseData);
+            // console.log("coursedata:",res[0]);
+            
+        })
+        
     }
 
     public scaleChapterKeys(data: IChapterItem[] | ISectionItem[]): ISelectItem[] {
@@ -186,6 +206,10 @@ export default class KnowledgeInput extends mixins(Lang) {
         }
     }
 
+    public selectCourse(){
+
+    }
+
     public render() {
         return (
             <div class='knowledge-input'>
@@ -194,18 +218,21 @@ export default class KnowledgeInput extends mixins(Lang) {
                         <el-select
                             v-model={this.batchCourseId}
                             placeholder={this.t(SELECT_KNOWLEDGE_COURSE)}
+                            onselectionchange
                         >
-                            {/* <el-option label='计算机通信与网络' value={0}></el-option>
-                            <el-option label='编译原理' value={1}></el-option> */}
-                            {this.courseData.map((Option:any,index:number)=>{
-                                return (
-                                    <el-option
-                                         key={index} 
-                                        label={Option.courseName}
-                                         value={index} >
-                                    </el-option>
+                         
+                        {
+                            this.courseData.map((option:any,index:number)=>{
+                 
+                                return(
+                                    <el-option 
+                                    key={option.courseId}
+                                    label={option.courseName}
+                                    value={option.courseId}
+                                    ></el-option>
                                 )
-                            })}
+                            })
+                        }
                         </el-select>
                     </el-form-item>
                     <el-form-item class='table-input-container'>
@@ -214,8 +241,8 @@ export default class KnowledgeInput extends mixins(Lang) {
                             rules={KnowledgeRules}
                             tableConfig={this.tableConfig}
                             tableTitle={KNOWLEDGE_INPUT}
-                            cascaderOptions={this.batchCascaderOptions}
-                            onGetCascaderData={this.getCascaderData}
+                            // cascaderOptions={this.batchCascaderOptions}
+                            // onGetCascaderData={this.getCascaderData}
                         />
                     </el-form-item>
                 </el-form>

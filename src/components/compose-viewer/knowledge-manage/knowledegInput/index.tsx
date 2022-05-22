@@ -1,4 +1,4 @@
-import { Component } from 'vue-property-decorator';
+import { Component, Prop } from 'vue-property-decorator';
 import { Action } from 'vuex-class';
 import { mixins } from 'vue-class-component';
 import {
@@ -38,6 +38,9 @@ const {
     }
 })
 export default class KnowledgeInput extends mixins(Lang) {
+    @Prop()
+     public batchCourseId!: number ;
+    
     
     @Action('submitKnowledgeData')
     public submitKnowledgeData!: (payload: { knowledgeList: Array<IKnowledgeItem> }) => Promise<boolean>;
@@ -61,8 +64,8 @@ export default class KnowledgeInput extends mixins(Lang) {
         singleRuleForm: IRefValidate
     }
 
-    //课程id
-    public batchCourseId: number = 0;
+ 
+
 
     public cascaderProps = {
         multiple: true,
@@ -147,7 +150,7 @@ export default class KnowledgeInput extends mixins(Lang) {
      
         await this.getCourseInfo().then((res:any) => {
            
-            const data:ICourseItem[] = Array.from(res[0].data)
+            const data:ICourseItem[] = Array.from(res.data)
             // this.CourseInfo.CourseInfo = res
                 this.courseData.push(...data)
                 console.log(this.courseData);

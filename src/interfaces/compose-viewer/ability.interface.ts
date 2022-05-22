@@ -16,6 +16,18 @@ export interface IAbilityItem {
     courseId:number
 
 }
+export interface KnowledgeArray{
+    knowledgeId:number;
+    knowledgeContent:string;
+}
+export interface IAbilityItem1 {
+    abilityContent:string;
+    abilityCourseId:number;
+    abilityId:number;
+    abilityImportance:number;
+    knowledgeVOList:KnowledgeArray;
+
+}
 export interface RelatedKnowledgeItem {
      id:number;
    

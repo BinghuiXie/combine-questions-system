@@ -1,10 +1,10 @@
-import { Component } from 'vue-property-decorator';
+import { Component, Prop, Watch } from 'vue-property-decorator';
 import { mixins } from 'vue-class-component';
 import CheckTable from '@/components/common/checkTable';
 import Lang from '@/lang/lang';
 import { ColumnTemType, ITableConfig, ISelectItem } from '@/interfaces/common';
 import { INPUT_MODULE, ABILITY_INPUT, ABILITY_CHECK } from '@/common/constants';
-import { KnowledegTableCheck,KnowledgeTableConfig} from '@/interfaces/compose-viewer/knowledge.interface';
+import { IKnowledgeItem1, KnowledegTableCheck,KnowledgeTableConfig} from '@/interfaces/compose-viewer/knowledge.interface';
 import { AbilityRules } from '@/common/rules/compose-viewer/ability-manage';
 import { KnowledgeRules } from '@/common/rules/compose-viewer/knowledge-manage';
 import { ICourseItem } from '@/interfaces/compose-viewer';
@@ -21,18 +21,44 @@ const {
     }
 })
 export default class KnowledgeCheck extends mixins(Lang) {
+
+    @Prop()
+    public courseId!: number;
+    @Prop()
+    public rowNum!: number;
+    @Prop()
+    public knowledgeList!:IKnowledgeItem1[];
+
+    @Watch('courseId')
+    courseChanged(newVal: number) {
+     //    this.courseId = newVal
+     this.changeKnowledgeTable().then(()=>{
+        // this.$forceUpdate()
+    
+    });
+     }
+ 
     @Action('getCourseInfo')
     private getCourseInfo!: () => any;
 
     @Action('getKnowledgeData')
-    private getKnowledgeDatao!: () => any;
+    private getKnowledgeData!: (courseid:number) => any;
+//     @Watch('courseId')
+//        courseChanged(newVal: number) {
+//         //    this.courseId = newVal
+//         console.log("watch",newVal);
+        
+// }
 
-
+    
+    
     public KnowledgeTypeSelectList: ISelectItem[] = [];
 
-    public courseId: number = 0;
+    // public courseId: number = 0;
 
-    public courseData:ICourseItem[]=[];
+    public courseData:ICourseItem[]=[
+ 
+    ];
     public tableConfig1: KnowledegTableCheck = [
         {
             type: ColumnTemType.CHECKBOX,
@@ -45,21 +71,21 @@ export default class KnowledgeCheck extends mixins(Lang) {
             type: ColumnTemType.INPUT,
             prop: 'content',
             propInit: '',
-            name: '能力点内容',
+            name: '知识点内容',
             
         },
         {
             type: ColumnTemType.INPUT,
-            prop: 'text',
+            prop: 'important',
             propInit: '1',
-            name: '能力点重要程度',
+            name: '知识点重要程度',
          
         },
         {
             type: ColumnTemType.INPUT,
-            prop: 'text',
+            prop: 'abilityContent',
             propInit: 'hhh',
-            name: '能力点重要程度',
+            name: '能力点内容',
       
         
         }
@@ -84,16 +110,32 @@ export default class KnowledgeCheck extends mixins(Lang) {
         //     }
         // }
     }
+     
+    //加载知识点数据表
+    public async changeKnowledgeTable(){
+        // this.$forceUpdate()
+        await this.getKnowledgeData(this.courseId).then((res:any) => {
+    
+        //    
+            this.knowledgeList = Array.from(res.data)
+            this.rowNum=this.knowledgeList.length;
+            // this.$forceUpdate();
+            // console.log("row:",this.rowNum);
+            
+            // console.log("k:",this.knowledgeList);
+            // console.log("res.data:",res.data);
+        }) 
+    }
 
          //加载课程
          public  async created() {
      
             await this.getCourseInfo().then((res:any) => {
                
-                const data:ICourseItem[] = Array.from(res[0].data)
+                const data:ICourseItem[] = Array.from(res.data)
                 // this.CourseInfo.CourseInfo = res
                     this.courseData.push(...data)
-                    console.log(this.courseData);
+                    // console.log(this.courseData);
                 // console.log("coursedata:",res[0]);
                 
             })
@@ -130,9 +172,13 @@ export default class KnowledgeCheck extends mixins(Lang) {
 
 
     <check-table
+                    courseId={this.courseId}
+                    knowledgeList={this.knowledgeList}
+                    rowNum={this.rowNum}
                     rules={KnowledgeRules}
                     tableConfig={this.tableConfig1}
                     tableTitle={KnowledgeCheck}
+                    
                 />
            
             </div>

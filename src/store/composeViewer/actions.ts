@@ -40,20 +40,28 @@ export const actions: ActionTree<IComposeState, IRootState> = {
         return res.status
      
     },
-     /**
-     * 
-     * 获取课程信息
-     */
-      async getCourseInfo() {
-        const res = await $http.get('/course/list');
-        console.log("rescourse:",res.data);
+    //  /**
+    //  * 
+    //  * 获取课程信息
+    //  */
+    //   async getCourseInfo() {
+    //     const res = await $http.get('/course/list');
+    //     console.log("rescourse:",res.data);
         
-        return  res.data
+    //     return  res.data
+        
+    // },
+    async getKnowledgeData(context,courseId:number){
+       
+        const  res=await $http.get('/knowledge/listByCourseId',courseId)
+        console.log("knowledgedata：",res);
+        return res.data
         
     },
-    async getKnowledgeData(){
-        const  res=await $http.get('/knowledge/listByCourseId')
-        console.log("knowledgedata：",res);
+    async getAbilityData(){
+        const  res=await $http.get('/ability/listByCourseId')
+        console.log("abilitydata：",res);
+        return res.data
         
     }
 }

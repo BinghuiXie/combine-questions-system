@@ -1,10 +1,10 @@
-import { Component } from 'vue-property-decorator';
+import { Component, Prop, Watch } from 'vue-property-decorator';
 import { mixins } from 'vue-class-component';
 import CheckTable from '@/components/common/checkTable';
 import Lang from '@/lang/lang';
 import { ColumnTemType, ITableConfig, ISelectItem } from '@/interfaces/common';
 import { INPUT_MODULE, ABILITY_INPUT, ABILITY_CHECK } from '@/common/constants';
-import { AbilityTableCheck, AbilityTableConfig, AbilityType } from '@/interfaces/compose-viewer/ability.interface';
+import { AbilityTableCheck, AbilityTableConfig, AbilityType, IAbilityItem1 } from '@/interfaces/compose-viewer/ability.interface';
 import { AbilityRules } from '@/common/rules/compose-viewer/ability-manage';
 import { ICourseItem } from '@/interfaces/compose-viewer/course.interface';
 import { Action } from 'vuex-class/lib/bindings';
@@ -21,13 +21,30 @@ const {
     }
 })
 export default class AbilityCheck extends mixins(Lang) {
+    @Prop()
+    public courseId!: number;
+    @Prop()
+    public rowNum!: number;
+    @Prop()
+    public abilityList!:IAbilityItem1[];
 
+    @Watch('courseId')
+    courseChanged(newVal: number) {
+     //    this.courseId = newVal
+     this.changeAbilityTable().then(()=>{
+        this.$forceUpdate()
+    
+    });
+     }
+
+    @Action('getAbilityData')
+     private getAbilityData!: (courseid:number) => any;
     @Action('getCourseInfo')
     private getCourseInfo!: () => any;
 
     public abilityTypeSelectList: ISelectItem[] = [];
 
-    public courseId: number = 0;
+    // public courseId: number = 0;
 
     public courseData:ICourseItem[]=[];
     public tableConfig1: AbilityTableCheck = [
@@ -37,12 +54,7 @@ export default class AbilityCheck extends mixins(Lang) {
             propInit: false,
             name: ''
         },
-        // {
-        //     type: ColumnTemType.TEXT,
-        //     prop: 'id',
-        //     propInit: 0,
-        //     name: '序号'
-        // },
+     
         {
             type: ColumnTemType.INPUT,
             prop: 'content',
@@ -60,44 +72,13 @@ export default class AbilityCheck extends mixins(Lang) {
        
     ]
 
-    // public tableConfig: AbilityTableConfig = [
-    //     {
-    //         type: ColumnTemType.CHECKBOX,
-    //         prop: 'isCheck',
-    //         propInit: false,
-    //         name: ''
-    //     },
-    //     {
-    //         type: ColumnTemType.TEXT,
-    //         prop: 'id',
-    //         propInit: '',
-    //         name: '序号'
-    //     },
-    //     {
-    //         type: ColumnTemType.INPUT,
-    //         prop: 'content',
-    //         propInit: '',
-    //         name: '能力点内容    ',
-    //         placeholder: INPUT_CONETNT,
-    //     },
-    //     {
-    //         type: ColumnTemType.SELECT,
-    //         prop: 'abilityType',
-    //         propInit: '',
-    //         name: '能力点类型     ',
-    //         placeholder: SELECT_ABILITY_TYPE,
-    //         selectOptions: {
-    //             multiple: false
-    //         },
-    //         selectData: this.abilityTypeSelectList
-    //     }
-    // ]
+   
        //加载课程
        public  async created() {
-     
+      
         await this.getCourseInfo().then((res:any) => {
            
-            const data:ICourseItem[] = Array.from(res[0].data)
+            const data:ICourseItem[] = Array.from(res.data)
             // this.CourseInfo.CourseInfo = res
                 this.courseData.push(...data)
                 console.log(this.courseData);
@@ -105,6 +86,21 @@ export default class AbilityCheck extends mixins(Lang) {
             
         })
         
+    }
+     //加载能力点数据表
+     public async changeAbilityTable(){
+        // this.$forceUpdate()
+        await this.getAbilityData(this.courseId).then((res:any) => {
+    
+        //    
+            this.abilityList = Array.from(res.data)
+            this.rowNum=this.abilityList.length;
+            // this.$forceUpdate();
+            console.log("row:",this.rowNum);
+            
+            console.log("k:",this.abilityList);
+            console.log("res.data:",res.data);
+        }) 
     }
 
 //能力点类型
@@ -188,6 +184,9 @@ export default class AbilityCheck extends mixins(Lang) {
   );
 })} */}
     <check-table
+                    courseId={this.courseId}
+                    rowNum={this.rowNum}
+                    abilityList={this.abilityList}
                     rules={AbilityRules}
                     tableConfig={this.tableConfig1}
                     tableTitle={ABILITY_CHECK}

@@ -24,6 +24,8 @@ export default class InputTable extends mixins(Lang) {
     @Prop()
     public courseId!: number;
 
+    // public courseId: number=0;
+
     @Prop()
     public tableConfig!: ITableConfig[];
 
@@ -118,6 +120,10 @@ export default class InputTable extends mixins(Lang) {
                 this.submitBatchKnowledgeData({
                     courseId: this.courseId,
                     knowledgeList: this.rowDataList
+                }).then(()=>{
+                    alert("提交成功！")
+                    location.reload()
+                    
                 })
             } else {
                 // 能力点

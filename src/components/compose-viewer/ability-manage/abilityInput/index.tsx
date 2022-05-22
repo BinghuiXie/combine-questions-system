@@ -1,4 +1,4 @@
-import { Component } from 'vue-property-decorator';
+import { Component, Prop } from 'vue-property-decorator';
 import { mixins } from 'vue-class-component';
 import InputTable from '@/components/common/inputTable';
 import Lang from '@/lang/lang';
@@ -35,7 +35,9 @@ export default class AbilityInput extends mixins(Lang) {
 
     public batchKownledgeOptions: ISelectItem[] = [];
 
-    public courseId: number = 0;
+
+    @Prop()
+     public courseId!: number;
     //关联知识点
     public relatedKnowledgeData:RelatedKnowledgeItem[]=[
         {
@@ -126,7 +128,7 @@ export default class AbilityInput extends mixins(Lang) {
         content: "",
     importance:1,
     relatedKnowledgeId:[],
-    courseId:0
+    courseId:this.courseId
     }
    
 
@@ -135,7 +137,7 @@ export default class AbilityInput extends mixins(Lang) {
      
     await this.getCourseInfo().then((res:any) => {
        
-        const data:ICourseItem[] = Array.from(res[0].data)
+        const data:ICourseItem[] = Array.from(res.data)
         // this.CourseInfo.CourseInfo = res
             this.courseData.push(...data)
             console.log(this.courseData);
@@ -163,13 +165,17 @@ export default class AbilityInput extends mixins(Lang) {
     }
 
     
-    public handleSubmitSingle() {
+    public async handleSubmitSingle() {
         // this.singleAbilityData.sectionList = this.cascaderData.map(item => item[1]);
         // TODO: 提交单个知识点
         console.log("hhh",this.singleAbilityData);
         
-        this.submitBathcAbilityData({
+       await this.submitBathcAbilityData({
             abilityItem: this.singleAbilityData
+        }).then(()=>{
+                 alert("录入成功")
+                 location.reload()
+                //  this.$forceUpdate()
         })
         
         
